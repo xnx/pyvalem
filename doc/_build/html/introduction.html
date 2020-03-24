@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Introduction to PyValem &#8212; pyvalem 2.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Formula" href="formula.html" />
+    <link rel="prev" title="Welcome to pyvalem’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction-to-pyvalem">
+<h1>Introduction to PyValem<a class="headerlink" href="#introduction-to-pyvalem" title="Permalink to this headline">¶</a></h1>
+<p>PyValem is a Python package for parsing, validating, manipulating and
+interpreting the chemical formulas, quantum states and labels of atoms, ions
+and small molecules.</p>
+<p>Species and states are specfied as strings using a simple and flexible syntax,
+and may be compared, output in different formats and manipulated using a
+variety of predefined Python methods.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The basic (state-less) chemical formula class is <code class="docutils literal notranslate"><span class="pre">Formula</span></code>. A <code class="docutils literal notranslate"><span class="pre">Formula</span></code> object
+can be created by passing its constructor a valid string. This object contains
+attributes for producing its plain text, HTML and LaTeX representations, and
+for calculating its molar mass:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>In [1]: from pyvalem.formula import Formula
+
+In [2]: f = Formula(&#39;C2H5OH&#39;)
+
+In [3]: print(f)
+C2H5OH
+
+In [4]: print(f.html)
+C&lt;sub&gt;2&lt;/sub&gt;H&lt;sub&gt;5&lt;/sub&gt;OH
+
+In [5]: print(f.latex)
+$\mathrm{C}_{2}\mathrm{H}_{5}\mathrm{O}\mathrm{H}$
+
+In [6]: print(f.rmm)    # g.mol-1
+46.069
+</pre></div>
+</div>
+<p>Note that there is no underscore character (<code class="docutils literal notranslate"><span class="pre">_</span></code>) before between the element
+symbol and its stoichiometry. Isotopes are specified with the mass number
+placed before the element symbol, with both surrounded by parentheses. Do not
+use a caret (<code class="docutils literal notranslate"><span class="pre">^</span></code>) to indicate a superscript:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Formula</span><span class="p">(</span><span class="s1">&#39;(14C)&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">html</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="mi">14</span><span class="o">&lt;/</span><span class="n">sup</span><span class="o">&gt;</span><span class="n">C</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">rmm</span><span class="p">)</span>
+<span class="mf">14.0032419884</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Formula</span><span class="p">(</span><span class="s1">&#39;H2(18O)&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">rmm</span><span class="p">)</span>
+<span class="mf">20.015159612799998</span>
+</pre></div>
+</div>
+<p>For isotopically-pure compounds, the mass returned is the atomic mass.</p>
+<p>Charges are specified as <code class="docutils literal notranslate"><span class="pre">+n</span></code> or <code class="docutils literal notranslate"><span class="pre">-n</span></code>, where <code class="docutils literal notranslate"><span class="pre">n</span></code> may be omitted if it is 1.
+Do not use a caret (<code class="docutils literal notranslate"><span class="pre">^</span></code>) to indicate a superscript:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Formula</span><span class="p">(</span><span class="s1">&#39;H3O+&#39;</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">charge</span><span class="p">)</span>
+<span class="mi">1</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">html</span><span class="p">)</span>
+<span class="n">H</span><span class="o">&lt;</span><span class="n">sub</span><span class="o">&gt;</span><span class="mi">3</span><span class="o">&lt;/</span><span class="n">sub</span><span class="o">&gt;</span><span class="n">O</span><span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;+&lt;/</span><span class="n">sup</span><span class="o">&gt;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Formula</span><span class="p">(</span><span class="s1">&#39;Co(H2O)6+2&#39;</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">charge</span><span class="p">)</span>
+<span class="mi">2</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">html</span><span class="p">)</span>
+<span class="n">Co</span><span class="p">(</span><span class="n">H</span><span class="o">&lt;</span><span class="n">sub</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">sub</span><span class="o">&gt;</span><span class="n">O</span><span class="p">)</span><span class="o">&lt;</span><span class="n">sub</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">&lt;/</span><span class="n">sub</span><span class="o">&gt;&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">+&lt;/</span><span class="n">sup</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>“Stateful” species are formulas which consist of a valid <code class="docutils literal notranslate"><span class="pre">Formula</span></code> string,
+followed by whitespace, followed by a semicolon-delimited sequence of valid
+quantum state or label specifications. Stateful species know which states they possess and can render these states in different ways. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">pyvalem.stateful_species</span> <span class="kn">import</span> <span class="n">StatefulSpecies</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="n">ss1</span> <span class="o">=</span> <span class="n">StatefulSpecies</span><span class="p">(</span><span class="s1">&#39;Ne+ 1s2.2s2.2p5; 2P_1/2&#39;</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">20</span><span class="p">]:</span> <span class="n">ss1</span><span class="o">.</span><span class="n">states</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="p">[</span><span class="mi">1</span><span class="n">s2</span><span class="o">.</span><span class="mi">2</span><span class="n">s2</span><span class="o">.</span><span class="mi">2</span><span class="n">p5</span><span class="p">,</span> <span class="mi">2</span><span class="n">P_1</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">ss1</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">pyvalem</span><span class="o">.</span><span class="n">atomic_term_symbol</span><span class="o">.</span><span class="n">AtomicTermSymbol</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="n">ss1</span><span class="o">.</span><span class="n">html</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="s1">&#39;Ne&lt;sup&gt;+&lt;/sup&gt; 1s&lt;sup&gt;2&lt;/sup&gt;2s&lt;sup&gt;2&lt;/sup&gt;2p&lt;sup&gt;5&lt;/sup&gt;; &lt;sup&gt;2&lt;/sup&gt;P&lt;sub&gt;1/2&lt;/sub&gt;&#39;</span>
+</pre></div>
+</div>
+<p>This HTML renders as:</p>
+Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub><p>Another example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">24</span><span class="p">]:</span> <span class="n">ss2</span> <span class="o">=</span> <span class="n">StatefulSpecies</span><span class="p">(</span><span class="s1">&#39;(52Cr)(1H) 1σ2.2σ1.1δ2.1π2; 6Σ+; v=0; J=2&#39;</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">25</span><span class="p">]:</span> <span class="n">ss2</span><span class="o">.</span><span class="n">html</span>
+<span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="mi">52</span><span class="o">&lt;/</span><span class="n">sup</span><span class="o">&gt;</span><span class="n">Cr</span><span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">sup</span><span class="o">&gt;</span><span class="n">H</span> <span class="mi">1</span><span class="n">σ</span><span class="o">&lt;</span><span class="n">sub</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">sub</span><span class="o">&gt;.</span><span class="mi">2</span><span class="n">σ</span><span class="o">&lt;</span><span class="n">sub</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">sub</span><span class="o">&gt;.</span><span class="mi">1</span><span class="n">δ</span><span class="o">&lt;</span><span class="n">sub</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">sub</span><span class="o">&gt;.</span><span class="mi">1</span><span class="n">π</span><span class="o">&lt;</span><span class="n">sub</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">sub</span><span class="o">&gt;</span><span class="p">;</span> <span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;</span><span class="mi">6</span><span class="o">&lt;/</span><span class="n">sup</span><span class="o">&gt;</span><span class="n">Σ</span><span class="o">&lt;</span><span class="n">sup</span><span class="o">&gt;+&lt;/</span><span class="n">sup</span><span class="o">&gt;</span><span class="p">;</span> <span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">J</span><span class="o">=</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>which produces:</p>
+<sup>52</sup>Cr<sup>1</sup>H 1σ<sub>2</sub>.2σ<sub>1</sub>.1δ<sub>2</sub>.1π<sub>2</sub>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2<p>The syntax for writing different types of quantum state are described in later pages of this documentation.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pyvalem</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to PyValem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="formula.html">Formula</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to pyvalem’s documentation!</a></li>
+      <li>Next: <a href="formula.html" title="next chapter">Formula</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Christian Hill.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/introduction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

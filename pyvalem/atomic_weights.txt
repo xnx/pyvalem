@@ -1,0 +1,119 @@
+Symbol, Name, Z, atomic_weight, atomic_weight_unc
+H , Hydrogen       ,   1,   1.008000000,        
+He, Helium         ,   2,   4.002602000, 2.0e-06
+Li, Lithium        ,   3,   6.940000000,        
+Be, Beryllium      ,   4,   9.012183100, 5.0e-07
+B , Boron          ,   5,  10.810000000,        
+C , Carbon         ,   6,  12.011000000,        
+N , Nitrogen       ,   7,  14.007000000,        
+O , Oxygen         ,   8,  15.999000000,        
+F , Fluorine       ,   9,  18.998403163, 6.0e-09
+Ne, Neon           ,  10,  20.179700000, 6.0e-04
+Na, Sodium         ,  11,  22.989769280, 2.0e-08
+Mg, Magnesium      ,  12,  24.305000000,        
+Al, Aluminium      ,  13,  26.981538400, 3.0e-07
+Si, Silicon        ,  14,  28.085000000,        
+P , Phosphorus     ,  15,  30.973761998, 5.0e-09
+S , Sulfur         ,  16,  32.060000000,        
+Cl, Chlorine       ,  17,  35.450000000,        
+Ar, Argon          ,  18,  39.950000000,        
+K , Potassium      ,  19,  39.098300000, 1.0e-04
+Ca, Calcium        ,  20,  40.078000000, 4.0e-03
+Sc, Scandium       ,  21,  44.955908000, 5.0e-06
+Ti, Titanium       ,  22,  47.867000000, 1.0e-03
+V , Vanadium       ,  23,  50.941500000, 1.0e-04
+Cr, Chromium       ,  24,  51.996100000, 6.0e-04
+Mn, Manganese      ,  25,  54.938043000, 2.0e-06
+Fe, Iron           ,  26,  55.845000000, 2.0e-03
+Co, Cobalt         ,  27,  58.933194000, 3.0e-06
+Ni, Nickel         ,  28,  58.693400000, 4.0e-04
+Cu, Copper         ,  29,  63.546000000, 3.0e-03
+Zn, Zinc           ,  30,  65.380000000, 2.0e-02
+Ga, Gallium        ,  31,  69.723000000, 1.0e-03
+Ge, Germanium      ,  32,  72.630000000, 8.0e-03
+As, Arsenic        ,  33,  74.921595000, 6.0e-06
+Se, Selenium       ,  34,  78.971000000, 8.0e-03
+Br, Bromine        ,  35,  79.904000000,        
+Kr, Krypton        ,  36,  83.798000000, 2.0e-03
+Rb, Rubidium       ,  37,  85.467800000, 3.0e-04
+Sr, Strontium      ,  38,  87.620000000, 1.0e-02
+Y , Yttrium        ,  39,  88.905840000, 1.0e-05
+Zr, Zirconium      ,  40,  91.224000000, 2.0e-03
+Nb, Niobium        ,  41,  92.906370000, 1.0e-05
+Mo, Molybdenum     ,  42,  95.950000000, 1.0e-02
+Tc, Technetium     ,  43,              ,        
+Ru, Ruthenium      ,  44, 101.070000000, 2.0e-02
+Rh, Rhodium        ,  45, 102.905490000, 2.0e-05
+Pd, Palladium      ,  46, 106.420000000, 1.0e-02
+Ag, Silver         ,  47, 107.868200000, 2.0e-04
+Cd, Cadmium        ,  48, 112.414000000, 4.0e-03
+In, Indium         ,  49, 114.818000000, 1.0e-03
+Sn, Tin            ,  50, 118.710000000, 7.0e-03
+Sb, Antimony       ,  51, 121.760000000, 1.0e-03
+Te, Tellurium      ,  52, 127.600000000, 3.0e-02
+I , Iodine         ,  53, 126.904470000, 3.0e-05
+Xe, Xenon          ,  54, 131.293000000, 6.0e-03
+Cs, Caesium        ,  55, 132.905451960, 6.0e-08
+Ba, Barium         ,  56, 137.327000000, 7.0e-03
+La, Lanthanum      ,  57, 138.905470000, 7.0e-05
+Ce, Cerium         ,  58, 140.116000000, 1.0e-03
+Pr, Praseodymium   ,  59, 140.907660000, 1.0e-05
+Nd, Neodymium      ,  60, 144.242000000, 3.0e-03
+Pm, Promethium     ,  61,              ,        
+Sm, Samarium       ,  62, 150.360000000, 2.0e-02
+Eu, Europium       ,  63, 151.964000000, 1.0e-03
+Gd, Gadolinium     ,  64, 157.250000000, 3.0e-02
+Tb, Terbium        ,  65, 158.925354000, 8.0e-06
+Dy, Dysprosium     ,  66, 162.500000000, 1.0e-03
+Ho, Holmium        ,  67, 164.930328000, 7.0e-06
+Er, Erbium         ,  68, 167.259000000, 3.0e-03
+Tm, Thulium        ,  69, 168.934218000, 6.0e-06
+Yb, Ytterbium      ,  70, 173.045000000, 1.0e-02
+Lu, Lutetium       ,  71, 174.966800000, 1.0e-04
+Hf, Hafnium        ,  72, 178.486000000, 6.0e-03
+Ta, Tantalum       ,  73, 180.947880000, 2.0e-05
+W , Tungsten       ,  74, 183.840000000, 1.0e-02
+Re, Rhenium        ,  75, 186.207000000, 1.0e-03
+Os, Osmium         ,  76, 190.230000000, 3.0e-02
+Ir, Iridium        ,  77, 192.217000000, 2.0e-03
+Pt, Platinum       ,  78, 195.084000000, 9.0e-03
+Au, Gold           ,  79, 196.966570000, 4.0e-06
+Hg, Mercury        ,  80, 200.592000000, 3.0e-03
+Tl, Thallium       ,  81, 204.380000000,        
+Pb, Lead           ,  82, 207.200000000, 1.0e-01
+Bi, Bismuth        ,  83, 208.980400000, 1.0e-05
+Po, Polonium       ,  84,              ,        
+At, Astatine       ,  85,              ,        
+Rn, Radon          ,  86,              ,        
+Fr, Francium       ,  87,              ,        
+Ra, Radium         ,  88,              ,        
+Ac, Actinium       ,  89,              ,        
+Th, Thorium        ,  90, 232.037700000, 4.0e-04
+Pa, Protactinium   ,  91, 231.035880000, 1.0e-05
+U , Uranium        ,  92, 238.028910000, 3.0e-05
+Np, Neptunium      ,  93,              ,        
+Pu, Plutonium      ,  94,              ,        
+Am, Americium      ,  95,              ,        
+Cm, Curium         ,  96,              ,        
+Bk, Berkelium      ,  97,              ,        
+Cf, Californium    ,  98,              ,        
+Es, Einsteinium    ,  99,              ,        
+Fm, Fermium        , 100,              ,        
+Md, Mendelevium    , 101,              ,        
+No, Nobelium       , 102,              ,        
+Lr, Lawrencium     , 103,              ,        
+Rf, Rutherfordium  , 104,              ,        
+Db, Dubnium        , 105,              ,        
+Sg, Seaborgium     , 106,              ,        
+Bh, Bohrium        , 107,              ,        
+Hs, Hassium        , 108,              ,        
+Mt, Meitnerium     , 109,              ,        
+Ds, Darmstadtium   , 110,              ,        
+Rg, Roentgenium    , 111,              ,        
+Cn, Copernicium    , 112,              ,        
+Nh, Nihonium       , 113,              ,        
+Fl, Flerovium      , 114,              ,        
+Mc, Moscovium      , 115,              ,        
+Lv, Livermorium    , 116,              ,        
+Ts, Tennessine     , 117,              ,        
+Og, Oganesson      , 118,              ,        

@@ -1,0 +1,20 @@
+\select@language {english}
+\contentsline {chapter}{\numberline {1}Introduction to PyValem}{1}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Installation}{1}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Examples}{1}{section.1.2}% 
+\contentsline {chapter}{\numberline {2}Formula}{5}{chapter.2}% 
+\contentsline {section}{\numberline {2.1}Instantiation}{5}{section.2.1}% 
+\contentsline {section}{\numberline {2.2}Output as HTML, LaTeX and slugs}{6}{section.2.2}% 
+\contentsline {section}{\numberline {2.3}Formula Attributes}{6}{section.2.3}% 
+\contentsline {chapter}{\numberline {3}States}{9}{chapter.3}% 
+\contentsline {section}{\numberline {3.1}\sphinxstyleliteralintitle {\sphinxupquote {GenericExcitedState}}}{9}{section.3.1}% 
+\contentsline {section}{\numberline {3.2}\sphinxstyleliteralintitle {\sphinxupquote {AtomicConfiguration}}}{9}{section.3.2}% 
+\contentsline {section}{\numberline {3.3}\sphinxstyleliteralintitle {\sphinxupquote {AtomicTermSymbol}}}{10}{section.3.3}% 
+\contentsline {section}{\numberline {3.4}\sphinxstyleliteralintitle {\sphinxupquote {DiatomicMolecularConfiguration}}}{11}{section.3.4}% 
+\contentsline {section}{\numberline {3.5}\sphinxstyleliteralintitle {\sphinxupquote {MolecularTermSymbol}}}{12}{section.3.5}% 
+\contentsline {section}{\numberline {3.6}\sphinxstyleliteralintitle {\sphinxupquote {VibrationalState}}}{12}{section.3.6}% 
+\contentsline {section}{\numberline {3.7}\sphinxstyleliteralintitle {\sphinxupquote {RotationalState}}}{13}{section.3.7}% 
+\contentsline {section}{\numberline {3.8}\sphinxstyleliteralintitle {\sphinxupquote {KeyValuePair}}}{13}{section.3.8}% 
+\contentsline {chapter}{\numberline {4}Stateful Species}{15}{chapter.4}% 
+\contentsline {chapter}{\numberline {5}Reaction}{17}{chapter.5}% 
+\contentsline {chapter}{\numberline {6}Indices and tables}{19}{chapter.6}% 

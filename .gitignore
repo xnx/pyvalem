@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+*.swo
+.DS_Store
+build/
+dist/
+pyvalem.egg-info/
+res/
