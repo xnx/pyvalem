@@ -12,10 +12,13 @@ variety of predefined Python methods.
 Installation
 ============
 
-For now::
+From this source::
 
     python setup.py install
 
+Or using pip::
+
+    pip install pyvalem
 
 Examples
 ========

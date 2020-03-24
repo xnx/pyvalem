@@ -1,11 +1,15 @@
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+long_description = """PyValem is a Python package for parsing, validating, manipulating and interpreting the chemical formulas, quantum states and labels of atoms, ions and small molecules.
+
+Species and states are specfied as strings using a simple and flexible syntax, and may be compared, output in different formats and manipulated using a variety of predefined Python methods.
+
+See https://github.com/xnx/pyvalem for documentation and more information.
+"""
 
 setup(
     name = 'pyvalem',
-    version = '2.0',
+    version = '2.0.2',
     author = 'Christian Hill',
     author_email = 'ch.hill@iaea.org',
     description = 'A package for managing simple chemical species and states',
@@ -16,11 +20,7 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Intended Audience :: Science/Research"
-        "Operating System :: OS Independent",
     ],
     python_requires='>=3.4',
     package_data={'pyvalem': ['atomic_weights.txt', 'isotope_masses.txt']},
 )
-
-
