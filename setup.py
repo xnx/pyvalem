@@ -9,7 +9,7 @@ See https://github.com/xnx/pyvalem for documentation and more information.
 
 setup(
     name = 'pyvalem',
-    version = '2.0.2',
+    version = '2.0.3',
     author = 'Christian Hill',
     author_email = 'ch.hill@iaea.org',
     description = 'A package for managing simple chemical species and states',

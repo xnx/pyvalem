@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.12.16)  23 MAR 2020 21:49
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.12.16)  25 MAR 2020 12:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1070,22 +1070,22 @@ Chapter 5.
 ]
 Chapter 6.
 (./pyvalem.ind)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 711.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 715.
  [19]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 711.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 715.
  (./pyvalem.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 711.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 711.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 715.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 715.
 Package rerunfilecheck Info: File `pyvalem.out' has not changed.
 (rerunfilecheck)             Checksum: F2C5CBB8A546C3722DC3321DF8D1F79B.
  ) 
 Here is how much of TeX's memory you used:
  24457 strings out of 492916
  452602 string characters out of 6133344
- 585504 words of memory out of 5000000
+ 586504 words of memory out of 5000000
  28214 multiletter control sequences out of 15000+600000
  537840 words of font info for 89 fonts, out of 8000000 for 9000
  1349 hyphenation exceptions out of 8191
- 41i,11n,79p,1653b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,12n,79p,1653b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on pyvalem.pdf (23 pages).

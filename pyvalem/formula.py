@@ -259,7 +259,11 @@ class Formula:
                     i_atom_stoich = int(atom_stoich)
                     total_atom_stoich = i_atom_stoich * stoich
                     self.natoms += total_atom_stoich
-                    self.rmm += atom.mass * total_atom_stoich
+                    try:
+                        self.rmm += atom.mass * total_atom_stoich
+                    except TypeError:
+                        # No atomic weight for some elements (e.g. Tc, Pm)
+                        self.rmm = None
                 except ValueError:
                     # Some formulas don't have well-defined stoichiometries,
                     # e.g. 'CFx'

@@ -64,6 +64,11 @@ class FormulaTest(unittest.TestCase):
             if 'latex' in good_formulas[formula].keys():
                 self.assertEqual(cf.latex, good_formulas[formula]['latex']) 
 
+    def test_Tc_Pm(self):
+        for f in ('Tc', 'Pm', 'TcH', 'Cl2Pm'):
+            cf = Formula(f)
+            self.assertIsNone(cf.rmm)
+
     def test_charged_species(self):
         cf1 = Formula('H+')
         self.assertEqual(cf1.html, 'H<sup>+</sup>')
