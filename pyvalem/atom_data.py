@@ -35,6 +35,14 @@ class Atom:
     def __repr__(self):
         return self.symbol
 
+    def __hash__(self):
+        return hash(self.symbol)
+
+    def __eq__(self, other):
+        if type(self) == type(other):
+            return self.symbol == other.symbol
+        return self.symbol == other
+
 class Isotope(Atom):
     is_isotope = True
 

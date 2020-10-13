@@ -5,7 +5,7 @@ Unit tests for the formula module of PyValem
 import unittest
 
 from pyvalem.formula import Formula, FormulaParseError
-from .good_formulas import good_formulas
+from good_formulas import good_formulas
 
 class FormulaTest(unittest.TestCase):
 
