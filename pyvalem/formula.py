@@ -18,8 +18,10 @@ integer_or_x = integer | pp.Literal('x')
 plusminus = pp.Literal('+') | pp.Literal('-')
 
 # An isotope looks like '(1H)', '(13C)', etc.; strip the parentheses.
-isotope = pp.Group(pp.Suppress(pp.Literal('(')) + integer + element
+isotope = ( pp.Group(pp.Suppress(pp.Literal('(')) + integer + element
                 + pp.Suppress(pp.Literal(')')))
+            | pp.Literal('D') | pp.Literal('T')
+          )
 
 # some named components of a formula
 # stoich comes before or after a "bare" element symbol, e.g. 3Br2.
@@ -34,7 +36,9 @@ charge = pp.Optional(pp.Combine(pp.Group(plusminus + pp.Optional(integer,
                         default='1'))), default='0').setResultsName('charge')
 # An elementRef is either an element symbol or an isotope symbol plus a
 # stoichiometry which is 1 if not given.
-elementRef = pp.Group((isotope | element).setResultsName('atom_symbol')+stoich)
+# NB check for element symbol first to catch Dy, Ti, etc. before parsing as
+# hydrogen isotopes D or T.
+elementRef = pp.Group((element | isotope).setResultsName('atom_symbol')+stoich)
 # A chemicalFormula is a series of elementRefs.
 chemicalFormula = pp.Group(pp.OneOrMore(elementRef)).setResultsName('atoms')
 # Radicals must be specified with the unicode character '·' (U+00B7).
@@ -164,6 +168,7 @@ class Formula:
 
     def parse_formula(self, formula):
         """Parse the string formula into a Formula object."""
+
         self.atoms = set()
 
         # We make a particular exception for various special cases, including
@@ -222,6 +227,10 @@ class Formula:
             for atom in moiety['atoms']:
                 atom_symbol, atom_stoich = atom
 
+                if atom_symbol == 'D':
+                    atom_symbol = isotope.parseString('(2H)')[0]
+                if atom_symbol == 'T':
+                    atom_symbol = isotope.parseString('(3H)')[0]
                 if isinstance(atom_symbol, pp.ParseResults):
                     # we got an isotope in the form '(zSy)' with z the mass
                     # number so symbol is the ParseResults ['z', 'Sy']:
@@ -438,4 +447,3 @@ class Formula:
         if self.charge == -1:
             return '-'
         return str(self.charge)
-            
