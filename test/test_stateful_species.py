@@ -34,10 +34,14 @@ class StatefulSpeciesTest(unittest.TestCase):
 
         ss6 = StatefulSpecies('H+')
         self.assertEqual(ss6.formula.charge, 1)
+
 #        ss7 = StatefulSpecies('H+ lambda=210nm')
 #        self.assertEqual(ss7.formula.charge, 1)
 
         ss8 = StatefulSpecies('CO2 2v2; l=2')
+
+        ss9 = StatefulSpecies("Ne 3p'[3/2]_1")
+        self.assertEqual(ss9.states[0].html, "3p'[3/2]<sub>1</sub>")
 
     def test_stateful_species_equality(self):
 

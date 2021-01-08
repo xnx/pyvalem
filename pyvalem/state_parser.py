@@ -10,6 +10,7 @@ from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
 from .molecular_term_symbol import MolecularTermSymbol
 from .rotational_state import RotationalState
 from .vibrational_state import VibrationalState
+from .racah_symbol import RacahSymbol
 from .key_value_pair import KeyValuePair
 
 STATES = (
@@ -20,7 +21,7 @@ STATES = (
     MolecularTermSymbol,
     VibrationalState,
     RotationalState,
-#    RacahSymbol,
+    RacahSymbol,
 #    PhaseState,
 #    EnergyFreqWvln,
     KeyValuePair,
