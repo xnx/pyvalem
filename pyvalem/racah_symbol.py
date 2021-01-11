@@ -52,7 +52,7 @@ class RacahSymbol(State):
     def __repr__(self):
         parent = '{}{}'.format(self.principal,self.orbital)
         K = '{}/{}'.format(self.k_num, self.k_den)
-        return '{}[{}]_{}',format(parent, K, self.j_term)
+        return '{}[{}]_{}'.format(parent, K, self.j_term)
         
     @property
     def html(self):
