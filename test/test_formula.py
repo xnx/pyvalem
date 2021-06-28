@@ -13,10 +13,22 @@ class FormulaTest(unittest.TestCase):
         cf = Formula('C2F4H2')
         self.assertEqual(cf.stoichiometric_formula(), 'H2C2F4')
         self.assertEqual(cf.stoichiometric_formula('alphabetical'), 'C2F4H2')
-        #self.assertEqual(cf.stoichiometric_formula('hill'), 'C2H2F4')
+        self.assertEqual(cf.stoichiometric_formula('hill'), 'C2H2F4')
 
         cf = Formula('CFx')
         self.assertEqual(cf.stoichiometric_formula(), 'CFx')
+        self.assertEqual(cf.stoichiometric_formula('hill'), 'CFx')
+
+        cf = Formula('CuBr4')
+        self.assertEqual(cf.stoichiometric_formula(), 'CuBr4')
+        self.assertEqual(cf.stoichiometric_formula('alphabetical'), 'Br4Cu')
+        self.assertEqual(cf.stoichiometric_formula('hill'), 'Br4Cu')
+
+        cf = Formula('HBr')
+        self.assertEqual(cf.stoichiometric_formula(), 'HBr')
+        self.assertEqual(cf.stoichiometric_formula('alphabetical'), 'BrH')
+        self.assertEqual(cf.stoichiometric_formula('hill'), 'BrH')
+        
 
     def test_html_and_slug(self):
         f = (('NO+', 'NO+', 'NO<sup>+</sup>', 'NO_p'),

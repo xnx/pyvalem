@@ -386,6 +386,43 @@ class Formula:
         atom_strs.sort()
         return atom_strs
 
+
+    def _stoichiometric_formula_hill(self):
+        """Return a list of atoms/isotopes and their stoichiometries.
+
+        The returned list is sorted in "Hill notation": first carbon, then
+        hydrogen, then all other chemical elements in alphabetical order.
+        If the species contains H but no C, all elements are listed in
+        alphabetical order, including hydrogen.
+
+        """
+
+        CH_strs = []
+        atom_strs = []
+        contains_C = False
+        for atom in sorted(self.atoms, key=lambda e: (e.Z, e.mass)):
+            if atom.is_isotope:
+                symbol = '({})'.format(atom.symbol)
+            else:
+                symbol = atom.symbol
+            if symbol == 'C':
+                CH_strs.insert(0, self._get_symbol_stoich('C',
+                                        self.atom_stoich['C']))
+                contains_C = True
+            elif symbol == 'H':
+                CH_strs.insert(1, self._get_symbol_stoich('H',
+                                        self.atom_stoich['H']))
+            else:
+                atom_strs.append(self._get_symbol_stoich(symbol,
+                            self.atom_stoich[atom.symbol]))
+        
+        if not contains_C:
+            atom_strs = CH_strs + atom_strs
+            CH_strs = []
+        atom_strs.sort()
+        return CH_strs + atom_strs
+
+
     def stoichiometric_formula(self, fmt='atomic number'):
         """
         Return a string representation of the stoichiometric formula
@@ -406,7 +443,7 @@ class Formula:
             return 'hν'
 
         fmt = fmt.lower()
-        if fmt not in ('atomic number', 'alphabetical'):
+        if fmt not in ('atomic number', 'alphabetical', 'hill'):
             raise FormulaError('Unsupported format for stoichiometric'
                     ' formula output: {}'.format(fmt))
 
@@ -414,6 +451,8 @@ class Formula:
             atom_strs = self._stoichiometric_formula_atomic_number()
         elif fmt == 'alphabetical':
             atom_strs = self._stoichiometric_formula_alphabetical()
+        elif fmt == 'hill':
+            atom_strs = self._stoichiometric_formula_hill()
 
         # finally, add on the charge string, e.g. '', '-', '+2', ...
         atom_strs.append(self._get_charge_string())
