@@ -79,6 +79,13 @@ class AtomicConfigurationTest(unittest.TestCase):
         self.assertEqual(c1, c2)
         self.assertEqual(c1, c3)
         self.assertNotEqual(c1, c4)
+
+    def test_excited_atomic_configuration(self):
+        c1 = AtomicConfiguration('5g1')
+        self.assertRaises(AtomicConfigurationError, AtomicConfiguration,
+                          '4g1')
+        c2 = AtomicConfiguration('10k1')
+        c3 = AtomicConfiguration('1s2.2s2.2p5.7h2')
  
 
 if __name__ == '__main__':

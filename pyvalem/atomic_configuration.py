@@ -8,7 +8,7 @@ import pyparsing as pp
 from .state import State, StateParseError
 
 integer = pp.Word(pp.nums).setParseAction(lambda t: int(t[0]))
-atomic_orbital_symbols = ('s', 'p', 'd', 'f')
+atomic_orbital_symbols = tuple('spdfghijklmnopq')
 noble_gases = ['He', 'Ne', 'Ar', 'Kr', 'Xe', 'Rn']
 noble_gas_configs = {'He': '1s2',
                      'Ne': '[He].2s2.2p6',
