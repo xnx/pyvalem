@@ -6,6 +6,8 @@ The Formula of the StatefulSpecies is separated from its States by whitespace;
 States are separated from each other by semicolons (;).
 """
 from .formula import Formula, FormulaParseError
+from .atomic_configuration import AtomicConfiguration
+from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
 from .state_parser import state_parser
 
 class StatefulSpeciesError(Exception):
@@ -63,6 +65,51 @@ class StatefulSpecies:
                 state_class_counts[state_class] > 1):
                 raise StatefulSpeciesError('Multiple states of type {}'
                     ' specified for {}'.format(state_class.__name__, self))
+        return True
+
+    def verify_atomic_configuration(self):
+        atomic_configurations = [s for s in self.states
+                                    if s.__class__ == AtomicConfiguration]
+        if len(atomic_configurations) != 1:
+            raise StatefulSpeciesError('Multiple AtomicConfigurations'
+                                ' specified for {}'.format(self))
+        if not atomic_configurations:
+            return True
+        atomic_configuration = atomic_configurations[0]
+        if self.formula.natoms != 1:
+            return True
+
+        atom = next(iter(self.formula.atoms))
+        nelectrons = atom.Z - self.formula.charge
+        if nelectrons != atomic_configuration.nelectrons:
+            raise StatefulSpeciesError('Incorrect number of electrons for'
+                    ' {} in atomic configuration {}'.format(self.formula,
+                                                        atomic_configuration))
+        return True
+
+
+    def verify_diatomic_inversion_parity(self):
+        if self.formula.natoms != 2:
+            return True
+        homonuclear_diatomic = len(self.formula.atoms) == 1
+        diatomic_configurations = [s for s in self.states
+                              if s.__class__ == DiatomicMolecularConfiguration]
+        if not diatomic_configurations:
+            return True
+        if len(diatomic_configurations) != 1:
+            raise StatefulSpeciesError('Multiple DiatomicConfigurations'
+                                       ' specified for {}'.format(self))
+        diatomic_configuration = diatomic_configurations[0]
+        has_parity_label = all(orbital.symbol[-1] in 'gu'
+                               for orbital in diatomic_configuration.orbitals)
+        if has_parity_label == homonuclear_diatomic:
+            return True
+        s_homohetero = 'homo' if homonuclear_diatomic else 'hetero'
+        raise StatefulSpeciesError('Incorrect use of inversion parity label'
+                    ' (u/g) for {}nuclear diatomic {}'.format(s_homohetero,
+                                                              self.formula))
+        
+
 
     @property
     def html(self):

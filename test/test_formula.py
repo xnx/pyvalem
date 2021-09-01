@@ -5,7 +5,7 @@ Unit tests for the formula module of PyValem
 import unittest
 
 from pyvalem.formula import Formula, FormulaParseError
-from good_formulas import good_formulas
+from .good_formulas import good_formulas
 
 class FormulaTest(unittest.TestCase):
 
@@ -85,6 +85,13 @@ class FormulaTest(unittest.TestCase):
         cf1 = Formula('H+')
         self.assertEqual(cf1.html, 'H<sup>+</sup>')
         self.assertEqual(cf1.charge, 1)
+
+        self.assertRaises(FormulaParseError, Formula, 'H+-')
+        self.assertRaises(FormulaParseError, Formula, 'H++')
+        self.assertRaises(FormulaParseError, Formula, 'H++2')
+        self.assertRaises(FormulaParseError, Formula, 'H--')
+        self.assertRaises(FormulaParseError, Formula, 'H+-')
+        self.assertRaises(FormulaParseError, Formula, 'H-+')
 
     def test_M(self):
         cf = Formula('M')

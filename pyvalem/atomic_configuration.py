@@ -8,7 +8,8 @@ import pyparsing as pp
 from .state import State, StateParseError
 
 integer = pp.Word(pp.nums).setParseAction(lambda t: int(t[0]))
-atomic_orbital_symbols = tuple('spdfghijklmnopq')
+# NB no "j" orbital.
+atomic_orbital_symbols = tuple('spdfghiklmnoqrtuvwxyz')
 noble_gases = ['He', 'Ne', 'Ar', 'Kr', 'Xe', 'Rn']
 noble_gas_configs = {'He': '1s2',
                      'Ne': '[He].2s2.2p6',
@@ -17,6 +18,8 @@ noble_gas_configs = {'He': '1s2',
                      'Xe': '[Kr].4d10.5s2.5p6',
                      'Rn': '[Xe].4f14.5d10.6s2.6p6'
                     }
+noble_gas_nelectrons = {'He': 2, 'Ne': 10, 'Ar': 18, 'Kr': 36, 'Xe': 54,
+                        'Rn': 86}
 
 noble_gas = pp.oneOf(['[{}]'.format(symbol) for symbol in noble_gases])
 
@@ -123,16 +126,20 @@ class AtomicConfiguration(State):
 
         self.orbitals = []
         self.noble_gas_config = None
+        self.nelectrons = 0
         for i, parsed_orbital in enumerate(parse_results):
             if not i and type(parsed_orbital) == str:
                 # Noble-gas notation for first atomic orbital
                 self.noble_gas_config = parsed_orbital
+                # NB strip '[' and ']' from parsed_orbital of the form '[Ar]'.
+                self.nelectrons = noble_gas_nelectrons[parsed_orbital[1:-1]]
                 continue
             # Create a validated AtomicOrbital object for this orbital.
             try:
                 orbital = AtomicOrbital(n=parsed_orbital['n'],
                                         lletter=parsed_orbital['lletter'],
                                         nocc=parsed_orbital['nocc'])
+                self.nelectrons += orbital.nocc
             except AtomicOrbitalError as err:
                 raise AtomicConfigurationError(err)
             self.orbitals.append(orbital)

@@ -10,11 +10,11 @@ from pyvalem.atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
 class AtomicTermSymbolTest(unittest.TestCase):
 
     def test_atomic_term_symbol(self):
-        a0 = AtomicTermSymbol('3P_1/2')
-        self.assertEqual(a0.html, '<sup>3</sup>P<sub>1/2</sub>')
+        a0 = AtomicTermSymbol('2P_1/2')
+        self.assertEqual(a0.html, '<sup>2</sup>P<sub>1/2</sub>')
         # The quantum numbers: NB since these are half-integral, they can
         # be tested with assertEqual instead of assertAlmostEqual
-        self.assertEqual(a0.S, 1.)
+        self.assertEqual(a0.S, 0.5)
         self.assertEqual(a0.L, 1)
         self.assertEqual(a0.J, 0.5)
 
@@ -43,10 +43,12 @@ class AtomicTermSymbolTest(unittest.TestCase):
         self.assertRaises(AtomicTermSymbolError, AtomicTermSymbol, '2PI_1/2')
         self.assertRaises(AtomicTermSymbolError, AtomicTermSymbol, '1PZ')
 
+        self.assertRaises(AtomicTermSymbolError, AtomicTermSymbol, '3P_3/2')
+
     def test_atomic_term_symbol_equality(self):
-        a0 = AtomicTermSymbol('3P_1/2')
-        a1 = AtomicTermSymbol('3P_1/2')
-        a2 = AtomicTermSymbol('3P_3/2')
+        a0 = AtomicTermSymbol('2P_1/2')
+        a1 = AtomicTermSymbol('2P_1/2')
+        a2 = AtomicTermSymbol('2P_3/2')
         self.assertEqual(a0, a1)
         self.assertNotEqual(a0, a2)
         

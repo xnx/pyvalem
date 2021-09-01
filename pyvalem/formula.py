@@ -175,6 +175,10 @@ class Formula:
             self.parse_formula('D-1')
             return
 
+        if any(s in formula for s in ('++', '--', '+-', '-+')):
+            raise FormulaParseError('Invalid formula syntax: {}'
+                                                    .format(formula))
+
         self.atoms = set()
 
         # We make a particular exception for various special cases, including

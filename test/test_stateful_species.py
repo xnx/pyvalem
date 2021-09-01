@@ -28,8 +28,8 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, StatefulSpecies, '')
         self.assertEqual(repr(ss4.states[0]), repr(VibrationalState('ν2+3ν1')))
 
-        ss = StatefulSpecies('Ar+ 1s2.2s2.2p5')
-        ss = StatefulSpecies('Ar+ 1s2.2s2.2p5; 2P_3/2')
+        ss = StatefulSpecies('Ne+ 1s2.2s2.2p5')
+        ss = StatefulSpecies('Ne+ 1s2.2s2.2p5; 2P_3/2')
         ss = StatefulSpecies('H2- 1sigmag2.1sigmau1')
 
         ss6 = StatefulSpecies('H+')
@@ -63,6 +63,29 @@ class StatefulSpeciesTest(unittest.TestCase):
                     'Ar 2S;2P_3/2')
 
 #        StatefulSpecies('CH3Cl J=2;Ka=1;Kc=2')
+
+    def test_atomic_configuration_verification(self):
+        ss1 = StatefulSpecies('Ar+ 1s2.2s2.2p6.3s2.3p5')
+        self.assertTrue(ss1.verify_atomic_configuration())
+        ss1 = StatefulSpecies('Ar+ [Ne].3s2.3p5')
+        self.assertTrue(ss1.verify_atomic_configuration())
+        ss2 = StatefulSpecies('Ar+ 1s2.2s2.2p6.3s2.3p6')
+        ss3 = StatefulSpecies('Ar+ [Ne].3s2.3p6')
+        ss4 = StatefulSpecies('Ar+ [Ne].3s2.3p6.4s1')
+        for ss in (ss2, ss3, ss4):
+            self.assertRaises(StatefulSpeciesError,
+                              ss.verify_atomic_configuration)
+
+    def test_diatomic_configuration_inversion_parity(self):
+        ss1 = StatefulSpecies('H2 1sigmag2; 1SIGMA+g')
+        self.assertTrue(ss1.verify_diatomic_inversion_parity())
+        ss2 = StatefulSpecies('H2 1sigma2')
+        ss3 = StatefulSpecies('HD 1sigmag2')
+        ss4 = StatefulSpecies('H2 1sigma1.2sigmau1')
+        for ss in (ss2, ss3, ss4):
+            self.assertRaises(StatefulSpeciesError,
+                              ss.verify_diatomic_inversion_parity)
+        
 
 
 if __name__ == '__main__':

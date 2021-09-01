@@ -49,6 +49,11 @@ class AtomicTermSymbol(State):
             self.validate_J()
                 
     def validate_J(self):
+        S_is_half_integer = int(2 * self.S) % 2
+        J_is_half_integer = int(2 * self.J) % 2
+        if S_is_half_integer != J_is_half_integer :
+            raise AtomicTermSymbolError('J={} is invalid for S={}.'.format(
+                                        self.J, self.S))
         if not abs(self.L - self.S) <= self.J <= self.L + self.S:
             raise AtomicTermSymbolError('Invalid atomic term symbol: {0:s}'
                 ' |L-S| <= J <= L+S must be satisfied.'.format(self.state_str))
