@@ -18,7 +18,7 @@ class KeyValuePair(State):
 
     """
 
-    multiple_allowed = False
+    multiple_allowed = True
 
     def parse_state(self, state_str):
         """Parse state_str into a KeyValuePair object.

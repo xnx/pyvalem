@@ -8,6 +8,7 @@ States are separated from each other by semicolons (;).
 from .formula import Formula, FormulaParseError
 from .atomic_configuration import AtomicConfiguration
 from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
+from .key_value_pair import KeyValuePair
 from .state_parser import state_parser
 
 class StatefulSpeciesError(Exception):
@@ -67,9 +68,12 @@ class StatefulSpecies:
                     ' specified for {}'.format(state_class.__name__, self))
         return True
 
+
+    def get_states_of_type(self, StateClass):
+        return [s for s in self.states if s.__class__ == StateClass]
+
     def verify_atomic_configuration(self):
-        atomic_configurations = [s for s in self.states
-                                    if s.__class__ == AtomicConfiguration]
+        atomic_configurations = self.get_states_of_type(AtomicConfiguration)
         if len(atomic_configurations) != 1:
             raise StatefulSpeciesError('Multiple AtomicConfigurations'
                                 ' specified for {}'.format(self))
@@ -92,8 +96,8 @@ class StatefulSpecies:
         if self.formula.natoms != 2:
             return True
         homonuclear_diatomic = len(self.formula.atoms) == 1
-        diatomic_configurations = [s for s in self.states
-                              if s.__class__ == DiatomicMolecularConfiguration]
+        diatomic_configurations = self.get_states_of_type(
+                                        DiatomicMolecularConfiguration)
         if not diatomic_configurations:
             return True
         if len(diatomic_configurations) != 1:
@@ -108,8 +112,13 @@ class StatefulSpecies:
         raise StatefulSpeciesError('Incorrect use of inversion parity label'
                     ' (u/g) for {}nuclear diatomic {}'.format(s_homohetero,
                                                               self.formula))
-        
 
+    def verify_multiple_key_value_pairs(self):
+        key_value_pairs = self.get_states_of_type(KeyValuePair)
+        keys = [key_value_pair.key for key_value_pair in key_value_pairs]
+        if len(set(keys)) != len(keys):
+            raise StatefulSpeciesError('Multiple key-value pairs with the same'
+                    ' key specified for {}'.format(self))
 
     @property
     def html(self):

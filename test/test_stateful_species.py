@@ -85,8 +85,14 @@ class StatefulSpeciesTest(unittest.TestCase):
         for ss in (ss2, ss3, ss4):
             self.assertRaises(StatefulSpeciesError,
                               ss.verify_diatomic_inversion_parity)
-        
 
+
+    def test_multiple_key_value_pair_states(self):
+        ss1 = StatefulSpecies('Ar+ n=2;2P;|M|=1')
+
+        ss2 = StatefulSpecies('Ar+ n=2;n=3')
+        self.assertRaises(StatefulSpeciesError,
+                          ss2.verify_multiple_key_value_pairs)
 
 if __name__ == '__main__':
     unittest.main()
