@@ -86,7 +86,11 @@ class AtomicConfigurationTest(unittest.TestCase):
                           '4g1')
         c2 = AtomicConfiguration('10k1')
         c3 = AtomicConfiguration('1s2.2s2.2p5.7h2')
- 
+
+    def test_atomic_configuration_repr(self):
+        c1 = AtomicConfiguration('1s2.2s2.2p6.3s2.3p6.4s2.3d3')
+        c2 = AtomicConfiguration('[Ar].4s2.3d3')
+        self.assertTrue(repr(c1) == repr(c2) == '1s2.2s2.2p6.3s2.3p6.4s2.3d3')
 
 if __name__ == '__main__':
     unittest.main()

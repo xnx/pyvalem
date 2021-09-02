@@ -98,5 +98,14 @@ class MolecularTermSymbolTest(unittest.TestCase):
         self.assertEqual(c2.irrep, 'Πu') 
         self.assertEqual(c2.Omega, -1.5) 
 
+    def test_molecular_term_symbol_repr(self):
+        m1 = MolecularTermSymbol('1Σ+u')
+        m2 = MolecularTermSymbol('1SIGMA+u')
+        self.assertTrue(repr(m1) == repr(m2) == '1Σ+u')
+
+        m3 = MolecularTermSymbol('4Δ')
+        m4 = MolecularTermSymbol('4DELTA')
+        self.assertTrue(repr(m3) == repr(m4) == '4Δ')
+
 if __name__ == '__main__':
     unittest.main()

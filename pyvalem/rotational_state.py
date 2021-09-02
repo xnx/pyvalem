@@ -27,10 +27,15 @@ class RotationalState(State):
 
     def parse_state(self, state_str):
 
-        if not state_str.startswith('J='):
+        try:
+            k, v = state_str.split('=')
+            if k.strip() != 'J':
+                raise ValueError
+        except ValueError:
             raise RotationalStateError('Rotational states must start with'
                                        ' "J="')
-        state_str = state_str[2:]
+
+        state_str = v.strip()
 
         self.J = None
         if state_str not in ('*', '**', '***'):
@@ -55,7 +60,8 @@ class RotationalState(State):
                 self.validate_J()
 
         self.state_str = 'J={}'.format(state_str)
-    
+
+
     def validate_J(self):
         if self.J % 0.5 != 0:
             raise RotationalStateError('Invalid rotational state value: {}.'

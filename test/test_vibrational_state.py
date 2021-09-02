@@ -32,11 +32,8 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertEqual(v3.html, 'ν<sub>1</sub> + ν<sub>2</sub>')
         self.assertEqual(v3.latex, r'\nu_{1} + \nu_{2}')
         
-        # Spaces around the '+' are allowed
-        v4 = VibrationalState('2v1 + 3v4')
-        self.assertEqual(str(v4), '2ν1+3ν4')
-        self.assertEqual(v4.html, '2ν<sub>1</sub> + 3ν<sub>4</sub>')
-        self.assertEqual(v4.latex, r'2\nu_{1} + 3\nu_{4}')
+        # Spaces around the '+' are not allowed
+        self.assertRaises(VibrationalStateError, VibrationalState, '2v1 + 3v4')
 
         # If only one mode is excited, there is no '+'
         v5 = VibrationalState('3v2')
@@ -73,10 +70,10 @@ class VibrationalStateTest(unittest.TestCase):
 
     def test_vibrational_state_equality(self):
 
-        v1 = VibrationalState('v1 + 3v4')
-        v2 = VibrationalState('ν1 + 3ν4')
-        v3 = VibrationalState('3v4 + v1')
-        v4 = VibrationalState('2v1 + v2')
+        v1 = VibrationalState('v1+3v4')
+        v2 = VibrationalState('ν1+3ν4')
+        v3 = VibrationalState('3v4+v1')
+        v4 = VibrationalState('2v1+v2')
         self.assertEqual(v1, v2)
         self.assertEqual(v1, v3)
         self.assertNotEqual(v1, v4)
@@ -87,6 +84,15 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertEqual(v5, v6)
         self.assertNotEqual(v6, v7)
 
+    def test_vibrational_state_repr(self):
+        
+        v1 = VibrationalState('3v1+v3')
+        v2 = VibrationalState('3ν1+ν3')
+        self.assertTrue(repr(v1) == repr(v2) == '3ν1+ν3')
+
+        v3 = VibrationalState('v=**')
+        v4 = VibrationalState('v = **')
+        self.assertTrue(repr(v3) == repr(v4) == 'v=**')
 
 if __name__ == '__main__':
     unittest.main()

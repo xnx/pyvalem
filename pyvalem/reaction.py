@@ -28,7 +28,7 @@ class Reaction:
                 continue
             if nfragments > 2:
                 raise ReactionParseError('Invalid reaction string'
-                        ' - multiple reactant-product separators: {}'.format(s))
+                       ' - multiple reactant-product separators: {}'.format(s))
             break
         else:
             raise ReactionParseError('Invalid reaction string'
@@ -103,16 +103,23 @@ class Reaction:
         return n, ss
 
     def __repr__(self):
-        reactants = ' + '.join([self._get_str_term(n, r)
-                                    for n, r in self.reactants])
-        products = ' + '.join([self._get_str_term(n, p)
-                                    for n, p in self.products])
+        reactants = ' + '.join(sorted(self._get_repr_term(n, r)
+                                    for n, r in self.reactants))
+        products = ' + '.join(sorted(self._get_repr_term(n, p)
+                                    for n, p in self.products))
         return '{} {} {}'.format(reactants, self.sep, products)
-    __str__ = __repr__
 
-    def _get_str_term(self, n, term):
+    def __str__(self):
+        reactants = ' + '.join(self._get_repr_term(n, r)
+                                    for n, r in self.reactants)
+        products = ' + '.join(self._get_repr_term(n, p)
+                                    for n, p in self.products)
+        return '{} {} {}'.format(reactants, self.sep, products)
+
+
+    def _get_repr_term(self, n, term):
         s_n = str(n) if n != 1 else ''
-        return '{}{}'.format(s_n, term)
+        return '{}{}'.format(s_n, repr(term))
 
 
     def _get_all_stoichs(self, ss_list):

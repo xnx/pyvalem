@@ -33,6 +33,16 @@ class KeyValuePairTest(unittest.TestCase):
         self.assertNotEqual(kv1, kv3)
         self.assertNotEqual(kv2, kv4)
 
+    def test_key_value_pair_repr(self):
+        kv1 = KeyValuePair('n=2')
+        kv2 = KeyValuePair('n =2')
+        kv3 = KeyValuePair('n= 2')
+        kv4 = KeyValuePair('n = 2')
+        kv5 = KeyValuePair('n  = 2')
+        self.assertTrue(repr(kv1) == repr(kv2) == repr(kv3) == repr(kv4)
+                     == repr(kv5) == 'n=2')
+
+
 if __name__ == '__main__':
     unittest.main()
 

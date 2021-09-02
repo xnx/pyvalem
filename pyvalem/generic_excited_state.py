@@ -38,6 +38,18 @@ class GenericExcitedState(State):
             raise GenericExcitedStateError('Invalid excited state value'
                         ' syntax: {0} Must have a * term.'.format(state_str))
 
+    def __repr__(self):
+        if self.state_str == '1*':
+            return '*'
+        elif self.state_str == '2*':
+            return '**'
+        elif self.state_str == '***':
+            return '3*'
+        elif self.state_str == '****':
+            return '4*'
+        return self.state_str
+
+
     @property
     def html(self):
         html_chunks = []

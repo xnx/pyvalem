@@ -34,7 +34,7 @@ class StatefulSpecies:
         """Return a canonical text representation of the StatefulSpecies."""
         if self.states:
             return '{} {}'.format(self.formula,
-                                  ';'.join(map(repr, self.states)))
+                                  ';'.join(sorted(map(repr, self.states))))
         return self.formula.__repr__()
 
     def __eq__(self, other):

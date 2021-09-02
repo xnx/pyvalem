@@ -94,6 +94,11 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertRaises(StatefulSpeciesError,
                           ss2.verify_multiple_key_value_pairs)
 
+
+    def test_stateful_species_repr(self):
+        ss1 = StatefulSpecies('C2H2 v2+v1;J=10;X(1SIGMA+u)')
+        self.assertTrue(repr(ss1) == 'C2H2 J=10;X(1Σ+u);ν1+ν2')
+
 if __name__ == '__main__':
     unittest.main()
 

@@ -20,9 +20,9 @@ class VibrationalTerm:
         self.n = int(n)
         self.mode = int(mode)
     
-    def __str__(self):
+    def __repr__(self):
         return '{}ν{:d}'.format(self.n if self.n > 1 else '', self.mode)
-    __repr__=__str__
+    __str__ = __repr__
 
     @property
     def html(self):
@@ -44,6 +44,10 @@ class VibrationalState(State):
     multiple_allowed = False
 
     def parse_state(self, state_str):
+
+        if ' + ' in state_str:
+            raise VibrationalStateError('Spaces around "+" not allowed for'
+                    ' polyatomic vibrational states: {}'.format(state_str))
 
         self.state_str = state_str.replace(' ','')
         self.v = None
