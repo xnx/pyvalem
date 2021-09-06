@@ -450,6 +450,7 @@ class Formula:
             return 'e-'
         if self.formula in ('hv', 'hν'):
             # Special case for the photon
+            self.formula = 'hν'
             return 'hν'
 
         fmt = fmt.lower()
