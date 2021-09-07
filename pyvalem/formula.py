@@ -169,6 +169,9 @@ class Formula:
     def parse_formula(self, formula):
         """Parse the string formula into a Formula object."""
 
+        if formula == 'hv':
+            formula == 'hν'
+
         if formula == 'D-':
             # This is a not-ideal way to deal with the fact that D- breaks
             # the parser due to a clash with the D- prefix.
