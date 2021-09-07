@@ -115,6 +115,7 @@ class FormulaTest(unittest.TestCase):
     def test_photon(self):
         for cf in (Formula('hν'), Formula('hv')):
             self.assertEqual(cf.stoichiometric_formula(), 'hν')
+            self.assertEqual(str(cf), 'hν')
             self.assertEqual(cf.slug, 'hv')
             self.assertEqual(cf.html, 'hν')
             self.assertEqual(cf.mass, 0)
