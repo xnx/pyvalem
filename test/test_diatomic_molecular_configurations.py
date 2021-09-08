@@ -65,7 +65,6 @@ class DiatomicMolecularConfigurationTest(unittest.TestCase):
                 DiatomicMolecularConfiguration, '1pi6')
 
     def test_diatomic_molecular_configuration_equality(self):
-
         c1 = DiatomicMolecularConfiguration('1σu2')
         c2 = DiatomicMolecularConfiguration('1sigmau2')
         c3 = DiatomicMolecularConfiguration('1sigmag2')
@@ -89,6 +88,14 @@ class DiatomicMolecularConfigurationTest(unittest.TestCase):
         self.assertEqual(c3, c4)
         self.assertTrue(repr(c3) == repr(c4) == '1πu4.1πg3')
         
+    def test_alt_diatomic_molecular_configuration(self):
+        c1 = DiatomicMolecularConfiguration('1s-σg2')
+        c2 = DiatomicMolecularConfiguration('1s-σg2.1s-sigmau2')
+        self.assertEqual(str(c2), '1s-σg2.1s-σu2')
+        c3 = DiatomicMolecularConfiguration('1s-σ2.2p-π1')
+
+        self.assertRaises(DiatomicMolecularConfigurationError,
+                DiatomicMolecularConfiguration, '1s-σ2.1s-σ1')
 
 if __name__ == '__main__':
     unittest.main()
