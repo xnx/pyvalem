@@ -99,6 +99,11 @@ class StatefulSpeciesTest(unittest.TestCase):
         ss1 = StatefulSpecies('C2H2 v2+v1;J=10;X(1SIGMA+u)')
         self.assertTrue(repr(ss1) == 'C2H2 J=10;X(1Σ+u);ν1+ν2')
 
+        ss2 = StatefulSpecies('(235U) l=0;***;n=1')
+        ss3 = StatefulSpecies('(235U) l=0;n=1;***')
+        self.assertEqual(repr(ss2), repr(ss3))
+        self.assertEqual(repr(ss2), '(235U) 3*;l=0;n=1')
+
 if __name__ == '__main__':
     unittest.main()
 
