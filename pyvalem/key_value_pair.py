@@ -3,7 +3,7 @@ The KeyValuePair class, representing an arbitrary atomic or molecular state,
 with methods for parsing it from a string and outputing its HTML
 representation, etc.
 """
-
+import html
 from .state import State, StateParseError
 
 class KeyValuePairError(StateParseError):
@@ -37,3 +37,7 @@ class KeyValuePair(State):
         self.value = value.strip()
 
         self.state_str = '{}={}'.format(self.key, self.value)
+
+    @property
+    def html(self):
+        return html.escape(str(self))

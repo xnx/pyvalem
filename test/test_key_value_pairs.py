@@ -42,6 +42,11 @@ class KeyValuePairTest(unittest.TestCase):
         self.assertTrue(repr(kv1) == repr(kv2) == repr(kv3) == repr(kv4)
                      == repr(kv5) == 'n=2')
 
+    def test_html_escaping(self):
+        kv1 = KeyValuePair('S="5<n<9"')
+        self.assertEqual(repr(kv1), 'S="5<n<9"')
+        self.assertEqual(kv1.html, 'S=&quot;5&lt;n&lt;9&quot;')
+
 
 if __name__ == '__main__':
     unittest.main()
