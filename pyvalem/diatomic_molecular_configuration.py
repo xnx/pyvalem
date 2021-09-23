@@ -204,6 +204,9 @@ class DiatomicMolecularConfiguration(State):
         return '.'.join([str(orbital) for orbital in self.orbitals])
     __str__ = __repr__
 
+    def __hash__(self):
+        return hash(self.state_str)
+
             
     @property
     def html(self):
