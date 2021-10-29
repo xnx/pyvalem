@@ -45,6 +45,21 @@ class ReactionParseTest(unittest.TestCase):
         r4 = Reaction(s_r4)
         self.assertEqual(r3, r4)
 
+    def test_incomplete_reaction(self):
+        self.assertRaises(ReactionParseError, Reaction,
+                                                    'Ar+ + He ->')
+        self.assertRaises(ReactionParseError, Reaction,
+                                                    'Ar+ + He -> ')
+        r1 = Reaction('Ar+ + He ->', strict=False)
+        r2 = Reaction('Ar+ + He -> ', strict=False)
+
+        self.assertEqual(str(r1), 'Ar+ + He →') 
+        self.assertEqual(r1.html, 'Ar<sup>+</sup> + He →') 
+        self.assertEqual(r1.latex, r'\mathrm{Ar}^{+} + \mathrm{He} \rightarrow') 
+        self.assertEqual(str(r2), 'Ar+ + He →') 
+        self.assertEqual(r2.html, 'Ar<sup>+</sup> + He →') 
+        self.assertEqual(r2.latex, r'\mathrm{Ar}^{+} + \mathrm{He} \rightarrow') 
+
     def test_reaction_term_aggregation(self):
         s_r1 = 'H + e- + e- -> H+ + e- + e- + e-'
         r1 = Reaction(s_r1)

@@ -13,15 +13,23 @@ class ReactionChargeError(ReactionParseError):
 
 class Reaction:
 
-    RP_SEPARATORS = ' → ', ' = ', ' ⇌ ', ' -> ', ' <-> ', ' <=> '
+    RP_SEPARATORS = '→', '=', '⇌', '->', '<->', '<=>'
+    SPACED_RP_SEPARATORS = [' ' + s + ' ' for s in RP_SEPARATORS]
 
     canonical_separators = {'→': '→', '->': '→', '=': '→',
                             '⇌': '⇌', '<->': '⇌', '<=>': '⇌'}
     latex_sep = {'→': r'\rightarrow', '⇌': r'\rightlefthooks'}
 
-    def __init__(self, s):
+    def __init__(self, s, strict=True):
 
+        # If the Reaction string has no products, add a space after the
+        # separator (e.g. 'Ar + e- ->' becomes 'Ar + e- -> ').
         for sep in Reaction.RP_SEPARATORS:
+            if s.rstrip().endswith(sep):
+                s = s + ' '
+                break
+
+        for sep in Reaction.SPACED_RP_SEPARATORS:
             fragments = s.split(sep)
             nfragments = len(fragments)
             if nfragments == 1:
@@ -39,8 +47,11 @@ class Reaction:
         try:
             self.reactants = [self._parse_ss_with_stoich_coeff(s) for s in
                               reactants]
-            self.products = [self._parse_ss_with_stoich_coeff(s) for s in
-                              products]
+            if strict:
+                self.products = [self._parse_ss_with_stoich_coeff(s) for s in
+                                  products]
+            else:
+                self.products = []
         except FormulaParseError as err:
              raise ReactionParseError('Failed to parse Reaction string "{}"'
                 ' because one of the StatefulSpecies was incorrectly formed.'
@@ -49,10 +60,10 @@ class Reaction:
         self.reactants = self._aggregate_terms(self.reactants)
         self.products = self._aggregate_terms(self.products)
 
-        if not self.stoichiometry_conserved():
+        if strict and not self.stoichiometry_conserved():
             raise ReactionStoichiometryError('Stoichiometry not preserved for'
                     ' reaction: {}'.format(s))
-        if not self.charge_conserved():
+        if strict and not self.charge_conserved():
             raise ReactionChargeError('Charge not preserved for'
                     ' reaction: {}'.format(s))
 
@@ -114,7 +125,9 @@ class Reaction:
                                     for n, r in self.reactants)
         products = ' + '.join(self._get_repr_term(n, p)
                                     for n, p in self.products)
-        return '{} {} {}'.format(reactants, self.sep, products)
+        if products:
+            return '{} {} {}'.format(reactants, self.sep, products)
+        return '{} {}'.format(reactants, self.sep)
 
 
     def _get_repr_term(self, n, term):
@@ -175,7 +188,10 @@ class Reaction:
         for n, reactant in self.reactants:
             reactant_html_chunks.append(_rp_html(n, reactant))
         html_chunks = [' + '.join(reactant_html_chunks)]
-        html_chunks.append(' {} '.format(self.sep))
+        if self.products:
+            html_chunks.append(' {} '.format(self.sep))
+        else:
+            html_chunks.append(' ' + self.sep)
         product_html_chunks = []
         for n, product in self.products:
             product_html_chunks.append(_rp_html(n, product))
@@ -193,7 +209,10 @@ class Reaction:
         for n, reactant in self.reactants:
             reactant_latex_chunks.append(_rp_latex(n, reactant))
         latex_chunks = [' + '.join(reactant_latex_chunks)]
-        latex_chunks.append(' {} '.format(Reaction.latex_sep[self.sep]))
+        if self.products:
+            latex_chunks.append(' {} '.format(Reaction.latex_sep[self.sep]))
+        else:
+            latex_chunks.append(' ' + Reaction.latex_sep[self.sep])
         product_latex_chunks = []
         for n, product in self.products:
             product_latex_chunks.append(_rp_latex(n, product))
