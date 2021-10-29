@@ -60,6 +60,9 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(r2.html, 'Ar<sup>+</sup> + He →') 
         self.assertEqual(r2.latex, r'\mathrm{Ar}^{+} + \mathrm{He} \rightarrow') 
 
+        r3 = Reaction('Kr+ + He+ -> Kr+2', strict=False)
+        self.assertEqual(str(r3), 'He+ + Kr+ → Kr+2')
+
     def test_reaction_term_aggregation(self):
         s_r1 = 'H + e- + e- -> H+ + e- + e- + e-'
         r1 = Reaction(s_r1)

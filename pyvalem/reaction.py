@@ -47,11 +47,8 @@ class Reaction:
         try:
             self.reactants = [self._parse_ss_with_stoich_coeff(s) for s in
                               reactants]
-            if strict:
-                self.products = [self._parse_ss_with_stoich_coeff(s) for s in
-                                  products]
-            else:
-                self.products = []
+            self.products = [self._parse_ss_with_stoich_coeff(s) for s in
+                             products if s.strip()]
         except FormulaParseError as err:
              raise ReactionParseError('Failed to parse Reaction string "{}"'
                 ' because one of the StatefulSpecies was incorrectly formed.'
@@ -118,7 +115,9 @@ class Reaction:
                                     for n, r in self.reactants))
         products = ' + '.join(sorted(self._get_repr_term(n, p)
                                     for n, p in self.products))
-        return '{} {} {}'.format(reactants, self.sep, products)
+        if products:
+            return '{} {} {}'.format(reactants, self.sep, products)
+        return '{} {}'.format(reactants, self.sep)
 
     def __str__(self):
         reactants = ' + '.join(self._get_repr_term(n, r)
