@@ -157,7 +157,7 @@ class MolecularTermSymbol(State):
 
         latex_chunks = []
         if self.term_label is not None:
-            latex_chunks.append('{:s}('.format(self.term_label))
+            latex_chunks.append(self.term_label)
         latex_chunks.append('{{}}^{{{:d}}}{:s}'.format(self.Smult,
                                                 self.irrep_latex(self.irrep)))
         if self.Omega is not None:
@@ -165,8 +165,6 @@ class MolecularTermSymbol(State):
             # NB avoid double underscore if we have a subscript already.
             latex_chunks.append('{{}}_{{{:s}}}'.format(Omegastr))
 
-        if self.term_label is not None:
-            latex_chunks.append(')'.format(self.term_label))
         return ''.join(latex_chunks)
         
 

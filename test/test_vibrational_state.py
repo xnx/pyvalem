@@ -94,5 +94,16 @@ class VibrationalStateTest(unittest.TestCase):
         v4 = VibrationalState('v = **')
         self.assertTrue(repr(v3) == repr(v4) == 'v=**')
 
+    def test_zero_polyatomic_vibrational_states(self):
+        v1 = VibrationalState('0v1+0v2+0v3')
+        self.assertTrue(not any(term.n for term in v1.terms))
+        self.assertEqual(str(v1), '0ν1+0ν2+0ν3')
+        self.assertEqual(repr(v1), '0ν1+0ν2+0ν3')
+        self.assertEqual(v1.html,
+                         '0ν<sub>1</sub> + 0ν<sub>2</sub> + 0ν<sub>3</sub>')
+        self.assertEqual(v1.latex,
+                         r'0\nu_{1} + 0\nu_{2} + 0\nu_{3}')
+        
+
 if __name__ == '__main__':
     unittest.main()

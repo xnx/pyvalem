@@ -21,17 +21,17 @@ class VibrationalTerm:
         self.mode = int(mode)
     
     def __repr__(self):
-        return '{}ν{:d}'.format(self.n if self.n > 1 else '', self.mode)
+        return '{}ν{:d}'.format(self.n if self.n != 1 else '', self.mode)
     __str__ = __repr__
 
     @property
     def html(self):
-        return '{}ν<sub>{:d}</sub>'.format(self.n if self.n > 1 else '',
+        return '{}ν<sub>{:d}</sub>'.format(self.n if self.n != 1 else '',
                                              self.mode)
 
     @property
     def latex(self):
-        return '{}\\nu_{{{:d}}}'.format(self.n if self.n > 1 else '',
+        return '{}\\nu_{{{:d}}}'.format(self.n if self.n != 1 else '',
                                              self.mode)
     def __lt__(self, other):
         return self.mode < other.mode
