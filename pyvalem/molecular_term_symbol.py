@@ -142,14 +142,12 @@ class MolecularTermSymbol(State):
 
         html_chunks = []
         if self.term_label is not None:
-            html_chunks.append('{:s}('.format(self.term_label))
+            html_chunks.append('{:s}'.format(self.term_label))
         html_chunks.append('<sup>{0:d}</sup>{1:s}'
                               .format(self.Smult, self.irrep_html(self.irrep)))
         if self.Omega is not None:
             Omegastr = float_to_fraction(self.Omega)
             html_chunks.append('<sub>{0:s}</sub>'.format(Omegastr))
-        if self.term_label is not None:
-            html_chunks.append(')')
         return ''.join(html_chunks)
 
 
