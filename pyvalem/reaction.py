@@ -111,10 +111,25 @@ class Reaction:
         return n, ss
 
     def __repr__(self):
-        reactants = ' + '.join(sorted(self._get_repr_term(n, r)
-                                    for n, r in self.reactants))
-        products = ' + '.join(sorted(self._get_repr_term(n, p)
-                                    for n, p in self.products))
+        # electron, positron and photon will go first, M will go last.
+        sort_key = {
+            'e-': -1, 'e+': -1, 'hv': -1, 'hν': -1, 'M': 1
+        }
+        reactants_sorted = sorted(
+            self.reactants,
+            key=lambda nr: (sort_key.get(nr[1].formula.formula, 0),
+                            repr(nr[1]))
+        )
+        products_sorted = sorted(
+            self.products,
+            key=lambda np: (sort_key.get(np[1].formula.formula, 0),
+                            repr(np[1]))
+        )
+
+        reactants = ' + '.join(self._get_repr_term(n, r)
+                               for n, r in reactants_sorted)
+        products = ' + '.join(self._get_repr_term(n, p)
+                              for n, p in products_sorted)
         if products:
             return '{} {} {}'.format(reactants, self.sep, products)
         return '{} {}'.format(reactants, self.sep)

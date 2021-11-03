@@ -85,9 +85,22 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(r1 == r3, False)
 
     def test_reaction_repr(self):
-        s_r1 = 'C2H5OH + 3O2 -> 3H2O + 2CO2'
-        r1 = Reaction(s_r1)
-        self.assertTrue(repr(r1) == '3O2 + C2H5OH → 2CO2 + 3H2O')
+        self.assertEqual(
+            repr(Reaction('C2H5OH + 3O2 -> 3H2O + 2CO2')),
+            'C2H5OH + 3O2 → 2CO2 + 3H2O'
+        )
+        self.assertEqual(
+            repr(Reaction('e- + C2 + e- -> C- + C-')),
+            '2e- + C2 → 2C-'
+        )
+        self.assertEqual(
+            repr(Reaction('e- + C2 -> C- + C')),
+            'e- + C2 → C + C-'
+        )
+        self.assertEqual(
+            repr(Reaction('hv + C2 -> C + C')),
+            'hv + C2 → 2C'
+        )
 
 
 if __name__ == '__main__':
