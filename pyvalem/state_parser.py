@@ -26,10 +26,10 @@ STATES = OrderedDict([
     (MolecularTermSymbol, 2),
     (VibrationalState, 3),
     (RotationalState, 4),
-    (RacahSymbol, 0),
-    # (PhaseState, 0),
-    # (EnergyFreqWvln, 0),
-    (KeyValuePair, 5),
+    (RacahSymbol, 5),
+    # (PhaseState, None),
+    # (EnergyFreqWvln, None),
+    (KeyValuePair, 6),
 ])
 
 
