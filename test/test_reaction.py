@@ -17,7 +17,7 @@ class ReactionParseTest(unittest.TestCase):
         r1 = Reaction(s_r1)
         self.assertEqual(str(r1), s_r1)
         r2 = Reaction('CO v=1 + O2 J=2;X(3SIGMA-g) → CO2 + O')
-        self.assertEqual(str(r2), 'CO v=1 + O2 J=2;X(3Σ-g) → CO2 + O')
+        self.assertEqual(str(r2), 'CO v=1 + O2 X(3Σ-g);J=2 → CO2 + O')
         self.assertRaises(ReactionParseError, Reaction, 'CO + O2 CO2 + O')
         self.assertRaises(ReactionParseError, Reaction, 'CO + O2 = + CO2 + O')
         self.assertRaises(ReactionParseError, Reaction, 'BeH+ + I2 =⇌ BeI')
@@ -28,9 +28,9 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(r2.reactants[0][1].states[0].__repr__(), 'v=1')
         self.assertEqual(r2.reactants[1][1].states[1].__repr__(), 'X(3Σ-g)')
         self.assertEqual(r2.html, 'CO v=1 + O<sub>2</sub> J=2;'
-            ' X(<sup>3</sup>Σ<sup>-</sup><sub>g</sub>) → CO<sub>2</sub> + O')
+            ' X<sup>3</sup>Σ<sup>-</sup><sub>g</sub> → CO<sub>2</sub> + O')
         self.assertEqual(r2.latex, r'\mathrm{C}\mathrm{O} \; v=1 + '
-                r'\mathrm{O}_{2} \; J=2; \; X({}^{3}\Sigma^-_{g}) \rightarrow '
+                r'\mathrm{O}_{2} \; J=2; \; X{}^{3}\Sigma^-_{g} \rightarrow '
                 r'\mathrm{C}\mathrm{O}_{2} + \mathrm{O}')
 
         s_r3 = 'C6H5OH + 7O2 -> 6CO2 + 3H2O'

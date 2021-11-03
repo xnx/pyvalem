@@ -9,7 +9,7 @@ from .formula import Formula, FormulaParseError
 from .atomic_configuration import AtomicConfiguration
 from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
 from .key_value_pair import KeyValuePair
-from .state_parser import state_parser
+from .state_parser import state_parser, STATES
 
 class StatefulSpeciesError(Exception):
     pass
@@ -33,8 +33,14 @@ class StatefulSpecies:
     def __repr__(self):
         """Return a canonical text representation of the StatefulSpecies."""
         if self.states:
-            return '{} {}'.format(self.formula,
-                                  ';'.join(sorted(map(repr, self.states))))
+            states_sorted = sorted(
+                self.states,
+                key=lambda state: (STATES[type(state)], repr(state))
+            )
+            return '{} {}'.format(
+                self.formula,
+                ';'.join(repr(state) for state in states_sorted)
+            )
         return self.formula.__repr__()
 
     def __eq__(self, other):

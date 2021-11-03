@@ -97,12 +97,21 @@ class StatefulSpeciesTest(unittest.TestCase):
 
     def test_stateful_species_repr(self):
         ss1 = StatefulSpecies('C2H2 v2+v1;J=10;X(1SIGMA+u)')
-        self.assertTrue(repr(ss1) == 'C2H2 J=10;X(1Σ+u);ν1+ν2')
+        self.assertTrue(repr(ss1) == 'C2H2 X(1Σ+u);ν1+ν2;J=10')
 
         ss2 = StatefulSpecies('(235U) l=0;***;n=1')
         ss3 = StatefulSpecies('(235U) l=0;n=1;***')
         self.assertEqual(repr(ss2), repr(ss3))
         self.assertEqual(repr(ss2), '(235U) 3*;l=0;n=1')
+
+        for ss_text in ['C+ 4P;2s2.2p1', 'C+ 2s2.2p1;4P']:
+            self.assertEqual(repr(StatefulSpecies(ss_text)),
+                             'C+ 2s2.2p1;4P')
+
+        for ss_text in ['C+ 2P;2s2.2p1', 'C+ 2s2.2p1;2P']:
+            self.assertEqual(repr(StatefulSpecies(ss_text)),
+                             'C+ 2s2.2p1;2P')
+
 
 if __name__ == '__main__':
     unittest.main()
