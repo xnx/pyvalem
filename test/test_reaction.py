@@ -17,7 +17,7 @@ class ReactionParseTest(unittest.TestCase):
         r1 = Reaction(s_r1)
         self.assertEqual(str(r1), s_r1)
         r2 = Reaction('CO v=1 + O2 J=2;X(3SIGMA-g) → CO2 + O')
-        self.assertEqual(str(r2), 'CO v=1 + O2 J=2;X(3Σ-g) → CO2 + O')
+        self.assertEqual(str(r2), 'CO v=1 + O2 X(3Σ-g);J=2 → CO2 + O')
         self.assertRaises(ReactionParseError, Reaction, 'CO + O2 CO2 + O')
         self.assertRaises(ReactionParseError, Reaction, 'CO + O2 = + CO2 + O')
         self.assertRaises(ReactionParseError, Reaction, 'BeH+ + I2 =⇌ BeI')
@@ -28,9 +28,9 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(r2.reactants[0][1].states[0].__repr__(), 'v=1')
         self.assertEqual(r2.reactants[1][1].states[1].__repr__(), 'X(3Σ-g)')
         self.assertEqual(r2.html, 'CO v=1 + O<sub>2</sub> J=2;'
-            ' X(<sup>3</sup>Σ<sup>-</sup><sub>g</sub>) → CO<sub>2</sub> + O')
+            ' X<sup>3</sup>Σ<sup>-</sup><sub>g</sub> → CO<sub>2</sub> + O')
         self.assertEqual(r2.latex, r'\mathrm{C}\mathrm{O} \; v=1 + '
-                r'\mathrm{O}_{2} \; J=2; \; X({}^{3}\Sigma^-_{g}) \rightarrow '
+                r'\mathrm{O}_{2} \; J=2; \; X{}^{3}\Sigma^-_{g} \rightarrow '
                 r'\mathrm{C}\mathrm{O}_{2} + \mathrm{O}')
 
         s_r3 = 'C6H5OH + 7O2 -> 6CO2 + 3H2O'
@@ -85,9 +85,22 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(r1 == r3, False)
 
     def test_reaction_repr(self):
-        s_r1 = 'C2H5OH + 3O2 -> 3H2O + 2CO2'
-        r1 = Reaction(s_r1)
-        self.assertTrue(repr(r1) == '3O2 + C2H5OH → 2CO2 + 3H2O')
+        self.assertEqual(
+            repr(Reaction('C2H5OH + 3O2 -> 3H2O + 2CO2')),
+            'C2H5OH + 3O2 → 2CO2 + 3H2O'
+        )
+        self.assertEqual(
+            repr(Reaction('e- + C2 + e- -> C- + C-')),
+            '2e- + C2 → 2C-'
+        )
+        self.assertEqual(
+            repr(Reaction('e- + C2 -> C- + C')),
+            'e- + C2 → C + C-'
+        )
+        self.assertEqual(
+            repr(Reaction('hv + C2 -> C + C')),
+            'hv + C2 → 2C'
+        )
 
 
 if __name__ == '__main__':
