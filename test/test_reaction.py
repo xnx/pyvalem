@@ -102,6 +102,10 @@ class ReactionParseTest(unittest.TestCase):
             'hv + C2 → 2C'
         )
 
+    def test_reaction_M(self):
+        s_r1 = 'H + M -> H+ + e- + M'
+        r1 = Reaction(s_r1)
+
 
 if __name__ == '__main__':
     unittest.main()

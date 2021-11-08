@@ -171,7 +171,11 @@ class Reaction:
 
 
     def _get_total_charge(self, ss_list):
-        return sum(n * ss.formula.charge for n,ss in ss_list)
+        total_charge = 0
+        for n, ss in ss_list:
+            if ss.formula.formula != 'M':
+                total_charge += n * ss.formula.charge
+        return total_charge
 
 
     def charge_conserved(self):
