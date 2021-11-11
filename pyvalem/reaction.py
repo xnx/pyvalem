@@ -127,13 +127,15 @@ class Reaction:
             return []
         aggregated_terms = [terms[0]]
         for term in terms[1:]:
-            if term[0].formula.formula in self.light_species:
+            if term[1].formula.formula in self.light_species:
                 last_term = aggregated_terms[-1]
                 if term[1] == last_term[1]:
                     n = term[0] + last_term[0]
-                    aggregated_terms[-1] = (n + term[1])
+                    aggregated_terms[-1] = (n, term[1])
                 else:
                     aggregated_terms.append(term)
+            else:
+                aggregated_terms.append(term)
         return aggregated_terms
 
     def _expand_terms(self, terms):
@@ -154,12 +156,6 @@ class Reaction:
     def _silent_n(n):
         return str(n) if n != 1 else ''
 
-    def _get_terms_string(self, terms):
-        terms_string = ' + '.join(
-            '{}{}'.format(self._silent_n(n), repr(ss)) for n, ss in terms
-        )
-        return terms_string
-
     def __str__(self):
         reactants_str = ' + '.join(
             '{}{}'.format(self._silent_n(n), str(ss))
@@ -172,16 +168,13 @@ class Reaction:
         return '{} {} {}'.format(reactants_str, self.sep, products_str).strip()
 
     def __repr__(self):
-        # sort the light species:
-        self.reactants = self._sort_terms(self.reactants)
-        self.products = self._sort_terms(self.products, side='rhs')
-
-        # aggregate the stoichiometries:
-        self.reactants = self._aggregate_terms(self.reactants)
-        self.products = self._aggregate_terms(self.products)
-
-        reactants = self._sort_terms(self.reactants)
-        products = self._sort_terms(self.products)
+        """
+        Performs canonicalisation of the reaction string by expanding
+        aggregated stoichiometries of all the heavy species and by aggregating
+        light species (e, hv) and moving them to the side.
+        """
+        reactants = self._sort_terms(self.reactants, side='lhs')
+        products = self._sort_terms(self.products, side='rhs')
         reactants = self._aggregate_terms(reactants)
         products = self._aggregate_terms(products)
         reactants = self._expand_terms(reactants)
@@ -219,7 +212,8 @@ class Reaction:
 
     @staticmethod
     def _get_total_charge(side):
-        return sum(n * ss.formula.charge for n, ss in side)
+        return sum(n * ss.formula.charge for n, ss in side
+                   if ss.formula.formula != 'M')
 
     def charge_conserved(self):
         """Verify that the Reaction object conserves charge."""
