@@ -2,17 +2,20 @@ import re
 from .stateful_species import StatefulSpecies
 from .formula import FormulaParseError
 
+
 class ReactionParseError(Exception):
     pass
+
 
 class ReactionStoichiometryError(ReactionParseError):
     pass
 
+
 class ReactionChargeError(ReactionParseError):
     pass
 
-class Reaction:
 
+class Reaction:
     RP_SEPARATORS = '→', '=', '⇌', '->', '<->', '<=>'
     SPACED_RP_SEPARATORS = [' ' + s + ' ' for s in RP_SEPARATORS]
 
@@ -20,138 +23,186 @@ class Reaction:
                             '⇌': '⇌', '<->': '⇌', '<=>': '⇌'}
     latex_sep = {'→': r'\rightarrow', '⇌': r'\rightlefthooks'}
 
-    def __init__(self, s, strict=True):
+    light_species = ('e-', 'e+', 'hv', 'hν')
 
+    def __init__(self, r_str, strict=True):
+        """
+        Is strict flag set to False, the stoichiometry and charge balance
+        is not enforced. This is intended for incomplete/ambiguous reactions.
+        """
         # If the Reaction string has no products, add a space after the
         # separator (e.g. 'Ar + e- ->' becomes 'Ar + e- -> ').
         for sep in Reaction.RP_SEPARATORS:
-            if s.rstrip().endswith(sep):
-                s = s + ' '
+            if r_str.rstrip().endswith(sep):
+                r_str = r_str + ' '
                 break
 
         for sep in Reaction.SPACED_RP_SEPARATORS:
-            fragments = s.split(sep)
-            nfragments = len(fragments)
-            if nfragments == 1:
+            fragments = r_str.split(sep)
+            # fragments is a list: [LHS_str, RHS_str]
+            if len(fragments) == 1:
                 continue
-            if nfragments > 2:
-                raise ReactionParseError('Invalid reaction string'
-                       ' - multiple reactant-product separators: {}'.format(s))
+            elif len(fragments) > 2:
+                raise ReactionParseError(
+                    'Invalid reaction string - multiple reactant-product '
+                    'separators: {}'.format(r_str)
+                )
             break
         else:
-            raise ReactionParseError('Invalid reaction string'
-                        ' - no reactant-product separator: {}'.format(s))
-        self.sep = Reaction.canonical_separators[sep.strip()]
+            raise ReactionParseError(
+                'Invalid reaction string - no reactant-product separator: '
+                '{}'.format(r_str))
 
-        reactants, products = [f.split(' + ') for f in fragments]
+        # canonicalised side separator:
+        self.sep = self.canonical_separators[sep.strip()]
+
+        # parse reactants and products into
+        # list[tuple[int: stoichiometry, str: species]]
+        lhs_sps, rhs_sps = [f.split(' + ') for f in fragments]
         try:
-            self.reactants = [self._parse_ss_with_stoich_coeff(s) for s in
-                              reactants]
-            self.products = [self._parse_ss_with_stoich_coeff(s) for s in
-                             products if s.strip()]
+            self.reactants = [
+                self._parse_ss_with_stoich_coeff(sp) for sp in lhs_sps
+            ]
+            self.products = [
+                self._parse_ss_with_stoich_coeff(sp) for sp in rhs_sps
+                if sp.strip()
+            ]
         except FormulaParseError as err:
-             raise ReactionParseError('Failed to parse Reaction string "{}"'
-                ' because one of the StatefulSpecies was incorrectly formed.'
-                ' The error reported was: {}'.format(s, err))
+            raise ReactionParseError(
+                'Failed to parse Reaction string "{}" because one of the '
+                'StatefulSpecies was incorrectly formed. '
+                'The error reported was: {}'.format(r_str, err)
+            )
 
-        self.reactants = self._aggregate_terms(self.reactants)
-        self.products = self._aggregate_terms(self.products)
-
+        # validate charge and stoichiometry conservation:
         if strict and not self.stoichiometry_conserved():
-            raise ReactionStoichiometryError('Stoichiometry not preserved for'
-                    ' reaction: {}'.format(s))
+            raise ReactionStoichiometryError('Stoichiometry not preserved for '
+                                             'reaction: {}'.format(r_str))
         if strict and not self.charge_conserved():
-            raise ReactionChargeError('Charge not preserved for'
-                    ' reaction: {}'.format(s))
+            raise ReactionChargeError('Charge not preserved for '
+                                      'reaction: {}'.format(r_str))
 
-        self._order_terms(self.reactants)
-        self._order_terms(self.products)
-
-
-    def _aggregate_terms(self, terms):
-        """
-        Collect separate terms involving the same StatefulSpecies into a single
-        term with the same total stoichiometry. e.g. H + e + e becomes H + 2e.
-
-        """
-
-        ss_set = set(term[1] for term in terms)
-        aggregated_terms = []
-        for ss in ss_set:
-            n = sum(st[0] for st in terms if st[1] == ss)
-            aggregated_terms.append((n, ss))
-        return aggregated_terms
-
-    def _order_terms(self, terms):
-        """
-        Sort the reactant or product terms alphabetically by formula first,
-        then stoichiometry.
-
-        """
-
-        terms.sort(key=lambda e: (e[1].formula.formula, e[0]))
-
-    def _parse_ss_with_stoich_coeff(self, s):
+    @staticmethod
+    def _parse_ss_with_stoich_coeff(sp):
         """
         Parse s into n<ss> where n is a stoichiometric coefficient and ss
-        a StatefulSpecies.
-
+        a StatefulSpecies instance.
         """
-
-        patt = '(\d*)(.*)'
-        n, ss = re.match(patt, s).groups()
+        patt = r'(\d*)(.*)'
+        n, ss = re.match(patt, sp).groups()
         if not n:
             n = 1
         else:
             try:
                 n = int(n)
             except ValueError:
-                raise ReactionParseError('Failed to parse {}'.format(s))
+                raise ReactionParseError(
+                    'Failed to parse {}'.format(sp)
+                )
         ss = StatefulSpecies(ss)
         return n, ss
 
-    def __repr__(self):
-        # electron, positron and photon will go first, M will go last.
-        sort_key = {
-            'e-': -1, 'e+': -1, 'hv': -1, 'hν': -1, 'M': 1
-        }
-        reactants_sorted = sorted(
-            self.reactants,
-            key=lambda nr: (sort_key.get(nr[1].formula.formula, 0),
-                            repr(nr[1]))
-        )
-        products_sorted = sorted(
-            self.products,
-            key=lambda np: (sort_key.get(np[1].formula.formula, 0),
-                            repr(np[1]))
-        )
+    @staticmethod
+    def _sort_terms(terms, side='lhs'):
+        """
+        The only sorting is performed on light species, these are placed
+        first on LHS and last on RHS of the reaction.
+        """
+        sort_keys = {sp: (-1, sp) for sp in Reaction.light_species}
+        return list(sorted(
+            terms, key=lambda e: sort_keys.get(e[1].formula.formula, (0, '')),
+            reverse=side != 'lhs'
+        ))
 
-        reactants = ' + '.join(self._get_repr_term(n, r)
-                               for n, r in reactants_sorted)
-        products = ' + '.join(self._get_repr_term(n, p)
-                              for n, p in products_sorted)
-        if products:
-            return '{} {} {}'.format(reactants, self.sep, products)
-        return '{} {}'.format(reactants, self.sep)
+    def _aggregate_terms(self, terms):
+        """
+        Accepts list[tuple[int, StatefulSpecies]].
+        Collect separate terms involving the same StatefulSpecies into a single
+        term with the same total stoichiometry.
+        The aggregation is only done on successive light species terms.
+        Examples:
+            H + H + e + e + He + e + e -> H + H + 2e + He + 2e
+        """
+        if not len(terms):
+            return []
+        aggregated_terms = [terms[0]]
+        for term in terms[1:]:
+            if term[0].formula.formula in self.light_species:
+                last_term = aggregated_terms[-1]
+                if term[1] == last_term[1]:
+                    n = term[0] + last_term[0]
+                    aggregated_terms[-1] = (n + term[1])
+                else:
+                    aggregated_terms.append(term)
+        return aggregated_terms
+
+    def _expand_terms(self, terms):
+        """
+        Method to expand all aggregated heave species terms. Used for
+        the canonicalised representation given by __repr__.
+        """
+        expanded_terms = []
+        for n, ss in terms:
+            if ss.formula.formula in self.light_species:
+                expanded_terms.append((n, ss))
+            else:
+                for _ in range(n):
+                    expanded_terms.append((1, ss))
+        return expanded_terms
+
+    @staticmethod
+    def _silent_n(n):
+        return str(n) if n != 1 else ''
+
+    def _get_terms_string(self, terms):
+        terms_string = ' + '.join(
+            '{}{}'.format(self._silent_n(n), repr(ss)) for n, ss in terms
+        )
+        return terms_string
 
     def __str__(self):
-        reactants = ' + '.join(self._get_repr_term(n, r)
-                                    for n, r in self.reactants)
-        products = ' + '.join(self._get_repr_term(n, p)
-                                    for n, p in self.products)
-        if products:
-            return '{} {} {}'.format(reactants, self.sep, products)
-        return '{} {}'.format(reactants, self.sep)
+        reactants_str = ' + '.join(
+            '{}{}'.format(self._silent_n(n), str(ss))
+            for n, ss in self.reactants
+        )
+        products_str = ' + '.join(
+            '{}{}'.format(self._silent_n(n), str(ss))
+            for n, ss in self.products
+        )
+        return '{} {} {}'.format(reactants_str, self.sep, products_str).strip()
 
+    def __repr__(self):
+        # sort the light species:
+        self.reactants = self._sort_terms(self.reactants)
+        self.products = self._sort_terms(self.products, side='rhs')
 
-    def _get_repr_term(self, n, term):
-        s_n = str(n) if n != 1 else ''
-        return '{}{}'.format(s_n, repr(term))
+        # aggregate the stoichiometries:
+        self.reactants = self._aggregate_terms(self.reactants)
+        self.products = self._aggregate_terms(self.products)
 
+        reactants = self._sort_terms(self.reactants)
+        products = self._sort_terms(self.products)
+        reactants = self._aggregate_terms(reactants)
+        products = self._aggregate_terms(products)
+        reactants = self._expand_terms(reactants)
+        products = self._expand_terms(products)
 
-    def _get_all_stoichs(self, ss_list):
+        reactants_repr = ' + '.join(
+            '{}{}'.format(self._silent_n(n), repr(ss))
+            for n, ss in reactants
+        )
+        products_repr = ' + '.join(
+            '{}{}'.format(self._silent_n(n), repr(ss))
+            for n, ss in products
+        )
+        return '{} {} {}'.format(
+            reactants_repr, self.sep, products_repr
+        ).strip()
+
+    @staticmethod
+    def _get_all_stoichs(side):
         stoich = {}
-        for n, ss in ss_list:
+        for n, ss in side:
             for sp, nn in ss.formula.atom_stoich.items():
                 if sp in stoich:
                     stoich[sp] += n * nn
@@ -161,22 +212,14 @@ class Reaction:
 
     def stoichiometry_conserved(self):
         """Verify that the Reaction object conserves its stoichiometry."""
-
         reactants_stoich = self._get_all_stoichs(self.reactants)
         products_stoich = self._get_all_stoichs(self.products)
 
-        if reactants_stoich == products_stoich:
-            return True
-        return False
+        return reactants_stoich == products_stoich
 
-
-    def _get_total_charge(self, ss_list):
-        total_charge = 0
-        for n, ss in ss_list:
-            if ss.formula.formula != 'M':
-                total_charge += n * ss.formula.charge
-        return total_charge
-
+    @staticmethod
+    def _get_total_charge(side):
+        return sum(n * ss.formula.charge for n, ss in side)
 
     def charge_conserved(self):
         """Verify that the Reaction object conserves charge."""
@@ -184,55 +227,35 @@ class Reaction:
         reactants_total_charge = self._get_total_charge(self.reactants)
         products_total_charge = self._get_total_charge(self.products)
 
-        if reactants_total_charge == products_total_charge:
-            return True
-        return False
+        return reactants_total_charge == products_total_charge
 
     def __eq__(self, other):
-        return (set(self.reactants) == set(other.reactants) and
-                set(self.products) == set(other.products))
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
+        return repr(self) == repr(other)
 
     @property
     def html(self):
-        def _rp_html(n, rp):
-            if n == 1:
-                n = ''
-            return '{}{}'.format(n, rp.html)
-
-        reactant_html_chunks = []
-        for n, reactant in self.reactants:
-            reactant_html_chunks.append(_rp_html(n, reactant))
-        html_chunks = [' + '.join(reactant_html_chunks)]
-        if self.products:
-            html_chunks.append(' {} '.format(self.sep))
-        else:
-            html_chunks.append(' ' + self.sep)
-        product_html_chunks = []
-        for n, product in self.products:
-            product_html_chunks.append(_rp_html(n, product))
-        html_chunks.append(' + '.join(product_html_chunks))
-        return ''.join(html_chunks)
+        reactants_html = ' + '.join(
+            '{}{}'.format(self._silent_n(n), ss.html)
+            for n, ss in self.reactants
+        )
+        products_html = ' + '.join(
+            '{}{}'.format(self._silent_n(n), ss.html)
+            for n, ss in self.products
+        )
+        return '{} {} {}'.format(
+            reactants_html, self.sep, products_html
+        ).strip()
 
     @property
     def latex(self):
-        def _rp_latex(n, rp):
-            if n == 1:
-                n = ''
-            return '{}{}'.format(n, rp.latex)
-
-        reactant_latex_chunks = []
-        for n, reactant in self.reactants:
-            reactant_latex_chunks.append(_rp_latex(n, reactant))
-        latex_chunks = [' + '.join(reactant_latex_chunks)]
-        if self.products:
-            latex_chunks.append(' {} '.format(Reaction.latex_sep[self.sep]))
-        else:
-            latex_chunks.append(' ' + Reaction.latex_sep[self.sep])
-        product_latex_chunks = []
-        for n, product in self.products:
-            product_latex_chunks.append(_rp_latex(n, product))
-        latex_chunks.append(' + '.join(product_latex_chunks))
-        return ''.join(latex_chunks)
+        reactants_latex = ' + '.join(
+            '{}{}'.format(self._silent_n(n), ss.latex)
+            for n, ss in self.reactants
+        )
+        products_latex = ' + '.join(
+            '{}{}'.format(self._silent_n(n), ss.latex)
+            for n, ss in self.products
+        )
+        return '{} {} {}'.format(
+            reactants_latex, self.latex_sep[self.sep], products_latex
+        ).strip()
