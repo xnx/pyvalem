@@ -120,7 +120,9 @@ class ReactionParseTest(unittest.TestCase):
              'e+ + hv + 2H -> hv + e+ + 2H'],
             ['2H + He + He -> H + H + 2He', '2H + 2He -> 2H + He + He'],
             ['2H + He + He + hv -> H + hv + H + 2He',
-             '2H + hv + 2He -> 2H + He + He + hv']
+             '2H + hv + 2He -> 2H + He + He + hv'],
+            ['H + H + M -> H2 + M', '2H + M -> H2 + M'],
+            ['Kr + hv -> Kr + 2hv', 'Kr + hv -> Kr + hv + hv'],
         ]
         for r1, r2 in equal:
             self.assertEqual(Reaction(r1), Reaction(r2))
@@ -128,7 +130,8 @@ class ReactionParseTest(unittest.TestCase):
     def test_reaction_inequality(self):
         unequal = [
             ['H + He + H -> 2H + He', 'He + 2H -> He + 2H'],
-            ['H + He -> H+ + e- + He', 'He + H -> H+ + e- + He']
+            ['H + He -> H+ + e- + He', 'He + H -> H+ + e- + He'],
+            ['He + He+ -> He+ + He', 'He+ + He -> He + He+'],
         ]
         for r1, r2 in unequal:
             self.assertNotEqual(Reaction(r1), Reaction(r2))
@@ -140,6 +143,11 @@ class ReactionParseTest(unittest.TestCase):
                     str(Reaction(r_str)),
                     r_str.replace('<->', '⇌').replace('->', '→')
                 )
+
+        s_r = '2H + M → H2 + M'
+        r = Reaction(s_r)
+        self.assertEqual(str(r), s_r)
+        self.assertEqual(repr(r), 'H + H + M → H2 + M')
 
     def test_reaction_html(self):
         for r_str, r_html in zip(self.r_strings, self.expected_html):
