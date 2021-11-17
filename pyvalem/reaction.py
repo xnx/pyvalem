@@ -57,16 +57,15 @@ class Reaction:
         self.sep = self.canonical_separators[sep.strip()]
 
         # parse reactants and products into
-        # list[tuple[int: stoichiometry, str: species]]
-        lhs_sps, rhs_sps = [f.split(' + ') for f in fragments]
+        # dict[str, int]
+        # and
+        # list[tuple[int: stoichiometry, StatefulSpecies]]
+        self.reactants_text_count_map = None
+        self.products_text_count_map = None
+        self.reactants = None
+        self.products = None
         try:
-            self.reactants = [
-                self._parse_ss_with_stoich_coeff(sp) for sp in lhs_sps
-            ]
-            self.products = [
-                self._parse_ss_with_stoich_coeff(sp) for sp in rhs_sps
-                if sp.strip()
-            ]
+            self._parse_species(*fragments)
         except FormulaParseError as err:
             raise ReactionParseError(
                 'Failed to parse Reaction string "{}" because one of the '
@@ -82,25 +81,38 @@ class Reaction:
             raise ReactionChargeError('Charge not preserved for '
                                       'reaction: {}'.format(r_str))
 
-    @staticmethod
-    def _parse_ss_with_stoich_coeff(sp):
+    def _parse_species(self, lhs_str, rhs_str):
         """
         Parse s into n<ss> where n is a stoichiometric coefficient and ss
         a StatefulSpecies instance.
         """
-        patt = r'(\d*)(.*)'
-        n, ss = re.match(patt, sp).groups()
-        if not n:
-            n = 1
-        else:
-            try:
-                n = int(n)
-            except ValueError:
-                raise ReactionParseError(
-                    'Failed to parse {}'.format(sp)
-                )
-        ss = StatefulSpecies(ss)
-        return n, ss
+        self.reactants_text_count_map = {}
+        self.products_text_count_map = {}
+        self.reactants = []
+        self.products = []
+        for side_str, species, species_map in zip(
+            [lhs_str, rhs_str],
+            [self.reactants, self.products],
+            [self.reactants_text_count_map, self.products_text_count_map]
+        ):
+            for side_fragment in side_str.split(' + '):
+                if side_fragment.strip():
+                    patt = r'(\d*)(.*)'
+                    n, ss_str = re.match(patt, side_fragment).groups()
+                    if not n:
+                        n = 1
+                    else:
+                        try:
+                            n = int(n)
+                        except ValueError:
+                            raise ReactionParseError(
+                                'Failed to parse {}'.format(side_fragment)
+                            )
+                    ss = StatefulSpecies(ss_str)
+                    species.append((n, ss))
+                    if ss_str not in species_map:
+                        species_map[ss_str] = 0
+                    species_map[ss_str] += n
 
     @staticmethod
     def _sort_terms(terms, side='lhs'):

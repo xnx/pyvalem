@@ -182,6 +182,22 @@ class ReactionParseTest(unittest.TestCase):
         self.assertTrue(r.charge_conserved())
         self.assertTrue(r.stoichiometry_conserved())
 
+    def test_reaction_species_map(self):
+        r = Reaction('e- + C2 + e- -> C- + C-')
+        self.assertEqual(r.reactants_text_count_map, {'e-': 2, 'C2': 1})
+        self.assertEqual(r.products_text_count_map, {'C-': 2})
+        r = Reaction('e- + e- + hv -> ', strict=False)
+        self.assertEqual(r.reactants_text_count_map, {'e-': 2, 'hv': 1})
+        self.assertEqual(r.products_text_count_map, {})
+        r = Reaction('1e- + 1e- + 2hv -> ', strict=False)
+        self.assertEqual(r.reactants_text_count_map, {'e-': 2, 'hv': 2})
+        r = Reaction('e- + O2 X(3Σ-g) -> ', strict=False)
+        self.assertEqual(r.reactants_text_count_map,
+                         {'e-': 1, 'O2 X(3Σ-g)': 1})
+        r = Reaction('e- + O2 X(3SIGMA-g) -> ', strict=False)
+        self.assertEqual(r.reactants_text_count_map,
+                         {'e-': 1, 'O2 X(3SIGMA-g)': 1})
+
 
 if __name__ == '__main__':
     unittest.main()
