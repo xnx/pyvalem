@@ -83,8 +83,13 @@ class Reaction:
 
     def _parse_species(self, lhs_str, rhs_str):
         """
-        Parse s into n<ss> where n is a stoichiometric coefficient and ss
-        a StatefulSpecies instance.
+        Parse strings of both sides of the reaction string into
+        self.reactants and self.products in the form of lists of
+        (species_count, StatefulSpecies).
+        On the side, also creates maps between species string (as passed
+        to the constructor) and number of species on the side.
+        Those are self.reactants_text_count_map and
+        self.products_text_count_map.
         """
         self.reactants_text_count_map = {}
         self.products_text_count_map = {}
