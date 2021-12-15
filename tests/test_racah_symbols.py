@@ -4,11 +4,10 @@ Unit tests for the Racah symbols module of PyValem.
 
 import unittest
 
-from pyvalem.state import StateParseError
 from pyvalem.racah_symbol import RacahSymbol
 
-class RacahSymbolTest(unittest.TestCase):
 
+class RacahSymbolTest(unittest.TestCase):
     def test_racah_symbol(self):
 
         r0 = RacahSymbol("5s'[1/2]_1")
@@ -22,14 +21,11 @@ class RacahSymbolTest(unittest.TestCase):
         r1 = RacahSymbol("3p[5/2]_2")
         self.assertEqual(r1.html, "3p[5/2]<sub>2</sub>")
         self.assertEqual(r1.principal, 3)
-        self.assertEqual(r1.orbital, 'p')
+        self.assertEqual(r1.orbital, "p")
         self.assertEqual(r1.k_num, 5)
         self.assertEqual(r1.k_den, 2)
         self.assertEqual(r1.j_term, 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-
-
-
