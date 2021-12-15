@@ -8,21 +8,26 @@ import pyparsing as pp
 from .state import State, StateParseError
 
 integer = pp.Word(pp.nums)
-atom_principal = integer.setResultsName('principal')
+atom_principal = integer.setResultsName("principal")
 
-orbital_labels = ('s', "s'", 
-                  'p', "p'",
-                  'd', "d'",
-                  'f', "f'")
-atom_orbital = pp.oneOf(orbital_labels).setResultsName('orbital')
+orbital_labels = ("s", "s'", "p", "p'", "d", "d'", "f", "f'")
+atom_orbital = pp.oneOf(orbital_labels).setResultsName("orbital")
 
-atom_k_term = integer.setResultsName('k_num') + pp.Suppress('/') \
-            + integer.setResultsName('k_den')
+atom_k_term = (
+    integer.setResultsName("k_num") + pp.Suppress("/") + integer.setResultsName("k_den")
+)
 
-atom_j_term = integer.setResultsName('jterm')
+atom_j_term = integer.setResultsName("jterm")
 
-racah_symbol_template = atom_principal + atom_orbital \
-            + pp.Suppress('[') + atom_k_term + pp.Suppress(']_') + atom_j_term
+racah_symbol_template = (
+    atom_principal
+    + atom_orbital
+    + pp.Suppress("[")
+    + atom_k_term
+    + pp.Suppress("]_")
+    + atom_j_term
+)
+
 
 class RacahSymbol(State):
     """The RacahSymbol class representing an atomic state in Racah notation.
@@ -37,8 +42,7 @@ class RacahSymbol(State):
         try:
             components = racah_symbol_template.parseString(state_str)
         except pp.ParseException:
-            raise StateParseError('Invalid Racah notation syntax: {}'
-                                  .format(state_str))
+            raise StateParseError("Invalid Racah notation syntax: {}".format(state_str))
         self.principal = int(components.principal)
         self.orbital = components.orbital
         if "'" in self.orbital:
@@ -50,17 +54,16 @@ class RacahSymbol(State):
         self.j_term = int(components.jterm)
 
     def __repr__(self):
-        parent = '{}{}'.format(self.principal,self.orbital)
-        K = '{}/{}'.format(self.k_num, self.k_den)
-        return '{}[{}]_{}'.format(parent, K, self.j_term)
-        
+        parent = "{}{}".format(self.principal, self.orbital)
+        K = "{}/{}".format(self.k_num, self.k_den)
+        return "{}[{}]_{}".format(parent, K, self.j_term)
+
     @property
     def html(self):
-        parent = '{}{}'.format(self.principal,self.orbital)
-        K = '{}/{}'.format(self.k_num, self.k_den)
-        return '{}[{}]<sub>{}</sub>'.format(parent, K, self.j_term)
+        parent = "{}{}".format(self.principal, self.orbital)
+        K = "{}/{}".format(self.k_num, self.k_den)
+        return "{}[{}]<sub>{}</sub>".format(parent, K, self.j_term)
 
     @property
     def latex(self):
         return repr(self)
-        

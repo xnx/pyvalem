@@ -16,14 +16,20 @@ class ReactionChargeError(ReactionParseError):
 
 
 class Reaction:
-    RP_SEPARATORS = '→', '=', '⇌', '->', '<->', '<=>'
-    SPACED_RP_SEPARATORS = [' ' + s + ' ' for s in RP_SEPARATORS]
+    RP_SEPARATORS = "→", "=", "⇌", "->", "<->", "<=>"
+    SPACED_RP_SEPARATORS = [" " + s + " " for s in RP_SEPARATORS]
 
-    canonical_separators = {'→': '→', '->': '→', '=': '→',
-                            '⇌': '⇌', '<->': '⇌', '<=>': '⇌'}
-    latex_sep = {'→': r'\rightarrow', '⇌': r'\rightlefthooks'}
+    canonical_separators = {
+        "→": "→",
+        "->": "→",
+        "=": "→",
+        "⇌": "⇌",
+        "<->": "⇌",
+        "<=>": "⇌",
+    }
+    latex_sep = {"→": r"\rightarrow", "⇌": r"\rightlefthooks"}
 
-    light_species = ('e-', 'e+', 'hv', 'hν')
+    light_species = ("e-", "e+", "hv", "hν")
 
     def __init__(self, r_str, strict=True):
         """
@@ -34,7 +40,7 @@ class Reaction:
         # separator (e.g. 'Ar + e- ->' becomes 'Ar + e- -> ').
         for sep in Reaction.RP_SEPARATORS:
             if r_str.rstrip().endswith(sep):
-                r_str = r_str + ' '
+                r_str = r_str + " "
                 break
 
         for sep in Reaction.SPACED_RP_SEPARATORS:
@@ -44,14 +50,15 @@ class Reaction:
                 continue
             elif len(fragments) > 2:
                 raise ReactionParseError(
-                    'Invalid reaction string - multiple reactant-product '
-                    'separators: {}'.format(r_str)
+                    "Invalid reaction string - multiple reactant-product "
+                    "separators: {}".format(r_str)
                 )
             break
         else:
             raise ReactionParseError(
-                'Invalid reaction string - no reactant-product separator: '
-                '{}'.format(r_str))
+                "Invalid reaction string - no reactant-product separator: "
+                "{}".format(r_str)
+            )
 
         # canonicalised side separator:
         self.sep = self.canonical_separators[sep.strip()]
@@ -69,17 +76,19 @@ class Reaction:
         except FormulaParseError as err:
             raise ReactionParseError(
                 'Failed to parse Reaction string "{}" because one of the '
-                'StatefulSpecies was incorrectly formed. '
-                'The error reported was: {}'.format(r_str, err)
+                "StatefulSpecies was incorrectly formed. "
+                "The error reported was: {}".format(r_str, err)
             )
 
         # validate charge and stoichiometry conservation:
         if strict and not self.stoichiometry_conserved():
-            raise ReactionStoichiometryError('Stoichiometry not preserved for '
-                                             'reaction: {}'.format(r_str))
+            raise ReactionStoichiometryError(
+                "Stoichiometry not preserved for " "reaction: {}".format(r_str)
+            )
         if strict and not self.charge_conserved():
-            raise ReactionChargeError('Charge not preserved for '
-                                      'reaction: {}'.format(r_str))
+            raise ReactionChargeError(
+                "Charge not preserved for " "reaction: {}".format(r_str)
+            )
 
     def _parse_species(self, lhs_str, rhs_str):
         """
@@ -98,11 +107,11 @@ class Reaction:
         for side_str, species, species_map in zip(
             [lhs_str, rhs_str],
             [self.reactants, self.products],
-            [self.reactants_text_count_map, self.products_text_count_map]
+            [self.reactants_text_count_map, self.products_text_count_map],
         ):
-            for side_fragment in side_str.split(' + '):
+            for side_fragment in side_str.split(" + "):
                 if side_fragment.strip():
-                    patt = r'(\d*)(.*)'
+                    patt = r"(\d*)(.*)"
                     n, ss_str = re.match(patt, side_fragment).groups()
                     if not n:
                         n = 1
@@ -111,7 +120,7 @@ class Reaction:
                             n = int(n)
                         except ValueError:
                             raise ReactionParseError(
-                                'Failed to parse {}'.format(side_fragment)
+                                "Failed to parse {}".format(side_fragment)
                             )
                     ss = StatefulSpecies(ss_str)
                     species.append((n, ss))
@@ -120,16 +129,19 @@ class Reaction:
                     species_map[ss_str] += n
 
     @staticmethod
-    def _sort_terms(terms, side='lhs'):
+    def _sort_terms(terms, side="lhs"):
         """
         The only sorting is performed on light species, these are placed
         first on LHS and last on RHS of the reaction.
         """
         sort_keys = {sp: (-1, sp) for sp in Reaction.light_species}
-        return list(sorted(
-            terms, key=lambda e: sort_keys.get(e[1].formula.formula, (0, '')),
-            reverse=side != 'lhs'
-        ))
+        return list(
+            sorted(
+                terms,
+                key=lambda e: sort_keys.get(e[1].formula.formula, (0, "")),
+                reverse=side != "lhs",
+            )
+        )
 
     def _aggregate_terms(self, terms):
         """
@@ -171,18 +183,16 @@ class Reaction:
 
     @staticmethod
     def _silent_n(n):
-        return str(n) if n != 1 else ''
+        return str(n) if n != 1 else ""
 
     def __str__(self):
-        reactants_str = ' + '.join(
-            '{}{}'.format(self._silent_n(n), str(ss))
-            for n, ss in self.reactants
+        reactants_str = " + ".join(
+            "{}{}".format(self._silent_n(n), str(ss)) for n, ss in self.reactants
         )
-        products_str = ' + '.join(
-            '{}{}'.format(self._silent_n(n), str(ss))
-            for n, ss in self.products
+        products_str = " + ".join(
+            "{}{}".format(self._silent_n(n), str(ss)) for n, ss in self.products
         )
-        return '{} {} {}'.format(reactants_str, self.sep, products_str).strip()
+        return "{} {} {}".format(reactants_str, self.sep, products_str).strip()
 
     def __repr__(self):
         """
@@ -190,24 +200,20 @@ class Reaction:
         aggregated stoichiometries of all the heavy species and by aggregating
         light species (e, hv) and moving them to the side.
         """
-        reactants = self._sort_terms(self.reactants, side='lhs')
-        products = self._sort_terms(self.products, side='rhs')
+        reactants = self._sort_terms(self.reactants, side="lhs")
+        products = self._sort_terms(self.products, side="rhs")
         reactants = self._aggregate_terms(reactants)
         products = self._aggregate_terms(products)
         reactants = self._expand_terms(reactants)
         products = self._expand_terms(products)
 
-        reactants_repr = ' + '.join(
-            '{}{}'.format(self._silent_n(n), repr(ss))
-            for n, ss in reactants
+        reactants_repr = " + ".join(
+            "{}{}".format(self._silent_n(n), repr(ss)) for n, ss in reactants
         )
-        products_repr = ' + '.join(
-            '{}{}'.format(self._silent_n(n), repr(ss))
-            for n, ss in products
+        products_repr = " + ".join(
+            "{}{}".format(self._silent_n(n), repr(ss)) for n, ss in products
         )
-        return '{} {} {}'.format(
-            reactants_repr, self.sep, products_repr
-        ).strip()
+        return "{} {} {}".format(reactants_repr, self.sep, products_repr).strip()
 
     @staticmethod
     def _get_all_stoichs(side):
@@ -229,8 +235,7 @@ class Reaction:
 
     @staticmethod
     def _get_total_charge(side):
-        return sum(n * ss.formula.charge for n, ss in side
-                   if ss.formula.formula != 'M')
+        return sum(n * ss.formula.charge for n, ss in side if ss.formula.formula != "M")
 
     def charge_conserved(self):
         """Verify that the Reaction object conserves charge."""
@@ -245,28 +250,22 @@ class Reaction:
 
     @property
     def html(self):
-        reactants_html = ' + '.join(
-            '{}{}'.format(self._silent_n(n), ss.html)
-            for n, ss in self.reactants
+        reactants_html = " + ".join(
+            "{}{}".format(self._silent_n(n), ss.html) for n, ss in self.reactants
         )
-        products_html = ' + '.join(
-            '{}{}'.format(self._silent_n(n), ss.html)
-            for n, ss in self.products
+        products_html = " + ".join(
+            "{}{}".format(self._silent_n(n), ss.html) for n, ss in self.products
         )
-        return '{} {} {}'.format(
-            reactants_html, self.sep, products_html
-        ).strip()
+        return "{} {} {}".format(reactants_html, self.sep, products_html).strip()
 
     @property
     def latex(self):
-        reactants_latex = ' + '.join(
-            '{}{}'.format(self._silent_n(n), ss.latex)
-            for n, ss in self.reactants
+        reactants_latex = " + ".join(
+            "{}{}".format(self._silent_n(n), ss.latex) for n, ss in self.reactants
         )
-        products_latex = ' + '.join(
-            '{}{}'.format(self._silent_n(n), ss.latex)
-            for n, ss in self.products
+        products_latex = " + ".join(
+            "{}{}".format(self._silent_n(n), ss.latex) for n, ss in self.products
         )
-        return '{} {} {}'.format(
+        return "{} {} {}".format(
             reactants_latex, self.latex_sep[self.sep], products_latex
         ).strip()

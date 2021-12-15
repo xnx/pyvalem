@@ -18,19 +18,21 @@ from .key_value_pair import KeyValuePair
 # the following has two purposes: keys determine the order in which the
 # states are parsed, and the values determine the sorting order of states
 # for StatefulSpecies.__repr__.
-STATES = OrderedDict([
-    (GenericExcitedState, 0),
-    (AtomicConfiguration, 1),
-    (AtomicTermSymbol, 2),
-    (DiatomicMolecularConfiguration, 1),
-    (MolecularTermSymbol, 2),
-    (VibrationalState, 3),
-    (RotationalState, 4),
-    (RacahSymbol, 5),
-    # (PhaseState, None),
-    # (EnergyFreqWvln, None),
-    (KeyValuePair, 6),
-])
+STATES = OrderedDict(
+    [
+        (GenericExcitedState, 0),
+        (AtomicConfiguration, 1),
+        (AtomicTermSymbol, 2),
+        (DiatomicMolecularConfiguration, 1),
+        (MolecularTermSymbol, 2),
+        (VibrationalState, 3),
+        (RotationalState, 4),
+        (RacahSymbol, 5),
+        # (PhaseState, None),
+        # (EnergyFreqWvln, None),
+        (KeyValuePair, 6),
+    ]
+)
 
 
 def state_parser(s_state):
@@ -53,4 +55,4 @@ def state_parser(s_state):
         except StateParseError:
             pass
 
-    raise StateParseError('Could not parse {}'.format(s_state))
+    raise StateParseError("Could not parse {}".format(s_state))

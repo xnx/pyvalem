@@ -2,33 +2,23 @@
 Defines dictionaries of meta data relating to the elements and their isotopes.
 """
 
+import csv
+
 try:
     import importlib.resources as pkg_resources
 except ImportError:
-    # Try backported to PY<37 `importlib_resources`.
+    # for python < 3.7, use the importlib-resources backport
+    # noinspection PyUnresolvedReferences
     import importlib_resources as pkg_resources
 
-# A list of all element symbols recognised by PyValem
-element_symbols = [
- 'H', 'He', 'Li', 'Be',  'B',  'C',  'N',  'O',  'F', 'Ne', 'Na', 'Mg', 'Al',
-'Si',  'P',  'S', 'Cl', 'Ar',  'K', 'Ca', 'Sc', 'Ti',  'V', 'Cr', 'Mn', 'Fe',
-'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr',  'Y',
-'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te',
- 'I', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb',
-'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf', 'Ta',  'W', 'Re', 'Os', 'Ir', 'Pt',
-'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Th', 'Pa',
- 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf',
-'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn', 'Nh', 'Fl', 'Mc', 'Lv', 'Ts',
-'Og'
-]
 
 class Atom:
     is_isotope = False
 
-    def __init__(self, symbol, name, Z, weight=None, weight_unc=None):
+    def __init__(self, symbol, name, atomic_number, weight=None, weight_unc=None):
         self.symbol = symbol
         self.name = name
-        self.Z = Z
+        self.Z = atomic_number
         self.weight = self.mass = weight
         self.weight_unc = weight_unc
 
@@ -43,70 +33,88 @@ class Atom:
             return self.symbol == other.symbol
         return self.symbol == other
 
+
 class Isotope(Atom):
     is_isotope = True
 
-    def __init__(self, Z, A, symbol, name, mass, mass_unc, estimated_flag=''):
-        super().__init__(symbol, name, Z)
-        self.A = A
+    def __init__(
+        self,
+        atomic_number,
+        mass_number,
+        symbol,
+        name,
+        mass,
+        mass_unc,
+        estimated_flag="",
+    ):
+        super().__init__(symbol, name, atomic_number)
+        self.A = mass_number
         self.mass = mass
         self.mass_unc = mass_unc
         self.estimated_flag = estimated_flag
+        self.N = mass_number + atomic_number
 
-        self.N = A + Z
 
-def float_or_None(f):
-    """Cast string f into a float, or None if it doesn't represent a number."""
-
+def float_or_none(f):
+    """
+    Cast string f into a float, or None if it doesn't represent a number.
+    """
     try:
         return float(f)
     except ValueError:
         return None
 
-def parse_aw_line(line):
-    """Parse comma-separated values for atomic weight data from line."""
-    fields = line.split(',')
-    symbol = fields[0].strip()
-    name = fields[1].strip()
-    Z = int(fields[2])
-    weight = float_or_None(fields[3])
-    weight_unc = float_or_None(fields[4])
-    return symbol, name, Z, weight, weight_unc
 
-def parse_im_line(line):
-    """Parse comma-separated values for isotope masses from line."""
-    fields = line.split(',')
-    Z = int(fields[0])
-    A = int(fields[1])
-    symbol = fields[2].strip()
-    mass = float(fields[3])
-    mass_unc = float(fields[4])
-    estimated_flag = fields[5].strip()
-    return Z, A, symbol, mass, mass_unc, estimated_flag
-
+# list of all the element symbols recognised by pyvalem:
+element_symbols = []
+# pre-built mapping between element symbols and Atom instances:
+atoms = {}
 # Atom data is from Meija et al., "Atomic weights of the elements 2013
 # (IUPAC Technical Report)", Pure Appl. Chem. 88(3), 265-291, 2016.
 # See https://ciaaw.org/atomic-weights.htm
-atoms = {}
-with pkg_resources.open_text('pyvalem', 'atomic_weights.txt') as fi:
-    # Skip the header line
-    fi.readline()
-    for line in fi.readlines():
-        symbol, name, Z, weight, weight_unc = parse_aw_line(line)
-        atoms[symbol] = Atom(symbol, name, Z, weight, weight_unc)
+with pkg_resources.open_text("pyvalem", "atomic_weights.txt") as fi:
+    reader = csv.reader(fi, delimiter=",")
+    header = ["Symbol", "Name", "Z", "atomic_weight", "atomic_weight_unc"]
+    for row in reader:
+        row = [val.strip() for val in row]
+        if row == header:
+            continue  # skip the header
+        atom_dtypes = [str, str, int, float_or_none, float_or_none]
+        atom_args = [dtype(val) for dtype, val in zip(atom_dtypes, row)]
+        element_symbol = atom_args[0]
+        element_symbols.append(element_symbol)
+        atoms[element_symbol] = Atom(*atom_args)
 
+# pre-built mapping between element isotopic symbols and Isotope instances:
+isotopes = {}
 # Isotope data is from the AME2016 Atomic Mass Evaluation reports,
 # Huang et al., "The Ame2016 atomic mass evaluation (I)", Chinese Physics C41,
 # 030002 (2017); Wang et al., "The Ame2016 atomic mass evaluation (II)",
 # Chinese Physics C41, 030003 (2017).
 # See http://amdc.impcas.ac.cn/masstables/Ame2016/mass16.txt
-isotopes = {}
-with pkg_resources.open_text('pyvalem', 'isotope_masses.txt') as fi:
-    # Skip the header line
-    fi.readline()
-    for line in fi.readlines():
-        Z, A, symbol, mass, mass_unc, estimated_flag = parse_im_line(line)
-        name = atoms[symbol].name + '-{}'.format(A)
-        symbol = '{:d}{:s}'.format(A, symbol)
-        isotopes[symbol] = Isotope(
-                            Z, A, symbol, name, mass, mass_unc, estimated_flag)
+with pkg_resources.open_text("pyvalem", "isotope_masses.txt") as fi:
+    reader = csv.reader(fi, delimiter=",")
+    header = ["Z", "A", "Symbol", "mass", "mass_unc", "estimated_flag"]
+    iso_attribs = [
+        "atomic_number",
+        "mass_number",
+        "symbol",
+        "mass",
+        "mass_unc",
+        "estimated_flag",
+    ]
+    for row in reader:
+        row = [val.strip() for val in row]
+        if row == header:
+            continue
+        iso_dtypes = [int, int, str, float, float, str]
+        iso_kwargs = {
+            attr: dtype(val) for attr, dtype, val in zip(iso_attribs, iso_dtypes, row)
+        }
+        iso_name = "{}-{}".format(
+            atoms[iso_kwargs["symbol"]].name, iso_kwargs["mass_number"]
+        )
+        iso_kwargs["name"] = iso_name
+        iso_symbol = "{:d}{:s}".format(iso_kwargs["mass_number"], iso_kwargs["symbol"])
+        iso_kwargs["symbol"] = iso_symbol
+        isotopes[iso_symbol] = Isotope(**iso_kwargs)

@@ -7,14 +7,14 @@ root = Path(__file__).parent.resolve()
 long_description = (root / "README.rst").read_text(encoding="utf-8")
 
 setup(
-    name='pyvalem',
-    version='2.4.0',
-    description='A package for managing simple chemical species and states',
+    name="pyvalem",
+    version="2.4.0",
+    description="A package for managing simple chemical species and states",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    url='https://github.com/xnx/pyvalem',
-    author='Christian Hill',
-    author_email='ch.hill@iaea.org',
+    url="https://github.com/xnx/pyvalem",
+    author="Christian Hill",
+    author_email="ch.hill@iaea.org",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Science/Research",
@@ -34,17 +34,14 @@ setup(
         "Operating System :: OS Independent",
     ],
     keywords="chemistry, formula, species, state, reaction",
-    package_dir={'': 'src'},
-    packages=find_packages(where='src'),
-    python_requires='>=3.4',
-    install_requires=[
-        "pyparsing",
-        'importlib-resources; python_version < "3.7.0"'
-    ],
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
+    python_requires=">=3.4",
+    install_requires=["pyparsing", 'importlib-resources; python_version < "3.7.0"'],
     extras_require={
-        'dev': ["check-manifest", "black", "coverage", "pytest", "ipython"]
+        "dev": ["check-manifest", "black", "coverage", "pytest", "ipython"]
     },
-    package_data={'pyvalem': ['atomic_weights.txt', 'isotope_masses.txt']},
+    package_data={"pyvalem": ["atomic_weights.txt", "isotope_masses.txt"]},
     project_urls={
         "Bug Reports": "https://github.com/xnx/pyvalem/issues",
     },

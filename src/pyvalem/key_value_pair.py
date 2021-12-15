@@ -6,8 +6,10 @@ representation, etc.
 import html
 from .state import State, StateParseError
 
+
 class KeyValuePairError(StateParseError):
     pass
+
 
 class KeyValuePair(State):
     """A class representing an state as an arbitrary key/value pair.
@@ -29,14 +31,13 @@ class KeyValuePair(State):
         """
 
         try:
-            key, value = state_str.split('=')
+            key, value = state_str.split("=")
         except ValueError:
-            raise KeyValuePairError('Invalid key-value pair: {}.'
-                                                .format(state_str))
+            raise KeyValuePairError("Invalid key-value pair: {}.".format(state_str))
         self.key = key.strip()
         self.value = value.strip()
 
-        self.state_str = '{}={}'.format(self.key, self.value)
+        self.state_str = "{}={}".format(self.key, self.value)
 
     @property
     def html(self):
