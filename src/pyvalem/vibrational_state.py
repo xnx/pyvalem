@@ -5,10 +5,12 @@ an HTML representation of it, etc.
 """
 
 import pyparsing as pp
+
 from .state import State, StateParseError
 
 integer = pp.Word(pp.nums)
 
+# noinspection PyTypeChecker
 vibrational_term = pp.Group(
     pp.Optional(integer.setResultsName("n"), default=1)
     + pp.Or(("v", "ν"))
@@ -48,19 +50,20 @@ class VibrationalStateError(StateParseError):
 
 
 class VibrationalState(State):
-
-    multiple_allowed = False
+    def __init__(self, state_str):
+        self.state_str = state_str.replace(" ", "")
+        self.v = None
+        self.polyatomic = None
+        self.terms = None
+        self.parse_state(state_str)
 
     def parse_state(self, state_str):
-
         if " + " in state_str:
             raise VibrationalStateError(
                 'Spaces around "+" not allowed for'
                 " polyatomic vibrational states: {}".format(state_str)
             )
 
-        self.state_str = state_str.replace(" ", "")
-        self.v = None
         self.polyatomic = False
 
         def get_v(s_v):
@@ -96,18 +99,14 @@ class VibrationalState(State):
             return "v={}".format(self.v)
         return "+".join([str(term) for term in self.terms])
 
-    __str__ = __repr__
-
     @property
     def html(self):
-        html_chunks = []
         if self.polyatomic:
             return " + ".join([term.html for term in self.terms])
-        return self.__str__()
+        return str(self)
 
     @property
     def latex(self):
-        latex_chunks = []
         if self.polyatomic:
             return " + ".join([term.latex for term in self.terms])
-        return self.__str__()
+        return str(self)

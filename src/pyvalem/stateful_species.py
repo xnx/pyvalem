@@ -5,9 +5,9 @@ molecule), optionally with with one or more State objects associated with it.
 The Formula of the StatefulSpecies is separated from its States by whitespace;
 States are separated from each other by semicolons (;).
 """
-from .formula import Formula, FormulaParseError
 from .atomic_configuration import AtomicConfiguration
 from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
+from .formula import Formula
 from .key_value_pair import KeyValuePair
 from .state_parser import state_parser, STATES
 
@@ -73,8 +73,8 @@ class StatefulSpecies:
                 )
         return True
 
-    def get_states_of_type(self, StateClass):
-        return [s for s in self.states if s.__class__ == StateClass]
+    def get_states_of_type(self, state_class):
+        return [s for s in self.states if s.__class__ == state_class]
 
     def verify_atomic_configuration(self):
         atomic_configurations = self.get_states_of_type(AtomicConfiguration)
@@ -143,6 +143,6 @@ class StatefulSpecies:
     def latex(self):
         if not self.states:
             return self.formula.latex
-        return "{} \; {}".format(
-            self.formula.latex, "; \; ".join(s.latex for s in self.states)
+        return r"{} \; {}".format(
+            self.formula.latex, r"; \; ".join(s.latex for s in self.states)
         )

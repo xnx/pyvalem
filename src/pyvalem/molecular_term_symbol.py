@@ -3,8 +3,8 @@ The MolecularTermSymbol class, representing a molecular term symbol, with
 methods for parsing a string into quantum numbers and labels, creating
 an HTML representation of the term symbol, etc.
 """
-
 import pyparsing as pp
+
 from .state import State, StateParseError
 from .utils import parse_fraction, float_to_fraction
 
@@ -171,8 +171,14 @@ class MolecularTermSymbolError(StateParseError):
 
 
 class MolecularTermSymbol(State):
-
-    multiple_allowed = False
+    def __init__(self, state_str):
+        self.state_str = state_str
+        self.Smult = None
+        self.S = None
+        self.irrep = None
+        self.term_label = None
+        self.Omega = None
+        self.parse_state(state_str)
 
     def parse_state(self, state_str):
 
@@ -193,7 +199,8 @@ class MolecularTermSymbol(State):
         self.term_label = components.term_label or None
         self.Omega = parse_fraction(components.Omegastr)
 
-    def irrep_html(self, irrep):
+    @staticmethod
+    def irrep_html(irrep):
         irrep_chunks = []
         if "+" in irrep or "-" in irrep:
             irrep_chunks.append("{0:s}<sup>{1:s}</sup>".format(irrep[0], irrep[1]))
@@ -208,10 +215,11 @@ class MolecularTermSymbol(State):
             irrep_chunks.append("<sub>{:s}</sub>".format(irrep[next_idx:]))
         return "".join(irrep_chunks)
 
-    def irrep_latex(self, irrep):
+    @staticmethod
+    def irrep_latex(irrep):
         irrep_chunks = []
         if "+" in irrep or "-" in irrep:
-            irrep_chunks.append("\Sigma^{:s}".format(irrep[1]))
+            irrep_chunks.append(r"\Sigma^{:s}".format(irrep[1]))
             next_idx = 2
         elif '"' in irrep:
             irrep_chunks.append(irrep[0] + "''")
@@ -220,9 +228,9 @@ class MolecularTermSymbol(State):
             irrep_chunks.append(irrep[0:2])
             next_idx = 2
         else:
-            symb = irrep[0]
-            symb = latex_terms.get(irrep[0]) or symb
-            irrep_chunks.append(symb)
+            symbol = irrep[0]
+            symbol = latex_terms.get(irrep[0]) or symbol
+            irrep_chunks.append(symbol)
             next_idx = 1
         if irrep[next_idx:] != "":
             irrep_chunks.append("_{{{:s}}}".format(irrep[next_idx:]))

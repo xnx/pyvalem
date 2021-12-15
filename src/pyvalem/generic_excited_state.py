@@ -4,11 +4,12 @@ an atom, ion or molecule as '*', '**', '***', '****', '5*', etc.
 """
 
 import pyparsing as pp
+
 from .state import State, StateParseError
 
 integer = pp.Word(pp.nums)
 atom_int = integer.setResultsName("int")
-state_term = ((atom_int + "*" + pp.StringEnd())).leaveWhitespace()
+state_term = (atom_int + "*" + pp.StringEnd()).leaveWhitespace()
 
 
 class GenericExcitedStateError(StateParseError):
@@ -16,12 +17,12 @@ class GenericExcitedStateError(StateParseError):
 
 
 class GenericExcitedState(State):
-
-    multiple_allowed = False
+    def __init__(self, state_str):
+        self.state_str = state_str
+        self.int_n = None
+        self.parse_state(state_str)
 
     def parse_state(self, state_str):
-        self.state_str = state_str
-
         if "*" in state_str:
             if state_str.count("*") == len(state_str):
                 if len(state_str) > 4:

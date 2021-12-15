@@ -33,21 +33,17 @@ class AtomicTermSymbolError(StateParseError):
 
 
 class AtomicTermSymbol(State):
-
-    multiple_allowed = False
-
     def __init__(self, state_str):
+        self.state_str = state_str
         self.Smult = None
         self.S = None
         self.Lletter = None
         self.L = None
         self.parity = None
         self.J = None
-        super(AtomicTermSymbol, self).__init__(state_str)
+        self.parse_state(state_str)
 
     def parse_state(self, state_str):
-        self.state_str = state_str
-
         try:
             components = atom_term.parseString(state_str)
         except pp.ParseException:

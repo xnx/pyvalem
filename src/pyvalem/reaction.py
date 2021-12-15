@@ -1,6 +1,7 @@
 import re
-from .stateful_species import StatefulSpecies
+
 from .formula import FormulaParseError
+from .stateful_species import StatefulSpecies
 
 
 class ReactionParseError(Exception):

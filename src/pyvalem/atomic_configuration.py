@@ -114,25 +114,14 @@ class AtomicOrbital:
 
 
 class AtomicConfiguration(State):
-    """A class representing an atomic configuration.
-
-    An atomic configuration is considered as a collection of occupied atomic
-    orbitals: e.g. 1s2.2s2.2p6.3s1; this may be abbreviated by using [X] where
-    [X] is a noble gas atom as a short cut for the closed-shell configuration
-    of X.
-    """
-
     def __init__(self, state_str):
+        self.state_str = state_str
         self.orbitals = []
         self.noble_gas_config = None
         self.nelectrons = 0
-        super(AtomicConfiguration, self).__init__(state_str)
-
-    multiple_allowed = False
+        self.parse_state(state_str)
 
     def parse_state(self, state_str):
-        self.state_str = state_str
-
         try:
             parse_results = atom_config.parseString(state_str)
         except pp.ParseException:
@@ -168,6 +157,14 @@ class AtomicConfiguration(State):
         # Check that the subshells specified are unique
         if len(subshells) != len(set(subshells)):
             raise AtomicConfigurationError("Repeated subshell in {0}".format(state_str))
+
+    """A class representing an atomic configuration.
+
+    An atomic configuration is considered as a collection of occupied atomic
+    orbitals: e.g. 1s2.2s2.2p6.3s1; this may be abbreviated by using [X] where
+    [X] is a noble gas atom as a short cut for the closed-shell configuration
+    of X.
+    """
 
     @property
     def html(self):

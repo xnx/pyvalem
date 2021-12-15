@@ -5,8 +5,9 @@ labels, creating an HTML representation of the term symbol, etc.
 """
 
 import pyparsing as pp
-from .state import State, StateParseError
+
 from .atomic_configuration import atomic_orbital_symbols
+from .state import State, StateParseError
 
 integer = pp.Word(pp.nums)
 molecular_orbital_symbols = (
@@ -181,17 +182,13 @@ class AltDiatomicMolecularOrbital(DiatomicMolecularOrbital):
 
 
 class DiatomicMolecularConfiguration(State):
-
-    multiple_allowed = False
-
     def __init__(self, state_str):
+        self.state_str = state_str
         self.orbitals = []
-        super().__init__(state_str)
+        self.parse_state(state_str)
 
     def parse_state(self, state_str):
-        self.state_str = state_str
-
-        if "-" in self.state_str:
+        if "-" in state_str:
             self.parse_alt_config(state_str)
         else:
             self.parse_regular_config(state_str)

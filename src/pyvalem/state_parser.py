@@ -4,16 +4,16 @@ State-like objects or sequences of such objects.
 """
 from collections import OrderedDict
 
-from .state import StateParseError
-from .generic_excited_state import GenericExcitedState
 from .atomic_configuration import AtomicConfiguration
 from .atomic_term_symbol import AtomicTermSymbol
 from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
-from .molecular_term_symbol import MolecularTermSymbol
-from .rotational_state import RotationalState
-from .vibrational_state import VibrationalState
-from .racah_symbol import RacahSymbol
+from .generic_excited_state import GenericExcitedState
 from .key_value_pair import KeyValuePair
+from .molecular_term_symbol import MolecularTermSymbol
+from .racah_symbol import RacahSymbol
+from .rotational_state import RotationalState
+from .state import StateParseError
+from .vibrational_state import VibrationalState
 
 # the following has two purposes: keys determine the order in which the
 # states are parsed, and the values determine the sorting order of states
@@ -28,8 +28,6 @@ STATES = OrderedDict(
         (VibrationalState, 3),
         (RotationalState, 4),
         (RacahSymbol, 5),
-        # (PhaseState, None),
-        # (EnergyFreqWvln, None),
         (KeyValuePair, 6),
     ]
 )
@@ -46,7 +44,6 @@ def state_parser(s_state):
         # of State-like objects.
         return [state_parser(s.strip()) for s in s_state]
 
-    state = None
     # Try to parse the string s_state into a State-like object by trying each
     # of the possible derived State classes one by one in a particular order.
     for StateClass in STATES:

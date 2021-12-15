@@ -145,7 +145,7 @@ class ReactionParseTest(unittest.TestCase):
             with self.subTest(r_str):
                 self.assertEqual(
                     str(Reaction(r_str)),
-                    r_str.replace("<->", "⇌").replace("->", "→").replace('hv', 'hν')
+                    r_str.replace("<->", "⇌").replace("->", "→").replace("hv", "hν"),
                 )
 
         s_r = "2H + M → H2 + M"

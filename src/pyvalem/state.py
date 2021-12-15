@@ -24,11 +24,7 @@ class StateParseError(StateError):
 
 # noinspection PyUnresolvedReferences
 class State:
-    multiple_allowed = True
-
-    def __init__(self, state_str):
-        self.state_str = state_str
-        self.parse_state(state_str)
+    multiple_allowed = False
 
     def __repr__(self):
         return self.state_str

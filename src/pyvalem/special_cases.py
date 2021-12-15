@@ -1,8 +1,8 @@
-"""Special cases of formulas for particular species.
+"""
+Special cases of formulas for particular species.
 
 The keys of the inner dictionaries are attribute names of the resulting Formula
 class instance, and are assigned to the corresponding values.
-
 """
 
 special_cases = {
