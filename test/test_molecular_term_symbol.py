@@ -15,7 +15,7 @@ class MolecularTermSymbolTest(unittest.TestCase):
         self.assertEqual(c0.irrep, 'Π')
         self.assertEqual(c0.term_label, 'X')
         self.assertEqual(c0.html, 'X<sup>3</sup>Π')
-        self.assertEqual(c0.latex, 'X{}^{3}\Pi')
+        self.assertEqual(c0.latex, r'X{}^{3}\Pi')
 
         c1 = MolecularTermSymbol('(2A")')
         self.assertEqual(c1.irrep, 'A"')
@@ -31,7 +31,7 @@ class MolecularTermSymbolTest(unittest.TestCase):
         self.assertEqual(c2.term_label, 'b')
         self.assertEqual(c2.Omega, -1.5)
         self.assertEqual(c2.html, 'b<sup>4</sup>Π<sub>-3/2</sub>')
-        self.assertEqual(c2.latex, 'b{}^{4}\Pi{}_{-3/2}')
+        self.assertEqual(c2.latex, r'b{}^{4}\Pi{}_{-3/2}')
 
         c3 = MolecularTermSymbol('A\'(1A1g_0)')
         self.assertEqual(c3.irrep, "A1g")
@@ -46,11 +46,11 @@ class MolecularTermSymbolTest(unittest.TestCase):
         
         c5 = MolecularTermSymbol('1Σ+u')
         self.assertEqual(c5.html,'<sup>1</sup>Σ<sup>+</sup><sub>u</sub>')
-        self.assertEqual(c5.latex,'{}^{1}\Sigma^+_{u}')
+        self.assertEqual(c5.latex,r'{}^{1}\Sigma^+_{u}')
 
         c6 = MolecularTermSymbol('1Σ-g')
         self.assertEqual(c6.html, '<sup>1</sup>Σ<sup>-</sup><sub>g</sub>')
-        self.assertEqual(c6.latex, '{}^{1}\Sigma^-_{g}')
+        self.assertEqual(c6.latex, r'{}^{1}\Sigma^-_{g}')
     
     def test_greek_letter_conversion(self):
         m1 = MolecularTermSymbol('1SIGMA-')
