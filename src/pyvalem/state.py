@@ -22,6 +22,7 @@ class StateParseError(StateError):
     pass
 
 
+# noinspection PyUnresolvedReferences
 class State:
     multiple_allowed = True
 

@@ -4,10 +4,11 @@ isotope, ion, molecule, molecular-ion, isotopologue, etc.) and associated
 exceptions.
 """
 
-import sys
 import re
 from collections import defaultdict
+
 import pyparsing as pp
+
 from .atom_data import element_symbols, atoms, isotopes
 from .special_cases import special_cases
 
@@ -28,20 +29,20 @@ isotope = (
 
 # some named components of a formula
 # stoich comes before or after a "bare" element symbol, e.g. 3Br2.
-stoich = pp.Optional(integer_or_x, default="1").setResultsName("stoich")
+pp_stoich = pp.Optional(integer_or_x, default="1").setResultsName("stoich")
 # prestoich comes before a bracketed element group, e.g. 2(NH3).
-prestoich = pp.Optional(integer, default="1").setResultsName("prestoich")
+pp_prestoich = pp.Optional(integer, default="1").setResultsName("prestoich")
 # poststoich comes after a bracketed element group, e.g. (H2O)3.
-poststoich = pp.Optional(integer_or_x, default="1").setResultsName("poststoich")
+pp_poststoich = pp.Optional(integer_or_x, default="1").setResultsName("poststoich")
 # the charge is always defined and defaults to '0'.
-charge = pp.Optional(
+pp_charge = pp.Optional(
     pp.Combine(pp.Group(plusminus + pp.Optional(integer, default="1"))), default="0"
 ).setResultsName("charge")
 # An elementRef is either an element symbol or an isotope symbol plus a
 # stoichiometry which is 1 if not given.
 # NB check for element symbol first to catch Dy, Ti, etc. before parsing as
 # hydrogen isotopes D or T.
-elementRef = pp.Group((element | isotope).setResultsName("atom_symbol") + stoich)
+elementRef = pp.Group((element | isotope).setResultsName("atom_symbol") + pp_stoich)
 # A chemicalFormula is a series of elementRefs.
 chemicalFormula = pp.Group(pp.OneOrMore(elementRef)).setResultsName("atoms")
 # Radicals must be specified with the unicode character '·' (U+00B7).
@@ -49,20 +50,20 @@ radicalDot = pp.Optional("·").setResultsName("radical")
 
 # A chargedChemicalFormula is a chemicalFormula with an optional pre-
 # stoichiometry, radical dot and charge.
-chargedChemicalFormula = pp.Group(stoich + chemicalFormula + radicalDot + charge)
+chargedChemicalFormula = pp.Group(pp_stoich + chemicalFormula + radicalDot + pp_charge)
 
 # A bracketedChemicalFormula is essentially a chargedChemicalFormula inside
 # parentheses with optional pre- and post-stoichiometries.
 left_bracket = pp.Literal("(")
 right_bracket = pp.Literal(")")
 bracketedChemicalFormula = pp.Group(
-    prestoich
+    pp_prestoich
     + pp.Suppress(left_bracket)
     + chemicalFormula
     + radicalDot
-    + charge
+    + pp_charge
     + pp.Suppress(right_bracket)
-    + poststoich
+    + pp_poststoich
 )
 
 # A chemical_formula_fragment is either one of the above ChemicalFormula
@@ -135,13 +136,13 @@ prefix_list_parser = (
 complexChemicalFormula = (
     pp.Optional(prefix_list_parser)
     + chemical_formula_fragments
-    + charge
+    + pp_charge
     + pp.StringEnd()
 )
 # replace '+' and '-' with 'p' and 'm' to make slugs for e.g. URLs.
 slug_charge_sign = {"+": "p", "-": "m"}
 
-# Some Exceptions
+
 class FormulaError(Exception):
     pass
 
@@ -154,43 +155,44 @@ class Formula:
     """
     A class representing a chemical formula, with methods for parsing and
     transforming its appearance as text or HTML.
-
     """
 
     def __init__(self, formula):
         """
         Initialize the Formula object by parsing the string argument
         formula.
-
         """
-
-        if formula == "hv":
-            formula == "hν"
-
         self.formula = formula
+        self.atoms = set()
+        self.atom_stoich = defaultdict(int)
+        self.charge = 0
+        self.natoms = 0
+        self.rmm = 0.0
+        self.html = ""
+        self.latex = ""
+        self.slug = ""
+        self.mass = 0.0
         self.parse_formula(formula)
 
-    def _make_prefix_html(self, prefix_list):
-        """Make the prefix HTML:
-        D- and L- prefixes get written in small caps
+    @staticmethod
+    def _make_prefix_html(prefix_list):
+        """
+        Make the prefix HTML: D- and L- prefixes get written in small caps
         """
         prefix = "-".join(prefix_list)
         prefix = prefix.replace("D", '<span style="font-size: 80%;">D</span>')
         prefix = prefix.replace("L", '<span style="font-size: 80%;">L</span>')
-        return "%s-" % prefix
-
-    def _make_prefix_latex(self, prefix_list):
-        """Make the prefix LaTeX."""
-        latex_prefixes = []
-        for prefix in prefix_list:
-            try:
-                latex_prefix = latex_prefix_dict[prefix]
-            except KeyError:
-                latex_prefix = prefix
-        prefix = "-".join(latex_prefix)
         return "{}-".format(prefix)
 
-    def _make_prefix_slug(self, prefix_list):
+    @staticmethod
+    def _make_prefix_latex(prefix_list):
+        """Make the prefix LaTeX."""
+        latex_prefixes = [latex_prefix_dict.get(pr, pr) for pr in prefix_list]
+        prefix = "-".join(latex_prefixes)
+        return "{}-".format(prefix)
+
+    @staticmethod
+    def _make_prefix_slug(prefix_list):
         """
         Make the prefix slug: commas are replaced by underscores and non-ASCII
         characters swapped out according to the entries in the prefix_tokens
@@ -229,8 +231,6 @@ class Formula:
         if any(s in formula for s in ("++", "--", "+-", "-+")):
             raise FormulaParseError("Invalid formula syntax: {}".format(formula))
 
-        self.atoms = set()
-
         # We make a particular exception for various special cases, including
         # photons, electrons, positrons and "M", denoting an unspecified
         # "third-body" in many reactions. Note that M does not have a defined
@@ -245,14 +245,10 @@ class Formula:
         except pp.ParseException:
             raise FormulaParseError("Invalid formula syntax: %s" % formula)
 
-        self.atom_stoich = defaultdict(int)
-        self.charge = 0
-        self.natoms = 0
         html_chunks = []
         latex_chunks = []
         slug_chunks = []
         # calculate relative molecular mass as the sum of the atomic weights
-        self.rmm = 0.0
 
         # make the prefix html and slug
         if "prefix" in moieties.keys():
@@ -263,6 +259,7 @@ class Formula:
         moieties, total_charge = moieties["formula"], int(moieties["charge"])
         nmoieties = len(moieties)
         for i, moiety in enumerate(moieties):
+            poststoich = 0
             if "prestoich" in moiety.keys():
                 # bracketed fragment, e.g. (OH)2, 3(HO2+), ...
                 prestoich = int(moiety["prestoich"])
@@ -347,6 +344,7 @@ class Formula:
                 except TypeError:
                     # There's not much we can do for the stoichiometry if this
                     # atom occurs with an undefined value.
+                    # noinspection PyTypeChecker
                     self.atom_stoich[atom_symbol] = None
 
                 html_chunks.append(symbol_html)
@@ -404,7 +402,8 @@ class Formula:
 
         self.mass = self.rmm
 
-    def _get_charge_reps(self, charge):
+    @staticmethod
+    def _get_charge_reps(charge):
         if charge:
             s_charge = ""
             if abs(charge) > 1:
@@ -421,18 +420,18 @@ class Formula:
         return "", "", ""
 
     def __repr__(self):
+        if self.formula == "hv":
+            return "hν"
         return self.formula
-
-    __str__ = __repr__
 
     def __eq__(self, other):
         return self.formula == other.formula
 
     def _stoichiometric_formula_atomic_number(self):
-        """Return a list of atoms/isotopes and their stoichiometries.
+        """
+        Return a list of atoms/isotopes and their stoichiometries.
 
         The returned list is sorted in order of increasing atomic number.
-
         """
 
         atom_strs = []
@@ -447,49 +446,47 @@ class Formula:
         return atom_strs
 
     def _stoichiometric_formula_alphabetical(self):
-        """Return a list of atoms/isotopes and their stoichiometries.
+        """
+        Return a list of atoms/isotopes and their stoichiometries.
 
         The returned list is sorted in alphabetical order.
-
         """
-
         atom_strs = self._stoichiometric_formula_atomic_number()
         atom_strs.sort()
         return atom_strs
 
     def _stoichiometric_formula_hill(self):
-        """Return a list of atoms/isotopes and their stoichiometries.
+        """
+        Return a list of atoms/isotopes and their stoichiometries.
 
         The returned list is sorted in "Hill notation": first carbon, then
         hydrogen, then all other chemical elements in alphabetical order.
         If the species contains H but no C, all elements are listed in
         alphabetical order, including hydrogen.
-
         """
-
-        CH_strs = []
+        c_h_strs = []
         atom_strs = []
-        contains_C = False
+        contains_c = False
         for atom in sorted(self.atoms, key=lambda e: (e.Z, e.mass)):
             if atom.is_isotope:
                 symbol = "({})".format(atom.symbol)
             else:
                 symbol = atom.symbol
             if symbol == "C":
-                CH_strs.insert(0, self._get_symbol_stoich("C", self.atom_stoich["C"]))
-                contains_C = True
+                c_h_strs.insert(0, self._get_symbol_stoich("C", self.atom_stoich["C"]))
+                contains_c = True
             elif symbol == "H":
-                CH_strs.insert(1, self._get_symbol_stoich("H", self.atom_stoich["H"]))
+                c_h_strs.insert(1, self._get_symbol_stoich("H", self.atom_stoich["H"]))
             else:
                 atom_strs.append(
                     self._get_symbol_stoich(symbol, self.atom_stoich[atom.symbol])
                 )
 
-        if not contains_C:
-            atom_strs = CH_strs + atom_strs
-            CH_strs = []
+        if not contains_c:
+            atom_strs = c_h_strs + atom_strs
+            c_h_strs = []
         atom_strs.sort()
-        return CH_strs + atom_strs
+        return c_h_strs + atom_strs
 
     def stoichiometric_formula(self, fmt="atomic number"):
         """
@@ -497,9 +494,7 @@ class Formula:
         in one of the formats specified by the fmt argument:
         "atomic number": order atoms by increasing atomic number
         "alphabetical" : order atoms in alphabetical order of atomic symbol
-
         """
-
         if self.formula == "M":
             # Special case for generic "third-body"
             return "M"
@@ -508,7 +503,6 @@ class Formula:
             return "e-"
         if self.formula in ("hv", "hν"):
             # Special case for the photon
-            self.formula = "hν"
             return "hν"
 
         fmt = fmt.lower()
@@ -524,16 +518,18 @@ class Formula:
             atom_strs = self._stoichiometric_formula_alphabetical()
         elif fmt == "hill":
             atom_strs = self._stoichiometric_formula_hill()
+        else:
+            raise ValueError("Unknown fmt value!")
 
         # finally, add on the charge string, e.g. '', '-', '+2', ...
         atom_strs.append(self._get_charge_string())
         return "".join(atom_strs)
 
-    def _get_symbol_stoich(self, symbol, stoich):
+    @staticmethod
+    def _get_symbol_stoich(symbol, stoich):
         """
         Return Xn for element symbol X and stoichiometry n, unless n is 1,
         in which case, just return X.
-
         """
         if stoich is None:
             return "{}x".format(symbol)
@@ -545,9 +541,7 @@ class Formula:
         """
         Return the string representation of the charge: '+', '-', '+2', '-3',
         etc.
-
         """
-
         if not self.charge:
             return ""
         if self.charge > 0:

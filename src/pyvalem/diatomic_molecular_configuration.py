@@ -90,10 +90,8 @@ class DiatomicMolecularOrbital:
         self.count = int(count)
         self.validate_molecular_orbital()
 
-    def __str__(self):
+    def __repr__(self):
         return "{:d}{:s}{:d}".format(self.n, self.symbol, self.count)
-
-    __repr__ = __str__
 
     def __hash__(self):
         return hash((self.n, self.symbol, self.count))
@@ -120,7 +118,8 @@ class DiatomicMolecularOrbital:
                     "but received {:d}".format(self.count)
                 )
 
-    def _make_symbol_html(self, symbol):
+    @staticmethod
+    def _make_symbol_html(symbol):
         if symbol[-1] in "ug":
             return symbol[:-1] + "<sub>{}</sub>".format(symbol[-1])
         return symbol
@@ -131,7 +130,8 @@ class DiatomicMolecularOrbital:
             self.n, self._make_symbol_html(self.symbol), self.count
         )
 
-    def _make_symbol_latex(self, symbol):
+    @staticmethod
+    def _make_symbol_latex(symbol):
         if symbol[-1] in "ug":
             return symbol_latex[symbol[:-1]] + "_{}".format(symbol[-1])
         return symbol_latex[symbol]
@@ -155,8 +155,6 @@ class AltDiatomicMolecularOrbital(DiatomicMolecularOrbital):
 
     def __repr__(self):
         return "{}{}-{}{}".format(self.n, self.lletter, self.symbol, self.count)
-
-    __str__ = __repr__
 
     def __hash__(self):
         return hash((self.n, self.lletter, self.symbol, self.count))
@@ -186,6 +184,10 @@ class DiatomicMolecularConfiguration(State):
 
     multiple_allowed = False
 
+    def __init__(self, state_str):
+        self.orbitals = []
+        super().__init__(state_str)
+
     def parse_state(self, state_str):
         self.state_str = state_str
 
@@ -203,7 +205,6 @@ class DiatomicMolecularConfiguration(State):
                 "configuration syntax: {0}".format(state_str)
             )
 
-        self.orbitals = []
         for i, parsed_orbital in enumerate(parse_results):
             try:
                 temp_orbital = DiatomicMolecularOrbital(
@@ -255,8 +256,6 @@ class DiatomicMolecularConfiguration(State):
 
     def __repr__(self):
         return ".".join([str(orbital) for orbital in self.orbitals])
-
-    __str__ = __repr__
 
     def __hash__(self):
         return hash(self.state_str)

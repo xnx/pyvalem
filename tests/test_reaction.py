@@ -24,10 +24,10 @@ class ReactionParseTest(unittest.TestCase):
         ]
         self.expected_repr = [
             "e- + H + H → H + H + e-",
-            "hv + H → H+ + hv + e-",
+            "hν + H → H+ + hν + e-",
             "H + H + He + H + H → He + H + H + H + H",
-            "e+ + hv + H → H+",
-            "e- + H + H + H + H ⇌ H + H + H + H + hv + 2e- + e+",
+            "e+ + hν + H → H+",
+            "e- + H + H + H + H ⇌ H + H + H + H + hν + 2e- + e+",
             "W+26 + M → W+28 + M + 2e-",
         ]
         self.expected_html = [
@@ -144,7 +144,8 @@ class ReactionParseTest(unittest.TestCase):
         for r_str in self.r_strings:
             with self.subTest(r_str):
                 self.assertEqual(
-                    str(Reaction(r_str)), r_str.replace("<->", "⇌").replace("->", "→")
+                    str(Reaction(r_str)),
+                    r_str.replace("<->", "⇌").replace("->", "→").replace('hv', 'hν')
                 )
 
         s_r = "2H + M → H2 + M"
@@ -166,7 +167,7 @@ class ReactionParseTest(unittest.TestCase):
         for r_str, r_html in zip(self.r_strings, self.expected_repr):
             with self.subTest(r_str):
                 self.assertEqual(repr(Reaction(r_str)), r_html)
-        self.assertEqual(repr(Reaction("hv + C2 -> C + C")), "hv + C2 → C + C")
+        self.assertEqual(repr(Reaction("hv + C2 -> C + C")), "hν + C2 → C + C")
         self.assertEqual(repr(Reaction("e- + C2 -> C- + C")), "e- + C2 → C- + C")
         self.assertEqual(
             repr(Reaction("e- + C2 + e- -> C- + C-")), "2e- + C2 → C- + C-"

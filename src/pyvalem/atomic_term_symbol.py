@@ -5,32 +5,11 @@ an HTML representation of the term symbol, etc.
 """
 
 import pyparsing as pp
+
 from .state import State, StateParseError
 from .utils import parse_fraction, float_to_fraction
 
-atom_L_symbols = (
-    "S",
-    "P",
-    "D",
-    "F",
-    "G",
-    "H",
-    "I",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "Q",
-    "R",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-)
+atom_L_symbols = "S P D F G H I K L M N O Q R T U V W X Y Z".split()
 
 integer = pp.Word(pp.nums)
 
@@ -57,6 +36,15 @@ class AtomicTermSymbol(State):
 
     multiple_allowed = False
 
+    def __init__(self, state_str):
+        self.Smult = None
+        self.S = None
+        self.Lletter = None
+        self.L = None
+        self.parity = None
+        self.J = None
+        super(AtomicTermSymbol, self).__init__(state_str)
+
     def parse_state(self, state_str):
         self.state_str = state_str
 
@@ -76,12 +64,12 @@ class AtomicTermSymbol(State):
         except ValueError as err:
             raise AtomicTermSymbolError(err)
         if self.J is not None:
-            self.validate_J()
+            self.validate_j()
 
-    def validate_J(self):
-        S_is_half_integer = int(2 * self.S) % 2
-        J_is_half_integer = int(2 * self.J) % 2
-        if S_is_half_integer != J_is_half_integer:
+    def validate_j(self):
+        s_is_half_integer = int(2 * self.S) % 2
+        j_is_half_integer = int(2 * self.J) % 2
+        if s_is_half_integer != j_is_half_integer:
             raise AtomicTermSymbolError(
                 "J={} is invalid for S={}.".format(self.J, self.S)
             )
@@ -97,8 +85,8 @@ class AtomicTermSymbol(State):
         if self.parity:
             html_chunks.append("<sup>o</sup>")
         if self.J is not None:
-            Jstr = float_to_fraction(self.J)
-            html_chunks.append("<sub>{0:s}</sub>".format(Jstr))
+            j_str = float_to_fraction(self.J)
+            html_chunks.append("<sub>{0:s}</sub>".format(j_str))
         return "".join(html_chunks)
 
     @property
@@ -107,6 +95,6 @@ class AtomicTermSymbol(State):
         if self.parity:
             latex_chunks.append("^o")
         if self.J is not None:
-            Jstr = float_to_fraction(self.J)
-            latex_chunks.append("_{{{}}}".format(Jstr))
+            j_str = float_to_fraction(self.J)
+            latex_chunks.append("_{{{}}}".format(j_str))
         return "".join(latex_chunks)
