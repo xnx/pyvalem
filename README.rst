@@ -86,27 +86,27 @@ For further information on valid PyValem ``State`` strings, consult the document
 
 Examples::
 
-    >>> from pyvalem.stateful_species = StatefulSpecies
+    >>> from pyvalem.stateful_species import StatefulSpecies
 
     >>> stateful_species = StatefulSpecies('Ne+ 1s2.2s2.2p5; 2P_1/2')
     >>> stateful_species.formula
     Ne+
 
     >>> type(stateful_species.formula)
-    pyvalem.formula.Formula
+    <class 'pyvalem.formula.Formula'>
 
     >>> stateful_species.states
     [1s2.2s2.2p5, 2P_1/2]
 
     >>> state1, state2 = stateful_species.states
     >>> type(state1)
-    pyvalem.atomic_configuration.AtomicConfiguration
+    <class 'pyvalem.atomic_configuration.AtomicConfiguration'>
 
     >>> state1.orbitals
     [1s2, 2s2, 2p5]
 
     >>> type(state2)
-    pyvalem.atomic_term_symbol.AtomicTermSymbol
+    <class 'pyvalem.atomic_term_symbol.AtomicTermSymbol'>
 
     >>> state2.L, state2.J
     (1, 0.5)
@@ -117,7 +117,7 @@ As ``Formula``, also ``StatefulSpecies`` have ``html`` (and ``latex``) attribute
     'Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>'
 
     >>> StatefulSpecies('(52Cr)(1H) 1sigma2.2sigma1.1delta2.1pi2; 6SIGMA+; v=0; J=2').html
-    <sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2
+    '<sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2'
 
 which render as
 
@@ -140,6 +140,7 @@ separated by ``' -> '``, such as::
 
     >>> from pyvalem.reaction import Reaction
     >>> reaction = Reaction('He+2 + H -> He+ 3p1 + H+ + hv')
+    >>> reaction
     He+2 + H → He+ 3p1 + H+ + hν
 
     >>> reaction.html
@@ -152,14 +153,14 @@ The ``Reaction`` class also watches out for charge balance and stoichiometry
 conservation during instantiation::
 
     >>> Reaction('(2H) + (3H) -> (4He)')
-    Traceback (most recent call last)
+    Traceback (most recent call last):
       ...
-    ReactionStoichiometryError: Stoichiometry not preserved for reaction: (2H) + (3H) -> (4He)
+    pyvalem.reaction.ReactionStoichiometryError: Stoichiometry not preserved for reaction: (2H) + (3H) -> (4He)
 
     >>> Reaction('e- + Ar -> Ar+ + e-')
-    Traceback (most recent call last)
+    Traceback (most recent call last):
       ...
-    ReactionChargeError: Charge not preserved for reaction: e- + Ar -> Ar+ + e-
+    pyvalem.reaction.ReactionChargeError: Charge not preserved for reaction: e- + Ar -> Ar+ + e-
 
 
 
