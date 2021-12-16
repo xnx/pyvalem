@@ -22,25 +22,23 @@ setup(
         "Topic :: Scientific/Engineering :: Physics",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3 :: Only",
         "Operating System :: OS Independent",
     ],
     keywords="chemistry, formula, species, state, reaction",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
-    python_requires=">=3.4",
-    install_requires=["pyparsing", 'importlib-resources; python_version < "3.7.0"'],
-    extras_require={
-        "dev": ["black", "coverage", "pytest", "ipython"]
-    },
+    python_requires=">=3.6",
+    install_requires=[
+        "pyparsing>=2.1",
+        'importlib-resources>=1.0; python_version < "3.7.0"',
+    ],
+    extras_require={"dev": ["black", "coverage", "pytest", "tox", "ipython"]},
     # package_data will include all the resolved globs into both the wheel and sdist
     package_data={"pyvalem": ["*.txt"]},
     # no need for MANIFEST.in, which should be reserved only for build-time files
