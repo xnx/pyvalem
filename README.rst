@@ -191,4 +191,4 @@ another layer of usefulness.
 
 The project code is formatted by ``black``.
 Always make sure to format your code before submitting a pull request, by running
-``black`` on all your python file.
+``black`` on all your python files.
