@@ -39,9 +39,11 @@ setup(
     python_requires=">=3.4",
     install_requires=["pyparsing", 'importlib-resources; python_version < "3.7.0"'],
     extras_require={
-        "dev": ["check-manifest", "black", "coverage", "pytest", "ipython"]
+        "dev": ["black", "coverage", "pytest", "ipython"]
     },
-    package_data={"pyvalem": ["atomic_weights.txt", "isotope_masses.txt"]},
+    # package_data will include all the resolved globs into both the wheel and sdist
+    package_data={"pyvalem": ["*.txt"]},
+    # no need for MANIFEST.in, which should be reserved only for build-time files
     project_urls={
         "Bug Reports": "https://github.com/xnx/pyvalem/issues",
     },
