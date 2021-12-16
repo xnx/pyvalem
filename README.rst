@@ -31,12 +31,6 @@ or from the source by running (one of the two) from the project source directory
 
 
 
-For Developers:
-===============
-To de added.
-
-
-
 Examples:
 =========
 
@@ -167,3 +161,33 @@ conservation during instantiation::
       ...
     ReactionChargeError: Charge not preserved for reaction: e- + Ar -> Ar+ + e-
 
+
+
+For Developers:
+===============
+.. _GitHub: https://github.com/xnx/pyvalem
+It goes without saying that any development should be done in a clean virtual
+environment.
+After cloning or forking the project from its GitHub_ page, ``pyvalem`` might be
+installed into the virtual environment in editable mode with::
+
+    pip install -e .[dev]
+
+The ``[dev]`` extra installs (apart from the package dependencies) also several
+development-related packages, such as ``pytest``, ``black``, ``tox`` or ``ipython.``
+The tests can then be executed by running (from the project root directory)::
+
+    # either
+    pytest
+
+    # or
+    tox
+
+The project does not have ``requirements.txt`` by design, all the package dependencies
+are rather handled by ``setup.py``.
+The package needs to be installed to run the tests, which grants the testing process
+another layer of usefulness.
+
+The project code is formatted by ``black``.
+Always make sure to format your code before submitting a pull request, by running
+``black`` on all your python file.
