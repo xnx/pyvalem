@@ -40,14 +40,21 @@ class ReactionParseTest(unittest.TestCase):
             "W<sup>26+</sup> + M → e<sup>-</sup> + W<sup>28+</sup> + M + e<sup>-</sup>",
         ]
         self.expected_latex = [
-            r"$e^-$ + 2\mathrm{H} \rightarrow $e^-$ + \mathrm{H} + \mathrm{H}",
-            r"\mathrm{H} + $h\nu$ \rightarrow $h\nu$ + \mathrm{H}^{+} + $e^-$",
+            r"\mathrm{e}^- + 2\mathrm{H} \rightarrow "
+            r"\mathrm{e}^- + \mathrm{H} + \mathrm{H}",
+
+            r"\mathrm{H} + h\nu \rightarrow h\nu + \mathrm{H}^{+} + \mathrm{e}^-",
+
             r"2\mathrm{H} + \mathrm{He} + 2\mathrm{H} \rightarrow "
             r"\mathrm{He} + 4\mathrm{H}",
-            r"$e^+$ + \mathrm{H} + $h\nu$ \rightarrow \mathrm{H}^{+}",
-            r"\mathrm{H} + \mathrm{H} + $e^-$ + 2\mathrm{H} \rightlefthooks "
-            r"$e^-$ + $e^-$ + 4\mathrm{H} + $e^+$ + $h\nu$",
-            r"\mathrm{W}^{26+} + M \rightarrow $e^-$ + \mathrm{W}^{28+} + M + $e^-$",
+
+            r"\mathrm{e}^+ + \mathrm{H} + h\nu \rightarrow \mathrm{H}^{+}",
+
+            r"\mathrm{H} + \mathrm{H} + \mathrm{e}^- + 2\mathrm{H} \rightlefthooks "
+            r"\mathrm{e}^- + \mathrm{e}^- + 4\mathrm{H} + \mathrm{e}^+ + h\nu",
+
+            r"\mathrm{W}^{26+} + \mathrm{M} \rightarrow "
+            r"\mathrm{e}^- + \mathrm{W}^{28+} + \mathrm{M} + \mathrm{e}^-",
         ]
 
     def test_reaction_parsing(self):

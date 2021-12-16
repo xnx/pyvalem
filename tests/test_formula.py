@@ -29,14 +29,15 @@ class FormulaTest(unittest.TestCase):
         self.assertEqual(cf.stoichiometric_formula("alphabetical"), "BrH")
         self.assertEqual(cf.stoichiometric_formula("hill"), "BrH")
 
-    def test_html_and_slug(self):
+    def test_html_latex_and_slug(self):
         f = (
-            ("NO+", "NO+", "NO<sup>+</sup>", "NO_p"),
-            ("OH-", "HO-", "OH<sup>-</sup>", "OH_m"),
+            ("NO+", "NO+", "NO<sup>+</sup>", r"\mathrm{N}\mathrm{O}^{+}", "NO_p"),
+            ("OH-", "HO-", "OH<sup>-</sup>", r"\mathrm{O}\mathrm{H}^{-}", "OH_m"),
             (
                 "CoN6H18-2",
                 "H18N6Co-2",
                 "CoN<sub>6</sub>H<sub>18</sub><sup>2-</sup>",
+                r"\mathrm{Co}\mathrm{N}_{6}\mathrm{H}_{18}^{2-}",
                 "CoN6H18_m2",
             ),
             (
@@ -44,15 +45,20 @@ class FormulaTest(unittest.TestCase):
                 "(1H)(14N)(16O)3(18O)",
                 "<sup>14</sup>N<sup>1</sup>H<sup>16</sup>O<sub>2</sub>"
                 "<sup>18</sup>O<sup>16</sup>O",
+                r"^{14}\mathrm{N}^{1}\mathrm{H}^{16}\mathrm{O}_{2}^{18}\mathrm{O}^{16}"
+                r"\mathrm{O}",
                 "14N-1H-16O2-18O-16O",
             ),
-            ("CFx", "CFx", "CF<sub>x</sub>", "CFx"),
+            ("CFx", "CFx", "CF<sub>x</sub>", r"\mathrm{C}\mathrm{F}_{x}", "CFx"),
+            ("NO+", "NO+", "NO<sup>+</sup>", r"\mathrm{N}\mathrm{O}^{+}", "NO_p"),
+            ("NO+", "NO+", "NO<sup>+</sup>", r"\mathrm{N}\mathrm{O}^{+}", "NO_p"),
         )
 
-        for formula, stoich_formula, html, slug in f:
+        for formula, stoich_formula, html, latex, slug in f:
             cf = Formula(formula)
             self.assertEqual(cf.stoichiometric_formula(), stoich_formula)
             self.assertEqual(cf.html, html)
+            self.assertEqual(cf.latex, latex)
             self.assertEqual(cf.slug, slug)
 
     def test_moieties(self):
@@ -66,6 +72,7 @@ class FormulaTest(unittest.TestCase):
 
         cf = Formula("Co(H2O)6+2")
         self.assertEqual(cf.html, "Co(H<sub>2</sub>O)<sub>6</sub><sup>2+</sup>")
+        self.assertEqual(cf.latex, r"\mathrm{Co}(\mathrm{H}_{2}\mathrm{O})_{6}^{2+}")
         self.assertEqual(cf.slug, "Co-_l_H2O_r_6_p2")
 
     def test_good_formulas(self):
@@ -101,34 +108,45 @@ class FormulaTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, Formula, "H+-")
         self.assertRaises(FormulaParseError, Formula, "H-+")
 
-    def test_M(self):
-        cf = Formula("M")
-        self.assertEqual(cf.stoichiometric_formula(), "M")
-        self.assertEqual(cf.html, "M")
-        self.assertEqual(cf.slug, "M")
-        self.assertIsNone(cf.rmm)
-        self.assertIsNone(cf.natoms)
-        self.assertIsNone(cf.charge)
-        self.assertEqual(cf.atoms, {"M"})
+    def test_special_formulas(self):
+        # stoichiometric_formula, html, latex, slug, rmm, natoms, charge, atoms
+        f = {
+            "M": ("M", "M", r"\mathrm{M}", "M", None, None, None, {"M"}),
+            "e-": (
+                "e-",
+                "e<sup>-</sup>",
+                r"\mathrm{e}^-",
+                "e_m",
+                5.48579909e-04,
+                None,
+                -1,
+                {},
+            ),
+            "e+": (
+                "e+",
+                "e<sup>+</sup>",
+                r"\mathrm{e}^+",
+                "e_p",
+                5.48579909e-04,
+                None,
+                1,
+                {},
+            ),
+            "hv": ("hν", "hν", r"h\nu", "hv", 0, None, 0, {}),
+        }
+        f["hν"] = f["hv"]
 
-    def test_e(self):
-        cf = Formula("e-")
-        self.assertEqual(cf.stoichiometric_formula(), "e-")
-        self.assertEqual(cf.html, "e<sup>-</sup>")
-        self.assertEqual(cf.slug, "e_m")
-        self.assertEqual(cf.mass, 5.48579909e-04)
-        self.assertIsNone(cf.natoms)
-        self.assertEqual(cf.charge, -1)
-
-    def test_photon(self):
-        for cf in (Formula("hν"), Formula("hv")):
-            self.assertEqual(cf.stoichiometric_formula(), "hν")
-            self.assertEqual(str(cf), "hν")
-            self.assertEqual(cf.slug, "hv")
-            self.assertEqual(cf.html, "hν")
-            self.assertEqual(cf.mass, 0)
-            self.assertIsNone(cf.natoms)
-            self.assertEqual(cf.charge, 0)
+        for f_str in f:
+            formula = Formula(f_str)
+            sf, html, latex, slug, rmm, natoms, charge, atoms = f[f_str]
+            self.assertEqual(formula.stoichiometric_formula(), sf)
+            self.assertEqual(formula.html, html)
+            self.assertEqual(formula.latex, latex)
+            self.assertEqual(formula.slug, slug)
+            self.assertEqual(formula.rmm, rmm)
+            self.assertEqual(formula.natoms, natoms)
+            self.assertEqual(formula.charge, charge)
+            self.assertEqual(formula.atoms, atoms)
 
     def test_parse_fail(self):
         self.assertRaises(FormulaParseError, Formula, "Mq")

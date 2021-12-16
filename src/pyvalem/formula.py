@@ -425,7 +425,7 @@ class Formula:
         return self.formula
 
     def __eq__(self, other):
-        return self.formula == other.formula
+        return repr(self.formula) == repr(other.formula)
 
     def _stoichiometric_formula_atomic_number(self):
         """
@@ -495,13 +495,10 @@ class Formula:
         "atomic number": order atoms by increasing atomic number
         "alphabetical" : order atoms in alphabetical order of atomic symbol
         """
-        if self.formula == "M":
-            # Special case for generic "third-body"
-            return "M"
-        if self.formula == "e-":
-            # Special case for the electron
-            return "e-"
-        if self.formula in ("hv", "hν"):
+        # Special cases
+        if self.formula in {"M", "e-", "e+"}:
+            return self.formula
+        if self.formula in {"hv", "hν"}:
             # Special case for the photon
             return "hν"
 

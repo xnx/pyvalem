@@ -9,7 +9,7 @@ special_cases = {
     "M": {
         "slug": "M",
         "html": "M",
-        "latex": "M",
+        "latex": r"\mathrm{M}",
         "atom_stoich": {},
         "mass": None,
         "rmm": None,
@@ -21,7 +21,7 @@ special_cases = {
     "hν": {
         "slug": "hv",
         "html": "hν",
-        "latex": r"$h\nu$",
+        "latex": r"h\nu",
         "atom_stoich": {},
         "mass": 0,
         "rmm": 0,
@@ -33,7 +33,7 @@ special_cases = {
     "e-": {
         "slug": "e_m",
         "html": "e<sup>-</sup>",
-        "latex": "$e^-$",
+        "latex": "\mathrm{e}^-",
         "atom_stoich": {},
         "mass": 5.48579909e-04,  # m_e / u
         "rmm": 5.48579909e-04,  # m_e / u
@@ -45,7 +45,7 @@ special_cases = {
     "e+": {
         "slug": "e_p",
         "html": "e<sup>+</sup>",
-        "latex": "$e^+$",
+        "latex": "\mathrm{e}^+",
         "atom_stoich": {},
         "mass": 5.48579909e-04,  # m_(e+) / u
         "rmm": 5.48579909e-04,  # m_(e+) / u
