@@ -35,7 +35,7 @@ setup(
     packages=find_packages(where="src"),
     python_requires=">=3.6",
     install_requires=[
-        "pyparsing>=2.1",
+        "pyparsing>=2.3",
         'importlib-resources>=1.0; python_version < "3.7.0"',
     ],
     extras_require={"dev": ["black", "coverage", "pytest", "tox", "ipython"]},
