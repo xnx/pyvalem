@@ -1,86 +1,86 @@
+***********************
 Introduction to PyValem
 ***********************
+
+
 
 PyValem is a Python package for parsing, validating, manipulating and
 interpreting the chemical formulas, quantum states and labels of atoms, ions
 and small molecules.
 
-Species and states are specfied as strings using a simple and flexible syntax,
+Species and states are specified as strings using a simple and flexible syntax,
 and may be compared, output in different formats and manipulated using a
 variety of predefined Python methods.
 
-Installation
-============
 
-From this source::
 
+Installation:
+=============
+.. _PyPI: https://pypi.org/project/pyvalem/
+The PyValem package can be installed either from PyPI_ using pip::
+
+    python3 -m pip install pyvalem
+
+or from the source by running (one of the two) from the project source directory::
+
+    # either
     python setup.py install
 
-Or using pip::
+    # or
+    python3 -m pip install .
 
-    pip install pyvalem
 
-Examples
-========
 
-The basic (state-less) chemical formula class is ``Formula``. A ``Formula`` object
-can be created by passing its constructor a valid string. This object contains
-attributes for producing its plain text, HTML and LaTeX representations, and
-for calculating its molar mass::
+For Developers:
+===============
+To de added.
 
-    In [1]: from pyvalem.formula import Formula
 
-    In [2]: f = Formula('C2H5OH')
 
-    In [3]: print(f)
+Examples:
+=========
+
+Formula
+-------
+The basic (state-less) chemical formulas are represented by the ``Formula`` class.
+A ``Formula`` object is instantiated from a valid formula string and supports ions,
+isotopologues, as well as a few special species. The object contains attributes with
+its HTML and LaTeX representations, and its molar mass::
+
+    >>> from pyvalem.formula import Formula
+
+    >>> # neutral formulas:
+    >>> Formula('C2H5OH')
     C2H5OH
 
-    In [4]: print(f.html)
-    C<sub>2</sub>H<sub>5</sub>OH
+    >>> # isotopes:
+    >>> Formula('(14C)')
+    (14C)
 
-    In [5]: print(f.latex)
-    $\mathrm{C}_{2}\mathrm{H}_{5}\mathrm{O}\mathrm{H}$
+    >>> # ions
+    >>> [Formula('H3O+'), Formula('(1H)(2H)+'), Formula('Co(H2O)6+2')]
+    [H3O+, (1H)(2H)+, Co(H2O)6+2]
 
-    In [6]: print(f.rmm)    # g.mol-1
-    46.069
+    >>> # special species
+    >>> [Formula('e-'), Formula('hv')]
+    [e-, hν]
 
-Note that there is no underscore character (``_``) before between the element
-symbol and its stoichiometry. Isotopes are specified with the mass number
-placed before the element symbol, with both surrounded by parentheses. Do not
-use a caret (``^``) to indicate a superscript::
-
-    In [7]: f = Formula('(14C)')
-
-    In [8]: print(f.html)
-    <sup>14</sup>C
-
-    In [9]: print(f.rmm)
-    14.0032419884
-
-    In [10]: f = Formula('H2(18O)')
-
-    In [11]: print(f.rmm)
-    20.015159612799998
-
-For isotopically-pure compounds, the mass returned is the atomic mass.
-
-Charges are specified as ``+n`` or ``-n``, where ``n`` may be omitted if it is 1.
-Do not use a caret (``^``) to indicate a superscript::
-
-    In [12]: f = Formula('H3O+')
-    In [13]: print(f.charge)
-    1
-
-    In [14]: print(f.html)
-    H<sub>3</sub>O<sup>+</sup>
-
-    In [15]: f = Formula('Co(H2O)6+2')
-    In [16]: print(f.charge)
+    >>> # formula attributes:
+    >>> Formula('Ar+2').charge
     2
 
-    In [17]: print(f.html)
-    Co(H<sub>2</sub>O)<sub>6</sub><sup>2+</sup>
+    >>> Formula('H2(18O)').html
+    'H<sub>2</sub><sup>18</sup>O'
 
+    >>> print(Formula('H2(18O)').latex)
+    \mathrm{H}_{2}^{18}\mathrm{O}
+
+    >>> Formula('(235U)').mass
+    235.04392819
+
+
+"Stateful" Species
+------------------
 "Stateful" species are formulas which consist of a valid ``Formula`` string,
 followed by whitespace, followed by a semicolon-delimited sequence of valid
 quantum state or label specifications. Stateful species know which states they possess and can render these states in different ways. For example::
@@ -124,3 +124,7 @@ which produces:
 
 The syntax for writing different types of quantum state are described in later pages of this documentation.
 
+
+Reaction
+--------
+To be added.
