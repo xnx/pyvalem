@@ -33,7 +33,7 @@ special_cases = {
     "e-": {
         "slug": "e_m",
         "html": "e<sup>-</sup>",
-        "latex": "\mathrm{e}^-",
+        "latex": r"\mathrm{e}^-",
         "atom_stoich": {},
         "mass": 5.48579909e-04,  # m_e / u
         "rmm": 5.48579909e-04,  # m_e / u
@@ -45,7 +45,7 @@ special_cases = {
     "e+": {
         "slug": "e_p",
         "html": "e<sup>+</sup>",
-        "latex": "\mathrm{e}^+",
+        "latex": r"\mathrm{e}^+",
         "atom_stoich": {},
         "mass": 5.48579909e-04,  # m_(e+) / u
         "rmm": 5.48579909e-04,  # m_(e+) / u
