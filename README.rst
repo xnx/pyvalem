@@ -17,11 +17,15 @@ variety of predefined Python methods.
 Installation:
 =============
 .. _PyPI: https://pypi.org/project/pyvalem/
-The PyValem package can be installed either from PyPI_ using pip::
+The PyValem package can be installed either from PyPI_ using pip
+
+.. code-block:: bash
 
     python3 -m pip install pyvalem
 
-or from the source by running (one of the two) from the project source directory::
+or from the source by running (one of the two) from the project source directory.
+
+.. code-block:: bash
 
     # either
     python setup.py install
@@ -40,7 +44,9 @@ The basic (state-less) chemical formulas are represented by the ``Formula`` clas
 A ``Formula`` object is instantiated from a valid formula string and supports ions,
 isotopologues, as well as a few special species.
 The object contains attributes with its HTML and LaTeX representations,
-and its molar mass::
+and its molar mass.
+
+.. code-block:: python
 
     >>> from pyvalem.formula import Formula
 
@@ -84,7 +90,9 @@ semicolon-delimited sequence of valid ``State`` strings.
 PyValem supports several different types of state notation.
 For further information on valid PyValem ``State`` strings, consult the documentation.
 
-Examples::
+Examples:
+
+.. code-block:: python
 
     >>> from pyvalem.stateful_species import StatefulSpecies
 
@@ -111,7 +119,9 @@ Examples::
     >>> state2.L, state2.J
     (1, 0.5)
 
-As ``Formula``, also ``StatefulSpecies`` have ``html`` (and ``latex``) attributes::
+As ``Formula``, also ``StatefulSpecies`` have ``html`` (and ``latex``) attributes.
+
+.. code-block:: python
 
     >>> stateful_species.html
     'Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>'
@@ -136,7 +146,9 @@ Reaction
 Finally, the ``Reaction`` class represents a reaction or a collisional process between
 species. A ``Reaction`` object is instantiated with a string consisting of valid
 ``Formula`` or ``StatefulSpecies`` strings delimited by ``' + '``, and reaction sides
-separated by ``' -> '``, such as::
+separated by ``' -> '``, such as
+
+.. code-block:: python
 
     >>> from pyvalem.reaction import Reaction
     >>> reaction = Reaction('He+2 + H -> He+ 3p1 + H+ + hv')
@@ -150,7 +162,9 @@ separated by ``' -> '``, such as::
     \mathrm{He}^{2+} + \mathrm{H} \rightarrow \mathrm{He}^{+} \; 3p^{1} + \mathrm{H}^{+} + h\nu
 
 The ``Reaction`` class also watches out for charge balance and stoichiometry
-conservation during instantiation::
+conservation during instantiation.
+
+.. code-block:: python
 
     >>> Reaction('(2H) + (3H) -> (4He)')
     Traceback (most recent call last):
@@ -170,13 +184,17 @@ For Developers:
 It goes without saying that any development should be done in a clean virtual
 environment.
 After cloning or forking the project from its GitHub_ page, ``pyvalem`` might be
-installed into the virtual environment in editable mode with::
+installed into the virtual environment in editable mode with
+
+.. code-block:: bash
 
     pip install -e .[dev]
 
 The ``[dev]`` extra installs (apart from the package dependencies) also several
 development-related packages, such as ``pytest``, ``black``, ``tox`` or ``ipython.``
-The tests can then be executed by running (from the project root directory)::
+The tests can then be executed by running (from the project root directory)
+
+.. code-block:: bash
 
     # either
     pytest
