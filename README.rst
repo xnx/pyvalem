@@ -1,3 +1,6 @@
+.. _GitHub: https://github.com/xnx/pyvalem
+.. _PyPI: https://pypi.org/project/pyvalem/
+
 ***********************
 Introduction to PyValem
 ***********************
@@ -16,7 +19,7 @@ variety of predefined Python methods.
 
 Installation:
 =============
-.. _PyPI: https://pypi.org/project/pyvalem/
+
 The PyValem package can be installed either from PyPI_ using pip
 
 .. code-block:: bash
@@ -119,26 +122,15 @@ Examples:
     >>> state2.L, state2.J
     (1, 0.5)
 
-As ``Formula``, also ``StatefulSpecies`` have ``html`` (and ``latex``) attributes.
+As ``Formula``, also ``StatefulSpecies`` have ``html`` and ``latex`` attributes.
 
 .. code-block:: pycon
 
-    >>> stateful_species.html
-    'Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>'
+    >>> print(stateful_species.latex)
+    \mathrm{Ne}^{+} \; 1s^{2}2s^{2}2p^{5}; \; {}^{2}P_{1/2}
 
     >>> StatefulSpecies('(52Cr)(1H) 1sigma2.2sigma1.1delta2.1pi2; 6SIGMA+; v=0; J=2').html
     '<sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2'
-
-which render as
-
-.. raw:: html
-
-    Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>
-    <br>
-
-.. raw:: html
-
-    <sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2
 
 
 Reaction
@@ -180,7 +172,6 @@ conservation during instantiation.
 
 For Developers:
 ===============
-.. _GitHub: https://github.com/xnx/pyvalem
 It goes without saying that any development should be done in a clean virtual
 environment.
 After cloning or forking the project from its GitHub_ page, ``pyvalem`` might be
