@@ -168,12 +168,12 @@ conservation during instantiation.
 
     >>> Reaction('(2H) + (3H) -> (4He)')
     Traceback (most recent call last):
-      ...
+    ...
     pyvalem.reaction.ReactionStoichiometryError: Stoichiometry not preserved for reaction: (2H) + (3H) -> (4He)
 
     >>> Reaction('e- + Ar -> Ar+ + e-')
     Traceback (most recent call last):
-      ...
+    ...
     pyvalem.reaction.ReactionChargeError: Charge not preserved for reaction: e- + Ar -> Ar+ + e-
 
 
