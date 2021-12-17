@@ -46,7 +46,7 @@ isotopologues, as well as a few special species.
 The object contains attributes with its HTML and LaTeX representations,
 and its molar mass.
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> from pyvalem.formula import Formula
 
@@ -92,7 +92,7 @@ For further information on valid PyValem ``State`` strings, consult the document
 
 Examples:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> from pyvalem.stateful_species import StatefulSpecies
 
@@ -121,7 +121,7 @@ Examples:
 
 As ``Formula``, also ``StatefulSpecies`` have ``html`` (and ``latex``) attributes.
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> stateful_species.html
     'Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>'
@@ -148,7 +148,7 @@ species. A ``Reaction`` object is instantiated with a string consisting of valid
 ``Formula`` or ``StatefulSpecies`` strings delimited by ``' + '``, and reaction sides
 separated by ``' -> '``, such as
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> from pyvalem.reaction import Reaction
     >>> reaction = Reaction('He+2 + H -> He+ 3p1 + H+ + hv')
@@ -164,7 +164,7 @@ separated by ``' -> '``, such as
 The ``Reaction`` class also watches out for charge balance and stoichiometry
 conservation during instantiation.
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> Reaction('(2H) + (3H) -> (4He)')
     Traceback (most recent call last):
