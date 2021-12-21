@@ -1,126 +1,203 @@
+.. _GitHub: https://github.com/xnx/pyvalem
+.. _PyPI: https://pypi.org/project/pyvalem/
+
+***********************
 Introduction to PyValem
 ***********************
+
+
 
 PyValem is a Python package for parsing, validating, manipulating and
 interpreting the chemical formulas, quantum states and labels of atoms, ions
 and small molecules.
 
-Species and states are specfied as strings using a simple and flexible syntax,
+Species and states are specified as strings using a simple and flexible syntax,
 and may be compared, output in different formats and manipulated using a
 variety of predefined Python methods.
 
-Installation
-============
 
-From this source::
 
+Installation:
+=============
+
+The PyValem package can be installed either from PyPI_ using pip
+
+.. code-block:: bash
+
+    python3 -m pip install pyvalem
+
+or from the source by running (one of the two) from the project source directory.
+
+.. code-block:: bash
+
+    # either
     python setup.py install
 
-Or using pip::
+    # or
+    python3 -m pip install .
 
-    pip install pyvalem
 
-Examples
-========
 
-The basic (state-less) chemical formula class is ``Formula``. A ``Formula`` object
-can be created by passing its constructor a valid string. This object contains
-attributes for producing its plain text, HTML and LaTeX representations, and
-for calculating its molar mass::
+Examples:
+=========
 
-    In [1]: from pyvalem.formula import Formula
+Formula
+-------
+The basic (state-less) chemical formulas are represented by the ``Formula`` class.
+A ``Formula`` object is instantiated from a valid formula string and supports ions,
+isotopologues, as well as a few special species.
+The object contains attributes with its HTML and LaTeX representations,
+and its molar mass.
 
-    In [2]: f = Formula('C2H5OH')
+.. code-block:: pycon
 
-    In [3]: print(f)
+    >>> from pyvalem.formula import Formula
+
+    >>> # neutral formulas:
+    >>> Formula('C2H5OH')
     C2H5OH
 
-    In [4]: print(f.html)
-    C<sub>2</sub>H<sub>5</sub>OH
+    >>> # isotopes:
+    >>> Formula('(14C)')
+    (14C)
 
-    In [5]: print(f.latex)
-    $\mathrm{C}_{2}\mathrm{H}_{5}\mathrm{O}\mathrm{H}$
+    >>> # ions
+    >>> [Formula('H3O+'), Formula('(1H)(2H)+'), Formula('Co(H2O)6+2')]
+    [H3O+, (1H)(2H)+, Co(H2O)6+2]
 
-    In [6]: print(f.rmm)    # g.mol-1
-    46.069
+    >>> # special species
+    >>> [Formula('e-'), Formula('hv')]
+    [e-, hν]
 
-Note that there is no underscore character (``_``) before between the element
-symbol and its stoichiometry. Isotopes are specified with the mass number
-placed before the element symbol, with both surrounded by parentheses. Do not
-use a caret (``^``) to indicate a superscript::
-
-    In [7]: f = Formula('(14C)')
-
-    In [8]: print(f.html)
-    <sup>14</sup>C
-
-    In [9]: print(f.rmm)
-    14.0032419884
-
-    In [10]: f = Formula('H2(18O)')
-
-    In [11]: print(f.rmm)
-    20.015159612799998
-
-For isotopically-pure compounds, the mass returned is the atomic mass.
-
-Charges are specified as ``+n`` or ``-n``, where ``n`` may be omitted if it is 1.
-Do not use a caret (``^``) to indicate a superscript::
-
-    In [12]: f = Formula('H3O+')
-    In [13]: print(f.charge)
-    1
-
-    In [14]: print(f.html)
-    H<sub>3</sub>O<sup>+</sup>
-
-    In [15]: f = Formula('Co(H2O)6+2')
-    In [16]: print(f.charge)
+    >>> # formula attributes:
+    >>> Formula('Ar+2').charge
     2
 
-    In [17]: print(f.html)
-    Co(H<sub>2</sub>O)<sub>6</sub><sup>2+</sup>
+    >>> Formula('H2(18O)').html
+    'H<sub>2</sub><sup>18</sup>O'
 
-"Stateful" species are formulas which consist of a valid ``Formula`` string,
-followed by whitespace, followed by a semicolon-delimited sequence of valid
-quantum state or label specifications. Stateful species know which states they possess and can render these states in different ways. For example::
+    >>> print(Formula('H2(18O)').latex)
+    \mathrm{H}_{2}^{18}\mathrm{O}
 
-    In [18]: from pyvalem.stateful_species import StatefulSpecies
-    In [19]: ss1 = StatefulSpecies('Ne+ 1s2.2s2.2p5; 2P_1/2')
-    In [20]: ss1.states
-    Out[21]: [1s2.2s2.2p5, 2P_1/2]
+    >>> Formula('(235U)').mass
+    235.04392819
 
-    In [22]: ss1.states[1].__class__
-    Out[22]: pyvalem.atomic_term_symbol.AtomicTermSymbol
 
-    In [23]: ss1.html
-    Out[23]: 'Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>'
+"Stateful" Species
+------------------
+The "stateful" species represent species with (or without) any number of states
+attached.
+The ``StatefulSpecies`` object can be instantiated from a valid string, which consist
+of a valid ``Formula`` string, followed by a whitespace, followed by a
+semicolon-delimited sequence of valid ``State`` strings.
+PyValem supports several different types of state notation.
+For further information on valid PyValem ``State`` strings, consult the documentation.
 
-This HTML renders as:
+Examples:
 
-.. raw:: html
+.. code-block:: pycon
 
-    Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>
+    >>> from pyvalem.stateful_species import StatefulSpecies
 
-.. raw:: latex
+    >>> stateful_species = StatefulSpecies('Ne+ 1s2.2s2.2p5; 2P_1/2')
+    >>> stateful_species.formula
+    Ne+
 
-    $\mathrm{Ne}^+ \; 1s^22s^22p^5; \; {}^2P_{1/2}$
+    >>> type(stateful_species.formula)
+    <class 'pyvalem.formula.Formula'>
 
-Another example::
+    >>> stateful_species.states
+    [1s2.2s2.2p5, 2P_1/2]
 
-    In [24]: ss2 = StatefulSpecies('(52Cr)(1H) 1σ2.2σ1.1δ2.1π2; 6Σ+; v=0; J=2')
-    In [25]: ss2.html
-    <sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2
+    >>> state1, state2 = stateful_species.states
+    >>> type(state1)
+    <class 'pyvalem.atomic_configuration.AtomicConfiguration'>
 
-which produces:
+    >>> state1.orbitals
+    [1s2, 2s2, 2p5]
 
-.. raw:: html
+    >>> type(state2)
+    <class 'pyvalem.atomic_term_symbol.AtomicTermSymbol'>
 
-    <sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2
+    >>> state2.L, state2.J
+    (1, 0.5)
 
-.. raw:: latex
+As ``Formula``, also ``StatefulSpecies`` have ``html`` and ``latex`` attributes.
 
-    $\mathrm{{}^{52}Cr^1H} \; 1\sigma^2.2\sigma^1.1\delta^2.1\pi^2; \; {}^6\Sigma^+; \; v=0; \; J=2$
+.. code-block:: pycon
 
-The syntax for writing different types of quantum state are described in later pages of this documentation.
+    >>> print(stateful_species.latex)
+    \mathrm{Ne}^{+} \; 1s^{2}2s^{2}2p^{5}; \; {}^{2}P_{1/2}
 
+    >>> StatefulSpecies('(52Cr)(1H) 1sigma2.2sigma1.1delta2.1pi2; 6SIGMA+; v=0; J=2').html
+    '<sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2'
+
+
+Reaction
+--------
+Finally, the ``Reaction`` class represents a reaction or a collisional process between
+species. A ``Reaction`` object is instantiated with a string consisting of valid
+``Formula`` or ``StatefulSpecies`` strings delimited by ``' + '``, and reaction sides
+separated by ``' -> '``, such as
+
+.. code-block:: pycon
+
+    >>> from pyvalem.reaction import Reaction
+    >>> reaction = Reaction('He+2 + H -> He+ 3p1 + H+ + hv')
+    >>> reaction
+    He+2 + H → He+ 3p1 + H+ + hν
+
+    >>> reaction.html
+    'He<sup>2+</sup> + H → He<sup>+</sup> 3p<sup>1</sup> + H<sup>+</sup> + hν'
+
+    >>> print(reaction.latex)
+    \mathrm{He}^{2+} + \mathrm{H} \rightarrow \mathrm{He}^{+} \; 3p^{1} + \mathrm{H}^{+} + h\nu
+
+The ``Reaction`` class also watches out for charge balance and stoichiometry
+conservation during instantiation.
+
+.. code-block:: pycon
+
+    >>> Reaction('(2H) + (3H) -> (4He)')
+    Traceback (most recent call last):
+    ...
+    pyvalem.reaction.ReactionStoichiometryError: Stoichiometry not preserved for reaction: (2H) + (3H) -> (4He)
+
+    >>> Reaction('e- + Ar -> Ar+ + e-')
+    Traceback (most recent call last):
+    ...
+    pyvalem.reaction.ReactionChargeError: Charge not preserved for reaction: e- + Ar -> Ar+ + e-
+
+
+
+For Developers:
+===============
+It goes without saying that any development should be done in a clean virtual
+environment.
+After cloning or forking the project from its GitHub_ page, ``pyvalem`` might be
+installed into the virtual environment in editable mode with
+
+.. code-block:: bash
+
+    pip install -e .[dev]
+
+The ``[dev]`` extra installs (apart from the package dependencies) also several
+development-related packages, such as ``pytest``, ``black``, ``tox`` or ``ipython.``
+The tests can then be executed by running (from the project root directory)
+
+.. code-block:: bash
+
+    # either
+    pytest
+
+    # or
+    tox
+
+The project does not have ``requirements.txt`` by design, all the package dependencies
+are rather handled by ``setup.py``.
+The package needs to be installed to run the tests, which grants the testing process
+another layer of usefulness.
+
+The project code is formatted by ``black``.
+Always make sure to format your code before submitting a pull request, by running
+``black`` on all your python files.
