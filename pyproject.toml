@@ -22,7 +22,7 @@ commands = pytest
 """
 
 [tool.coverage.run]
-omit = ["tests/*", "src/pyvalem/__init__.py"]
+omit = ["tests/*", "src/pyvalem/__init__.py", "doc/*"]
 
 [tool.coverage.html]
 directory = "htmlcov"
