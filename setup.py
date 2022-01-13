@@ -38,7 +38,7 @@ setup(
         "pyparsing>=2.3",
         'importlib-resources>=1.0; python_version < "3.7.0"',
     ],
-    extras_require={"dev": ["black", "coverage", "pytest", "tox", "ipython"]},
+    extras_require={"dev": ["black", "pytest-cov", "tox", "ipython"]},
     # package_data will include all the resolved globs into both the wheel and sdist
     package_data={"pyvalem": ["*.txt"]},
     # no need for MANIFEST.in, which should be reserved only for build-time files
