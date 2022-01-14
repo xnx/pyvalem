@@ -9,8 +9,9 @@ import pyparsing as pp
 from .state import State, StateParseError
 
 integer = pp.Word(pp.nums).setParseAction(lambda t: int(t[0]))
-nocc_integer = pp.Optional(pp.Word(pp.nums), default = '1'
-                             ).setParseAction(lambda t: int(t[0]))
+nocc_integer = pp.Optional(pp.Word(pp.nums), default="1").setParseAction(
+    lambda t: int(t[0])
+)
 
 # NB no "j" orbital.
 atomic_orbital_symbols = tuple("spdfghiklmnoqrtuvwxyz")

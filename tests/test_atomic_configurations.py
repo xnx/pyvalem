@@ -71,14 +71,14 @@ class AtomicConfigurationTest(unittest.TestCase):
         self.assertTrue(repr(c1) == repr(c2) == "1s2.2s2.2p6.3s2.3p6.4s2.3d3")
 
     def test_atomic_configuration_default_nocc(self):
-        c1 = AtomicConfiguration('1s')
+        c1 = AtomicConfiguration("1s")
         self.assertEqual(c1.nelectrons, 1)
         self.assertEqual(c1.orbitals[0].nocc, 1)
-        c2 = AtomicConfiguration('1s2.2s')
+        c2 = AtomicConfiguration("1s2.2s")
         self.assertEqual(c2.nelectrons, 3)
         self.assertEqual(c2.orbitals[0].nocc, 2)
         self.assertEqual(c2.orbitals[1].nocc, 1)
-        c3 = AtomicConfiguration('1s1.2s2')
+        c3 = AtomicConfiguration("1s1.2s2")
         self.assertEqual(c3.nelectrons, 3)
         self.assertEqual(c3.orbitals[0].nocc, 1)
         self.assertEqual(c3.orbitals[1].nocc, 2)
