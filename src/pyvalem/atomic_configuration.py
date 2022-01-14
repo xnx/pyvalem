@@ -9,6 +9,9 @@ import pyparsing as pp
 from .state import State, StateParseError
 
 integer = pp.Word(pp.nums).setParseAction(lambda t: int(t[0]))
+nocc_integer = pp.Optional(pp.Word(pp.nums), default = '1'
+                             ).setParseAction(lambda t: int(t[0]))
+
 # NB no "j" orbital.
 atomic_orbital_symbols = tuple("spdfghiklmnoqrtuvwxyz")
 noble_gases = ["He", "Ne", "Ar", "Kr", "Xe", "Rn"]
@@ -27,7 +30,7 @@ noble_gas = pp.oneOf(["[{}]".format(symbol) for symbol in noble_gases])
 atom_orbital = pp.Group(
     integer.setResultsName("n")
     + pp.oneOf(atomic_orbital_symbols).setResultsName("lletter")
-    + integer.setResultsName("nocc")
+    + nocc_integer.setResultsName("nocc")
 )
 
 atom_config = (
