@@ -1,5 +1,15 @@
-.. _GitHub: https://github.com/xnx/pyvalem
-.. _PyPI: https://pypi.org/project/pyvalem/
+|Tests action| |GitHub license| |PyPI version| |PyPI pyversions| |Code style|
+
+.. |Tests action| image:: https://github.com/xnx/pyvalem/workflows/tests/badge.svg
+   :target: https://github.com/xnx/pyvalem/actions
+.. |GitHub license| image:: https://img.shields.io/github/license/xnx/pyvalem.svg
+   :target: https://github.com/xnx/pyvalem/blob/master/LICENSE
+.. |PyPI version| image:: https://img.shields.io/pypi/v/pyvalem.svg
+   :target: https://pypi.python.org/pypi/pyvalem/
+.. |PyPI pyversions| image:: https://img.shields.io/pypi/pyversions/pyvalem.svg
+   :target: https://pypi.python.org/pypi/pyvalem/
+.. |Code style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
 
 ***********************
 Introduction to PyValem
@@ -201,3 +211,7 @@ another layer of usefulness.
 The project code is formatted by ``black``.
 Always make sure to format your code before submitting a pull request, by running
 ``black`` on all your python files.
+
+
+.. _GitHub: https://github.com/xnx/pyvalem
+.. _PyPI: https://pypi.org/project/pyvalem/

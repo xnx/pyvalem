@@ -1,4 +1,4 @@
-name: Upload python package to PyPI
+name: pypi-deploy
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: Build and deploy the package to TestPyPI
+    name: Build and deploy the package to PyPI
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
