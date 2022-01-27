@@ -4,10 +4,18 @@ Utility functions for the pyvalem package.
 
 
 def parse_fraction(s):
-    """
-    Parse an integer or fraction as a pyparsing.ParseResults object resulting
-    from a match to '2', '3/2', etc. into a float. If s is None or the empty
-    string, return None.
+    """Parse an integer or fraction as a pyparsing.ParseResults object resulting
+    from a match to '2', '3/2', etc. into a float.
+
+    If s is None or the empty string, returns None.
+
+    Parameters
+    ----------
+    s : str or None
+
+    Returns
+    -------
+    float or None
     """
     if not s:
         return None
@@ -22,7 +30,16 @@ def parse_fraction(s):
 
 
 def float_to_fraction(v):
-    """Convert the integer or half-integer float v into a string fraction."""
+    """Convert the integer or half-integer float v into a string fraction.
+
+    Parameters
+    ----------
+    v : number
+
+    Returns
+    -------
+    str
+    """
 
     if v.is_integer():
         return str(int(v))
