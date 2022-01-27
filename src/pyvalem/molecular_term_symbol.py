@@ -269,3 +269,6 @@ class MolecularTermSymbol(State):
             latex_chunks.append("{{}}_{{{:s}}}".format(Omegastr))
 
         return "".join(latex_chunks)
+
+    def __repr__(self):
+        return self.state_str

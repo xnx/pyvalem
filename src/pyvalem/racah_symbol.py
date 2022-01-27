@@ -74,7 +74,3 @@ class RacahSymbol(State):
         parent = "{}{}".format(self.principal, self.orbital)
         k = "{}/{}".format(self.k_num, self.k_den)
         return "{}[{}]<sub>{}</sub>".format(parent, k, self.j_term)
-
-    @property
-    def latex(self):
-        return repr(self)

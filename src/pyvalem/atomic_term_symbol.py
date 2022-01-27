@@ -94,3 +94,6 @@ class AtomicTermSymbol(State):
             j_str = float_to_fraction(self.J)
             latex_chunks.append("_{{{}}}".format(j_str))
         return "".join(latex_chunks)
+
+    def __repr__(self):
+        return self.state_str

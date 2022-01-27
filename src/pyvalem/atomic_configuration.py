@@ -1,6 +1,7 @@
-"""
-The AtomicConfiguration class, representing an atomic electronic
-configuration with methods for parsing a string into quantum numbers and
+"""Module with the `AtomicConfiguration` `State` subclass.
+
+The `AtomicConfiguration` class, represents an atomic electronic configuration.
+Methods are implemented for parsing a string into quantum numbers and
 labels, creating an HTML representation of the term symbol, etc.
 """
 
@@ -50,18 +51,39 @@ class AtomicConfigurationError(StateParseError):
 
 
 class AtomicOrbital:
-    """A class representing an atomic orbital."""
+    # noinspection PyUnresolvedReferences
+    """A class representing a single atomic orbital.
+
+    This is a building block of the `AtomicConfiguration` state class.
+
+    Parameters
+    ----------
+    n : int
+        The principal quantum number.
+    l : int, optional
+        The azimuthal quantum number (0, 1, 2, ..., n-1)
+        At least one of {`l`, `lletter`} must be passed.
+    nocc : int, default: 0
+        Number of occupied electrons.
+    lletter : str, optional
+        The letter corresponding to l: 's', 'p', 'd', ... for l = 0, 1, 2, ...
+        At least one of {`l`, `lletter`} must be passed.
+
+    Attributes
+    ----------
+    n : int
+    l : int
+    lletter : str
+    html
+    latex
+
+    Raises
+    ------
+    AtomicOrbitalError
+        If inconsistent quantum numbers are passed to the constructor.
+    """
 
     def __init__(self, n, l=None, nocc=0, lletter=None):
-        """Initialize the atomic orbital.
-
-        n is the principal quantum number; either l, the azimuthal quantum
-        number (0, 1, 2, ..., n-1) or lletter, the corresponding letter ('s',
-        'p', 'd', ... for l = 0, 1, 2, ...) must be given. The orbital can
-        contain up to 2(2l+1) electrons.
-
-        """
-
         self.n = n
         if l is None:
             self.lletter = lletter
@@ -97,27 +119,93 @@ class AtomicOrbital:
 
     @property
     def html(self):
+        """Html representation of the AtomicOrbital instance.
+
+        Returns
+        -------
+        str
+        """
         return "{}{}<sup>{}</sup>".format(self.n, self.lletter, self.nocc)
 
     @property
     def latex(self):
+        """LaTeX representation of the AtomicOrbital instance.
+
+        Returns
+        -------
+        str
+        """
         return "{}{}^{{{}}}".format(self.n, self.lletter, self.nocc)
 
     def validate_atomic_orbital(self):
+        """Validator method for the atomic orbital class.
+
+        Checks if the quantum numbers passed are consistent and physical and
+        raises `AtomicOrbitalError` if not.
+
+        Raises
+        ------
+        AtomicOrbitalError
+        """
         if self.l > self.n - 1:
-            raise AtomicConfigurationError("l >= n in atomic orbital {}".format(self))
+            raise AtomicOrbitalError("l >= n in atomic orbital {}".format(self))
         if self.nocc < 0:
-            raise AtomicConfigurationError(
+            raise AtomicOrbitalError(
                 "Negative nocc = {} not allowed in"
                 " orbital: {}".format(self.nocc, self.nocc)
             )
         if self.nocc > 2 * (2 * self.l + 1):
-            raise AtomicConfigurationError(
+            raise AtomicOrbitalError(
                 "Too many electrons in atomic" " orbital: {}".format(self)
             )
 
 
 class AtomicConfiguration(State):
+    """A class representing an atomic configuration.
+
+    An atomic configuration is considered as a collection of occupied atomic
+    orbitals: e.g. 1s2.2s2.2p6.3s1; this may be abbreviated by using [X] where
+    [X] is a noble gas atom as a short cut for the closed-shell configuration
+    of X.
+
+    The ``__repr__`` method is overloaded to provide a *canonicalised* representation
+    of the state.
+
+    Parameters
+    ----------
+    state_str : str
+        State string in the required format
+
+    Attributes
+    ----------
+    state_str : str
+    orbitals : list of `AtomicOrbital`
+    noble_gas_config : Any
+    nelectrons : int
+
+    Raises
+    ------
+    AtomicConfigurationError
+        If the state cannot be parsed from the `state_str`.
+
+    Examples
+    --------
+    >>> ac1 = AtomicConfiguration("1s2.2s2.2p6.3p1")
+    >>> outer_orbital = ac1.orbitals[-1]
+    >>> type(outer_orbital)
+    <class 'pyvalem.atomic_configuration.AtomicOrbital'>
+
+    >>> outer_orbital.n, outer_orbital.l, outer_orbital.nocc
+    (3, 1, 1)
+
+    >>> repr(ac1)
+    '1s2.2s2.2p6.3p1'
+
+    >>> ac2 = AtomicConfiguration("[Ne].3p")
+    >>> repr(ac2)
+    '1s2.2s2.2p6.3p1'
+    """
+
     def __init__(self, state_str):
         self.state_str = state_str
         self.orbitals = []
@@ -126,6 +214,17 @@ class AtomicConfiguration(State):
         self.parse_state(state_str)
 
     def parse_state(self, state_str):
+        """Parses the `AtomicConfiguration` instance from the supplied `state_str`.
+
+        Parameters
+        ----------
+        state_str : str
+
+        Raises
+        ------
+        AtomicConfigurationError
+            If the `state_str` cannot be parsed into a valid state.
+        """
         try:
             parse_results = atom_config.parseString(state_str)
         except pp.ParseException:
@@ -162,16 +261,9 @@ class AtomicConfiguration(State):
         if len(subshells) != len(set(subshells)):
             raise AtomicConfigurationError("Repeated subshell in {0}".format(state_str))
 
-    """A class representing an atomic configuration.
-
-    An atomic configuration is considered as a collection of occupied atomic
-    orbitals: e.g. 1s2.2s2.2p6.3s1; this may be abbreviated by using [X] where
-    [X] is a noble gas atom as a short cut for the closed-shell configuration
-    of X.
-    """
-
     @property
     def html(self):
+        """See the `State` base class."""
         html_chunks = []
         if self.noble_gas_config:
             html_chunks.append(self.noble_gas_config)
@@ -181,6 +273,7 @@ class AtomicConfiguration(State):
 
     @property
     def latex(self):
+        """See the `State` base class."""
         latex_chunks = []
         if self.noble_gas_config:
             latex_chunks.append(r"\mathrm{{{}}}".format(self.noble_gas_config))
@@ -191,9 +284,18 @@ class AtomicConfiguration(State):
     def _expand_noble_gas_config(self, config):
         """Recursively expand out the noble gas notation to orbitals.
 
-        For example, '[He].2s1' -> '1s2.2s2',
+        For example:
+        '[He].2s1' -> '1s2.2s2',
         '[Xe].4f7' -> '1s2.2s2.2p6.3s2.3p6.3d10.4s2.4p6.4d10.5s2.5p6.4f7'
 
+        Parameters
+        ----------
+        config : str
+            Closed shell nobel gas configuration, in the form of '[Ne]', '[Xe]', etc.
+
+        Returns
+        -------
+        str
         """
 
         if config[0] != "[":
@@ -203,4 +305,11 @@ class AtomicConfiguration(State):
         )
 
     def __repr__(self):
-        return self._expand_noble_gas_config(self.state_str)
+        """See the `State` base class."""
+        if self.noble_gas_config:
+            state_repr = self._expand_noble_gas_config(self.noble_gas_config)
+            if self.orbitals:
+                state_repr += "." + ".".join(repr(orbital) for orbital in self.orbitals)
+            return state_repr
+        else:
+            return ".".join(repr(orbital) for orbital in self.orbitals)

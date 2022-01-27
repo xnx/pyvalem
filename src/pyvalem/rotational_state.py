@@ -72,3 +72,6 @@ class RotationalState(State):
                 "Invalid rotational state value: {}."
                 "Must be a multiple of 1/2.".format(self.state_str)
             )
+
+    def __repr__(self):
+        return self.state_str

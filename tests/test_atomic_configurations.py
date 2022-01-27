@@ -66,9 +66,10 @@ class AtomicConfigurationTest(unittest.TestCase):
         c3 = AtomicConfiguration("1s2.2s2.2p5.7h2")
 
     def test_atomic_configuration_repr(self):
-        c1 = AtomicConfiguration("1s2.2s2.2p6.3s2.3p6.4s2.3d3")
-        c2 = AtomicConfiguration("[Ar].4s2.3d3")
-        self.assertTrue(repr(c1) == repr(c2) == "1s2.2s2.2p6.3s2.3p6.4s2.3d3")
+        c1 = AtomicConfiguration("1s2.2s2.2p6.3s2.3p6.4s2.3d")
+        c2 = AtomicConfiguration("[Ar].4s2.3d1")
+        self.assertEqual(repr(c1), "1s2.2s2.2p6.3s2.3p6.4s2.3d1")
+        self.assertEqual(repr(c2), "1s2.2s2.2p6.3s2.3p6.4s2.3d1")
 
     def test_atomic_configuration_default_nocc(self):
         c1 = AtomicConfiguration("1s")

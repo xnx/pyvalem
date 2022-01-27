@@ -76,6 +76,7 @@ class Atom:
     >>> atom.is_isotope
     False
     """
+
     is_isotope = False
 
     def __init__(self, symbol, name, atomic_number, weight=None, weight_unc=None):
@@ -133,6 +134,7 @@ class Isotope(Atom):
     >>> isotope.N
     20
     """
+
     is_isotope = True
 
     def __init__(

@@ -13,16 +13,18 @@ class GenericExcitedStateTest(unittest.TestCase):
         self.assertEqual(x0.html, "<sup>*</sup>")
         x1 = GenericExcitedState("**")
         self.assertEqual(x1.html, "<sup>**</sup>")
+        x11 = GenericExcitedState("2*")
+        self.assertEqual(x11.html, "<sup>**</sup>")
         x2 = GenericExcitedState("***")
-        self.assertEqual(x2.html, "<sup>***</sup>")
+        self.assertEqual(x2.html, "<sup>3*</sup>")
 
         x3 = GenericExcitedState("3*")
         self.assertEqual(x3.int_n, 3)
-        self.assertEqual(x3.html, "3<sup>*</sup>")
+        self.assertEqual(x3.html, "<sup>3*</sup>")
 
         x4 = GenericExcitedState("15*")
         self.assertEqual(x4.int_n, 15)
-        self.assertEqual(x4.html, "15<sup>*</sup>")
+        self.assertEqual(x4.html, "<sup>15*</sup>")
 
         self.assertRaises(GenericExcitedStateError, GenericExcitedState, "a")
         self.assertRaises(GenericExcitedStateError, GenericExcitedState, "*3")

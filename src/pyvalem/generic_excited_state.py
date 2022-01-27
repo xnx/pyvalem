@@ -58,12 +58,8 @@ class GenericExcitedState(State):
 
     @property
     def html(self):
-        html_chunks = []
-        if "*" in self.state_str:
-            if len(self.state_str) == self.state_str.count("*"):
-                html_chunks.append("<sup>{:s}</sup>".format(self.state_str))
-            else:
-                html_chunks.append("{:d}<sup>*</sup>".format(self.int_n))
-        else:
-            html_chunks.append(self.state_str)
-        return "".join(html_chunks)
+        return "<sup>{:s}</sup>".format(repr(self))
+
+    @property
+    def latex(self):
+        return "^{{{:s}}}".format(repr(self))
