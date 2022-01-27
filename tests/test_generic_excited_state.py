@@ -4,7 +4,10 @@ Unit tests for the generic_excited_state module of PyValem
 
 import unittest
 
-from pyvalem.states.generic_excited_state import GenericExcitedState, GenericExcitedStateError
+from pyvalem.states.generic_excited_state import (
+    GenericExcitedState,
+    GenericExcitedStateError,
+)
 
 
 class GenericExcitedStateTest(unittest.TestCase):

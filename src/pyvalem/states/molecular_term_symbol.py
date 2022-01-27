@@ -178,9 +178,9 @@ class MolecularTermSymbol(State):
         self.irrep = None
         self.term_label = None
         self.Omega = None
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
 
         try:
             components = molecule_term_with_label.parseString(state_str)
@@ -200,7 +200,7 @@ class MolecularTermSymbol(State):
         self.Omega = parse_fraction(components.Omegastr)
 
     @staticmethod
-    def irrep_html(irrep):
+    def _irrep_html(irrep):
         irrep_chunks = []
         if "+" in irrep or "-" in irrep:
             irrep_chunks.append("{0:s}<sup>{1:s}</sup>".format(irrep[0], irrep[1]))
@@ -216,7 +216,7 @@ class MolecularTermSymbol(State):
         return "".join(irrep_chunks)
 
     @staticmethod
-    def irrep_latex(irrep):
+    def _irrep_latex(irrep):
         irrep_chunks = []
         if "+" in irrep or "-" in irrep:
             irrep_chunks.append(r"\Sigma^{:s}".format(irrep[1]))
@@ -246,11 +246,11 @@ class MolecularTermSymbol(State):
         if self.term_label is not None:
             html_chunks.append("{:s}".format(self.term_label))
         html_chunks.append(
-            "<sup>{0:d}</sup>{1:s}".format(self.Smult, self.irrep_html(self.irrep))
+            "<sup>{0:d}</sup>{1:s}".format(self.Smult, self._irrep_html(self.irrep))
         )
         if self.Omega is not None:
-            Omegastr = float_to_fraction(self.Omega)
-            html_chunks.append("<sub>{0:s}</sub>".format(Omegastr))
+            omegastr = float_to_fraction(self.Omega)
+            html_chunks.append("<sub>{0:s}</sub>".format(omegastr))
         return "".join(html_chunks)
 
     @property
@@ -261,12 +261,12 @@ class MolecularTermSymbol(State):
         if self.term_label is not None:
             latex_chunks.append(self.term_label)
         latex_chunks.append(
-            "{{}}^{{{:d}}}{:s}".format(self.Smult, self.irrep_latex(self.irrep))
+            "{{}}^{{{:d}}}{:s}".format(self.Smult, self._irrep_latex(self.irrep))
         )
         if self.Omega is not None:
-            Omegastr = float_to_fraction(self.Omega)
+            omegastr = float_to_fraction(self.Omega)
             # NB avoid double underscore if we have a subscript already.
-            latex_chunks.append("{{}}_{{{:s}}}".format(Omegastr))
+            latex_chunks.append("{{}}_{{{:s}}}".format(omegastr))
 
         return "".join(latex_chunks)
 

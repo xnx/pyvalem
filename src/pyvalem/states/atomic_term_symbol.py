@@ -41,9 +41,9 @@ class AtomicTermSymbol(State):
         self.L = None
         self.parity = None
         self.J = None
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
         try:
             components = atom_term.parseString(state_str)
         except pp.ParseException:
@@ -60,9 +60,9 @@ class AtomicTermSymbol(State):
         except ValueError as err:
             raise AtomicTermSymbolError(err)
         if self.J is not None:
-            self.validate_j()
+            self._validate_j()
 
-    def validate_j(self):
+    def _validate_j(self):
         s_is_half_integer = int(2 * self.S) % 2
         j_is_half_integer = int(2 * self.J) % 2
         if s_is_half_integer != j_is_half_integer:

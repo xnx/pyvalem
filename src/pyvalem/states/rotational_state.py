@@ -27,9 +27,9 @@ class RotationalState(State):
     def __init__(self, state_str):
         self.state_str = None
         self.J = None
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
 
         try:
             k, v = state_str.split("=")
@@ -62,11 +62,11 @@ class RotationalState(State):
                 )
 
             if self.J is not None:
-                self.validate_j()
+                self._validate_j()
 
         self.state_str = "J={}".format(state_str)
 
-    def validate_j(self):
+    def _validate_j(self):
         if self.J % 0.5 != 0:
             raise RotationalStateError(
                 "Invalid rotational state value: {}."

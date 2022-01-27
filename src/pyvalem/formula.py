@@ -1,7 +1,19 @@
 """
-Defines the Formula class, representing a chemical formula (of an atom,
+This module defines the `Formula` class, representing a chemical formula (of an atom,
 isotope, ion, molecule, molecular-ion, isotopologue, etc.) and associated
 exceptions.
+
+Quantum states are not defined in the `Formula` framework, for chemical species
+with quantum states, look at the `StatefulSpecies` class.
+
+Examples
+--------
+>>> from pyvalem.formula import Formula
+>>> Formula("H2O+").charge
+1
+
+>>> dict(Formula("CH4").atom_stoich.items())
+{'C': 1, 'H': 4}
 """
 
 import re
@@ -9,11 +21,11 @@ from collections import defaultdict
 
 import pyparsing as pp
 
-from .atom_data import element_symbols, atoms, isotopes
 from ._special_cases import special_cases
+from .atom_data import element_symbols, atoms, isotopes
 
 element = pp.oneOf(element_symbols)
-# TODO don't allow leading 0
+# TODO: don't allow leading 0
 integer = pp.Word(pp.nums)
 integer_or_x = integer | pp.Literal("x")
 plusminus = pp.Literal("+") | pp.Literal("-")
@@ -152,15 +164,74 @@ class FormulaParseError(FormulaError):
 
 
 class Formula:
-    """
-    A class representing a chemical formula, with methods for parsing and
-    transforming its appearance as text or HTML.
+    """A class representing a chemical formula without states.
+
+    Methods are implemented for the `Formula` from a compatible string and providing
+    *html* and *LaTeX* representations, atomic stoichiometry, species mass, number of
+    atoms, or html-save slug.
+
+    Parameters
+    ---------
+    formula : str
+        PyValem-compatible string. No ``"_"`` or ``"^"`` symbols to indicate subscripts
+        and superscripts. Brackets are allowed, as well as several common prefixes.
+        Charges are provided by ``"+"/"-"``, or ``"+n"/"-n"``, where `n` is the charge
+
+    Attributes
+    ----------
+    formula : str
+        The formula string as passed to the constructor.
+    atoms : set of `Atom`
+    atom_stoich : dict[str, int]
+    charge : int
+        Charge in [e].
+    natoms : int
+        Number of atoms of the `Formula`.
+    rmm, mass : float
+        Both are the mass in [amu] (one is alias for the other).
+    html, latex, slug : str
+        Different string representations of the `Formula`. The ``slug`` is a url-safe
+        representation.
+
+    Raises
+    ------
+    FormulaParseError
+        When an incompatible `formula` string is passed into the constructor
+
+    Notes
+    -----
+    The ``__repr__`` method is overloaded to provide a *canonicalised* representation
+    of the formula. The idea is that two formulas representing the same physical entity
+    will have the same ``repr(formula)`` representation.
+
+    Examples
+    --------
+    >>> Formula("H2+")  # a simple chemical formula instantiation
+    H2+
+
+    >>> Formula("(1H)2(16O)")  # isotopologue instantiation
+    (1H)2(16O)
+
+    >>> Formula("ortho-C6H4(CH3)2"), Formula("W+42")  # more complicated situations
+    (ortho-C6H4(CH3)2, W+42)
+
+    >>> # Attributes available:
+    >>> dict(Formula("CH4").atom_stoich)
+    {'C': 1, 'H': 4}
+    >>> Formula("(2H)(3H)+").html
+    '<sup>2</sup>H<sup>3</sup>H<sup>+</sup>'
+    >>> Formula("Ar").mass
+    39.95
+
+    >>> # Incompatible formula string
+    >>> Formula("Argon")
+    Traceback (most recent call last):
+    ...
+    pyvalem.formula.FormulaParseError: Invalid formula syntax: Argon
     """
 
     def __init__(self, formula):
-        """
-        Initialize the Formula object by parsing the string argument
-        formula.
+        """Initialize the Formula object by parsing the string argument formula.
         """
         self.formula = formula
         self.atoms = set()
@@ -172,12 +243,11 @@ class Formula:
         self.latex = ""
         self.slug = ""
         self.mass = 0.0
-        self.parse_formula(formula)
+        self._parse_formula(formula)
 
     @staticmethod
     def _make_prefix_html(prefix_list):
-        """
-        Make the prefix HTML: D- and L- prefixes get written in small caps
+        """Make the prefix HTML: D- and L- prefixes get written in small caps
         """
         prefix = "-".join(prefix_list)
         prefix = prefix.replace("D", '<span style="font-size: 80%;">D</span>')
@@ -193,8 +263,9 @@ class Formula:
 
     @staticmethod
     def _make_prefix_slug(prefix_list):
-        """
-        Make the prefix slug: commas are replaced by underscores and non-ASCII
+        """Make the prefix slug
+
+        Commas are replaced by underscores and non-ASCII
         characters swapped out according to the entries in the prefix_tokens
         dictionary. For example,
             1,1,3- -> 1_1_3-
@@ -219,13 +290,24 @@ class Formula:
         slug_prefix = "_".join(slug_prefix_tokens)
         return "{}__".format(slug_prefix)
 
-    def parse_formula(self, formula):
-        """Parse the string formula into a Formula object."""
+    def _parse_formula(self, formula):
+        """Parse the formula string into a Formula object.
 
+        The main method of the class, populates all the instance attributes.
+
+        Parameters
+        ----------
+        formula : str
+            See the class docstring.
+
+        Raises
+        ------
+        FormulaParseError
+        """
         if formula == "D-":
             # This is a not-ideal way to deal with the fact that D- breaks
             # the parser due to a clash with the D- prefix.
-            self.parse_formula("D-1")
+            self._parse_formula("D-1")
             return
 
         if any(s in formula for s in ("++", "--", "+-", "-+")):
@@ -233,7 +315,7 @@ class Formula:
 
         # We make a particular exception for various special cases, including
         # photons, electrons, positrons and "M", denoting an unspecified
-        # "third-body" in many reactions. Note that M does not have a defined
+        # "third-body" in many reactions. Note that M does not have a defined
         # charge or mass.
         if formula in special_cases:
             for attr, val in special_cases[formula].items():
@@ -290,7 +372,7 @@ class Formula:
                     atom_symbol = isotope.parseString("(3H)")[0]
                 if isinstance(atom_symbol, pp.ParseResults):
                     # we got an isotope in the form '(zSy)' with z the mass
-                    # number so symbol is the ParseResults ['z', 'Sy']:
+                    # number so symbol is the ParseResults ['z', 'Sy']:
                     mass_number, atom_symbol = (int(atom_symbol[0]), atom_symbol[1])
                     symbol_html = "<sup>%d</sup>%s" % (mass_number, atom_symbol)
                     symbol_latex = r"^{{{0:d}}}\mathrm{{{1:s}}}".format(
@@ -428,8 +510,7 @@ class Formula:
         return repr(self.formula) == repr(other.formula)
 
     def _stoichiometric_formula_atomic_number(self):
-        """
-        Return a list of atoms/isotopes and their stoichiometries.
+        """Return a list of atoms/isotopes and their stoichiometries.
 
         The returned list is sorted in order of increasing atomic number.
         """
@@ -446,8 +527,7 @@ class Formula:
         return atom_strs
 
     def _stoichiometric_formula_alphabetical(self):
-        """
-        Return a list of atoms/isotopes and their stoichiometries.
+        """Return a list of atoms/isotopes and their stoichiometries.
 
         The returned list is sorted in alphabetical order.
         """
@@ -456,8 +536,7 @@ class Formula:
         return atom_strs
 
     def _stoichiometric_formula_hill(self):
-        """
-        Return a list of atoms/isotopes and their stoichiometries.
+        """Return a list of atoms/isotopes and their stoichiometries.
 
         The returned list is sorted in "Hill notation": first carbon, then
         hydrogen, then all other chemical elements in alphabetical order.
@@ -489,11 +568,30 @@ class Formula:
         return c_h_strs + atom_strs
 
     def stoichiometric_formula(self, fmt="atomic number"):
-        """
-        Return a string representation of the stoichiometric formula
-        in one of the formats specified by the fmt argument:
+        """Return a string representation of the stoichiometric formula.
+
+        The formula is given in one of the formats specified by the fmt argument:
         "atomic number": order atoms by increasing atomic number
         "alphabetical" : order atoms in alphabetical order of atomic symbol
+        "hill": first C, then H, then all other chemical elements in alphabetical order,
+                if C not present, all alphabetical.
+
+        Parameters
+        ----------
+        fmt : {"atomic number", "alphabetical", "hill"}
+
+        Returns
+        -------
+        str
+            Stoichiometric formula (with charges)
+
+        Examples
+        --------
+        >>> Formula("L-CH3CH(NH2)CO2H").stoichiometric_formula("atomic number")
+        'H7C3NO2'
+
+        >>> Formula("L-CH3CH(NH2)CO2H+").stoichiometric_formula("alphabetical")
+        'C3H7NO2+'
         """
         # Special cases
         if self.formula in {"M", "e-", "e+"}:
@@ -503,12 +601,6 @@ class Formula:
             return "hν"
 
         fmt = fmt.lower()
-        if fmt not in ("atomic number", "alphabetical", "hill"):
-            raise FormulaError(
-                "Unsupported format for stoichiometric"
-                " formula output: {}".format(fmt)
-            )
-
         if fmt == "atomic number":
             atom_strs = self._stoichiometric_formula_atomic_number()
         elif fmt == "alphabetical":
@@ -516,7 +608,9 @@ class Formula:
         elif fmt == "hill":
             atom_strs = self._stoichiometric_formula_hill()
         else:
-            raise ValueError("Unknown fmt value!")
+            raise FormulaError(
+                "Unsupported format for stoichiometric formula output: {}".format(fmt)
+            )
 
         # finally, add on the charge string, e.g. '', '-', '+2', ...
         atom_strs.append(self._get_charge_string())
@@ -524,8 +618,7 @@ class Formula:
 
     @staticmethod
     def _get_symbol_stoich(symbol, stoich):
-        """
-        Return Xn for element symbol X and stoichiometry n, unless n is 1,
+        """Return Xn for element symbol X and stoichiometry n, unless n is 1,
         in which case, just return X.
         """
         if stoich is None:
@@ -535,9 +628,7 @@ class Formula:
         return symbol
 
     def _get_charge_string(self):
-        """
-        Return the string representation of the charge: '+', '-', '+2', '-3',
-        etc.
+        """Return the string representation of the charge: '+', '-', '+2', '-3', etc.
         """
         if not self.charge:
             return ""

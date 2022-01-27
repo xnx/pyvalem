@@ -20,9 +20,9 @@ class GenericExcitedState(State):
     def __init__(self, state_str):
         self.state_str = state_str
         self.int_n = None
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
         if "*" in state_str:
             if state_str.count("*") == len(state_str):
                 if len(state_str) > 4:

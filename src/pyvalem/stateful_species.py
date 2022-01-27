@@ -6,7 +6,9 @@ The Formula of the StatefulSpecies is separated from its States by whitespace;
 States are separated from each other by semicolons (;).
 """
 from pyvalem.states.atomic_configuration import AtomicConfiguration
-from pyvalem.states.diatomic_molecular_configuration import DiatomicMolecularConfiguration
+from pyvalem.states.diatomic_molecular_configuration import (
+    DiatomicMolecularConfiguration,
+)
 from .formula import Formula
 from pyvalem.states.key_value_pair import KeyValuePair
 from pyvalem.states._state_parser import state_parser, STATES
@@ -29,7 +31,7 @@ class StatefulSpecies:
         self.formula = Formula(s[:i])
         self.states = state_parser(s[i + 1 :].split(";"))
 
-        self.verify_states()
+        self._verify_states()
 
     def __repr__(self):
         """Return a canonical text representation of the StatefulSpecies."""
@@ -53,7 +55,7 @@ class StatefulSpecies:
     def __hash__(self):
         return hash(repr(self))
 
-    def verify_states(self):
+    def _verify_states(self):
         """Check that multiple states are not given where this is not allowed.
 
         For example, a StatefulSpecies may not have two atomic configurations.

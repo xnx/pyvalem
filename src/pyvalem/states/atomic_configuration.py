@@ -112,7 +112,7 @@ class AtomicOrbital:
                 )
 
         self.nocc = nocc
-        self.validate_atomic_orbital()
+        self._validate_atomic_orbital()
 
     def __repr__(self):
         return "{}{}{}".format(self.n, self.lletter, self.nocc)
@@ -137,7 +137,7 @@ class AtomicOrbital:
         """
         return "{}{}^{{{}}}".format(self.n, self.lletter, self.nocc)
 
-    def validate_atomic_orbital(self):
+    def _validate_atomic_orbital(self):
         """Validator method for the atomic orbital class.
 
         Checks if the quantum numbers passed are consistent and physical and
@@ -164,62 +164,66 @@ class AtomicConfiguration(State):
     # noinspection PyUnresolvedReferences
     """A class representing an atomic configuration.
 
-        An atomic configuration is considered as a collection of occupied atomic
-        orbitals: e.g. 1s2.2s2.2p6.3s1; this may be abbreviated by using [X] where
-        [X] is a noble gas atom as a short cut for the closed-shell configuration
-        of X.
+    An atomic configuration is considered as a collection of occupied atomic
+    orbitals: e.g. 1s2.2s2.2p6.3s1; this may be abbreviated by using [X] where
+    [X] is a noble gas atom as a short cut for the closed-shell configuration
+    of X.
 
-        The ``__repr__`` method is overloaded to provide a *canonicalised* representation
-        of the state.
+    Parameters
+    ----------
+    state_str : str
+        State string in the required format
 
-        Parameters
-        ----------
-        state_str : str
-            State string in the required format
+    Attributes
+    ----------
+    state_str : str
+    orbitals : list of `AtomicOrbital`
+        This list does *not* include the closed-shell nobel gas configuration.
+    noble_gas_config : str or NoneType
+        For example "[Ne]"
+    nelectrons : int
+        Number of electrons in the whole configuration.
+    html
+    latex
 
-        Attributes
-        ----------
-        state_str : str
-        orbitals : list of `AtomicOrbital`
-            This list does *not* include the closed-shell nobel gas configuration.
-        noble_gas_config : str or NoneType
-            For example "[Ne]"
-        nelectrons : int
-            Number of electrons in the whole configuration.
-        html
-        latex
+    Raises
+    ------
+    AtomicConfigurationError
+        If the state cannot be parsed from the `state_str`.
 
-        Raises
-        ------
-        AtomicConfigurationError
-            If the state cannot be parsed from the `state_str`.
+    Notes
+    -----
+    The ``__repr__`` method is overloaded to provide a *canonicalised* representation
+    of the state.
+    The idea is that two states representing the same physical entity will have the
+    same ``repr(state)`` representation.
 
-        Examples
-        --------
-        >>> ac1 = AtomicConfiguration("1s2.2s2.2p6.3p1")
-        >>> outer_orbital = ac1.orbitals[-1]
-        >>> type(outer_orbital)
-        <class 'pyvalem.states.atomic_configuration.AtomicOrbital'>
+    Examples
+    --------
+    >>> ac1 = AtomicConfiguration("1s2.2s2.2p6.3p1")
+    >>> outer_orbital = ac1.orbitals[-1]
+    >>> type(outer_orbital)
+    <class 'pyvalem.states.atomic_configuration.AtomicOrbital'>
 
-        >>> outer_orbital.n, outer_orbital.l, outer_orbital.nocc
-        (3, 1, 1)
+    >>> outer_orbital.n, outer_orbital.l, outer_orbital.nocc
+    (3, 1, 1)
 
-        >>> repr(ac1)
-        '1s2.2s2.2p6.3p1'
+    >>> repr(ac1)
+    '1s2.2s2.2p6.3p1'
 
-        >>> ac2 = AtomicConfiguration("[Ne].3p")
-        >>> repr(ac2)
-        '1s2.2s2.2p6.3p1'
-        """
+    >>> ac2 = AtomicConfiguration("[Ne].3p")
+    >>> repr(ac2)
+    '1s2.2s2.2p6.3p1'
+    """
 
     def __init__(self, state_str):
         self.state_str = state_str
         self.orbitals = []
         self.noble_gas_config = None
         self.nelectrons = 0
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
         """Parses the `AtomicConfiguration` instance from the supplied `state_str`.
 
         Parameters

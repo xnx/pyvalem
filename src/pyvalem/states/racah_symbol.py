@@ -47,9 +47,9 @@ class RacahSymbol(State):
         self.k_num = None
         self.k_den = None
         self.j_term = None
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
         try:
             components = racah_symbol_template.parseString(state_str)
         except pp.ParseException:

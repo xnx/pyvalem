@@ -4,7 +4,10 @@ Unit tests for the atomic_configurations module of PyValem
 
 import unittest
 
-from pyvalem.states.atomic_configuration import AtomicConfiguration, AtomicConfigurationError
+from pyvalem.states.atomic_configuration import (
+    AtomicConfiguration,
+    AtomicConfigurationError,
+)
 
 
 class AtomicConfigurationTest(unittest.TestCase):

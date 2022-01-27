@@ -55,9 +55,9 @@ class VibrationalState(State):
         self.v = None
         self.polyatomic = None
         self.terms = None
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
         if " + " in state_str:
             raise VibrationalStateError(
                 'Spaces around "+" not allowed for'

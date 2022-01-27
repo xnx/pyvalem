@@ -25,9 +25,9 @@ class KeyValuePair(State):
         self.state_str = None
         self.key = None
         self.value = None
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
         """
         Parse state_str into a KeyValuePair object.
 

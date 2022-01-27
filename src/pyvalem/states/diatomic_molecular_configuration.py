@@ -185,15 +185,15 @@ class DiatomicMolecularConfiguration(State):
     def __init__(self, state_str):
         self.state_str = state_str
         self.orbitals = []
-        self.parse_state(state_str)
+        self._parse_state(state_str)
 
-    def parse_state(self, state_str):
+    def _parse_state(self, state_str):
         if "-" in state_str:
-            self.parse_alt_config(state_str)
+            self._parse_alt_config(state_str)
         else:
-            self.parse_regular_config(state_str)
+            self._parse_regular_config(state_str)
 
-    def parse_regular_config(self, state_str):
+    def _parse_regular_config(self, state_str):
         try:
             parse_results = molecule_config.parseString(state_str)
         except pp.ParseException:
@@ -212,9 +212,9 @@ class DiatomicMolecularConfiguration(State):
             except DiatomicMolecularOrbitalError as err:
                 raise DiatomicMolecularConfigurationError(err)
             self.orbitals.append(temp_orbital)
-        self.validate_configuration()
+        self._validate_configuration()
 
-    def parse_alt_config(self, state_str):
+    def _parse_alt_config(self, state_str):
         try:
             parse_results = alt_molecule_config.parseString(state_str)
         except pp.ParseException:
@@ -235,16 +235,16 @@ class DiatomicMolecularConfiguration(State):
             except DiatomicMolecularOrbitalError as err:
                 raise DiatomicMolecularConfigurationError(err)
             self.orbitals.append(temp_orbital)
-        self.validate_alt_configuration()
+        self._validate_alt_configuration()
 
-    def validate_configuration(self):
+    def _validate_configuration(self):
         orbitals = [(o.n, o.symbol) for o in self.orbitals]
         if len(orbitals) != len(set(orbitals)):
             raise DiatomicMolecularConfigurationError(
                 "Repeated orbitals " "in {0}".format(self.state_str)
             )
 
-    def validate_alt_configuration(self):
+    def _validate_alt_configuration(self):
         orbitals = [(o.n, o.lletter, o.symbol) for o in self.orbitals]
         if len(orbitals) != len(set(orbitals)):
             raise DiatomicMolecularConfigurationError(
