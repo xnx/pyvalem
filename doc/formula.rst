@@ -25,35 +25,26 @@ A ``Formula`` object may be instantiated by passing a valid string, conforming t
 following grammar:
 
 * Single atoms, with atomic weights given by a default natural isotopic abundance are
-specified with their element symbol, e.g. ``H``, ``Be``, ``Fr``.
-
+  specified with their element symbol, e.g. ``H``, ``Be``, ``Fr``.
 * Isotopes are specified in parentheses (round brackets) with the isotope mass number
-preceding the element symbol, e.g. ``(12C)``, ``(35Cl)``, ``(235U)``.
-Note that no caret (``^``) is used to indicate a superscript.
-
+  preceding the element symbol, e.g. ``(12C)``, ``(35Cl)``, ``(235U)``.
+  Note that no caret (``^``) is used to indicate a superscript.
 * Charged species are specified with the charge following the formula in the format
-``+n`` or ``-n``, where ``n`` may be omitted if it is 1.
-Do not use a caret (``^``) to indicate a superscript.
-For example, ``He+``, ``C+2``, ``W-``, ``(79Br)-2``.
-
+  ``+n`` or ``-n``, where ``n`` may be omitted if it is 1.
+  Do not use a caret (``^``) to indicate a superscript.
+  For example, ``He+``, ``C+2``, ``W-``, ``(79Br)-2``.
 * Molecular formulas are written as a sequence of element symbols (which may be
-repeated for clarity over the structure), with their stoichiometries specified as
-an integer following the symbol. No underscore (``_``) character is used.
-For example, ``H2O``, ``(1H)2(16O)``, ``C2H6OH``, ``CH3CH2OH``, ``NH+``, ``CO3+2``.
-
+  repeated for clarity over the structure), with their stoichiometries specified as
+  an integer following the symbol. No underscore (``_``) character is used.
+  For example, ``H2O``, ``(1H)2(16O)``, ``C2H6OH``, ``CH3CH2OH``, ``NH+``, ``CO3+2``.
 * Moieties within formula can be bracketed for clarity, for example ``CH3C(CH3)2CH3``.
-
 * A limited number of formula prefixes are supported, for example ``L-CH3CH(NH2)CO2H``,
-``cis-CH3CHCHCH3``, ``ortho-C6H4(CH3)2``
-
+  ``cis-CH3CHCHCH3``, ``ortho-C6H4(CH3)2``
 * There are some special species:
   * ``e-`` is the electron;
   * ``e+`` is the positron;
-
   * ``M`` is a generic third-body with no specific identity (and no defined mass or
-
-  charge);
-
+      charge);
   * ``hν`` (or ``hv``) is the photon.
 
 
