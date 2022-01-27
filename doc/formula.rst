@@ -124,6 +124,7 @@ This last example is the Lysine zwitterion,
 
     $(\mathrm{N}\mathrm{H}_{3}^{+})(\mathrm{C}\mathrm{H}_{2})_{4}\mathrm{C}\mathrm{H}(\mathrm{N}\mathrm{H}_{2})\mathrm{C}\mathrm{O}_{2}^{-}$
 
+
 The same applies to isotopes and isotopically-pure molecules, in which case the exact
 mass is held by the ``mass`` attribute:
 
