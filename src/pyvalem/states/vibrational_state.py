@@ -31,8 +31,6 @@ class VibrationalTerm:
     def __repr__(self):
         return "{}ν{:d}".format(self.n if self.n != 1 else "", self.mode)
 
-    __str__ = __repr__
-
     @property
     def html(self):
         return "{}ν<sub>{:d}</sub>".format(self.n if self.n != 1 else "", self.mode)
