@@ -1,5 +1,40 @@
-"""
-Defines dictionaries of meta data relating to the elements and their isotopes.
+"""This module defines dictionaries of meta data relating to the elements and
+their isotopes.
+
+Routine Listings
+----------------
+atoms : dict[str, Atom]
+    Dictionary of `Atom` instances keyed by the elemental symbols.
+isotopes : dict[str, Isotope]:
+    Dictionary of `Isotope` instances. Keys are in the form of mass number followed by
+    the element symbol, such as ``"38Ar"``
+
+Notes
+-----
+The atomic data are compiled from Meija et al.[1]_.
+The isotope data are compiled from the AME2016 Atomic Mass Evaluation reports[2]_.
+
+References
+----------
+.. [1] Meija et al., "Atomic weights of the elements 2013
+   (IUPAC Technical Report)", Pure Appl. Chem. 88(3), 265-291, 2016.
+   See https://ciaaw.org/atomic-weights.htm
+.. [2] Huang et al., "The Ame2016 atomic mass evaluation (I)", Chinese Physics C41,
+   030002 (2017); Wang et al., "The Ame2016 atomic mass evaluation (II)",
+   Chinese Physics C41, 030003 (2017).
+   See http://amdc.impcas.ac.cn/masstables/Ame2016/mass16.txt
+
+Examples
+--------
+>>> ar_atom = atoms["Ar"]
+>>> ar_atom.name
+'Argon'
+>>> ar_atom.Z
+18
+
+>>> ar_isotope = isotopes["38Ar"]
+>>> ar_isotope.A, ar_isotope.N
+(38, 20)
 """
 
 import csv
@@ -13,6 +48,34 @@ except ImportError:
 
 
 class Atom:
+    """Class representing an atom instance.
+
+    All the parameters are stored as instance attributes.
+    The `Atom` instances are hashable.
+
+    Parameters
+    ----------
+    symbol, name : str
+        Element symbol and name, such as ``"Ar"``, ``"Argon"``.
+    atomic_number : int
+        Z number of the atom.
+    weight, weight_unc : float, optional
+        Atomic weight in [amu] and the uncertainty.
+
+    Attributes
+    ----------
+    symbol, name : str
+    Z : int
+    weight, weight_unc : float or NoneType
+
+    Examples
+    --------
+    >>> atom = Atom("Ar", "Argon", 18)
+    >>> atom == "Ar"
+    True
+    >>> atom.is_isotope
+    False
+    """
     is_isotope = False
 
     def __init__(self, symbol, name, atomic_number, weight=None, weight_unc=None):
@@ -35,6 +98,41 @@ class Atom:
 
 
 class Isotope(Atom):
+    """Class representing an isotope instance.
+
+    The `Isotope` instances are hashable.
+
+    Parameters
+    ----------
+    atomic_number : int
+        Atomic number Z of the isotope.
+    mass_number : int
+        Mass number A of the isotope.
+    symbol, name : str
+        Element symbol and name, such as ``"Ar"``, ``"Argon"``.
+    mass, mass_unc : float
+        Atomic weight in [amu] and the uncertainty.
+    estimated_flag : str
+        Generic field flagging estimated values.
+
+    Attributes
+    ----------
+    A : int
+    mass, mass_unc : float
+    estimated_flag : str
+    N : int
+        A + Z
+
+    Examples
+    --------
+    >>> isotope = Isotope(18, 38, "Ar", "Argon", 37.9627321040, 2.09e-07)
+    >>> isotope.is_isotope
+    True
+    >>> isotope.A
+    38
+    >>> isotope.N
+    20
+    """
     is_isotope = True
 
     def __init__(
@@ -52,12 +150,19 @@ class Isotope(Atom):
         self.mass = mass
         self.mass_unc = mass_unc
         self.estimated_flag = estimated_flag
-        self.N = mass_number + atomic_number
+        self.N = mass_number - atomic_number
 
 
 def float_or_none(f):
-    """
-    Cast string f into a float, or None if it doesn't represent a number.
+    """Cast string ``f`` into a float, or None if it doesn't represent a number.
+
+    Parameters
+    ----------
+    f : Any
+
+    Returns
+    -------
+    float or NoneType
     """
     try:
         return float(f)

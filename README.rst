@@ -208,6 +208,7 @@ are rather handled by ``setup.py``.
 The package needs to be installed to run the tests, which grants the testing process
 another layer of usefulness.
 
+Docstrings in the project adhere to the numpydoc_ styling.
 The project code is formatted by ``black``.
 Always make sure to format your code before submitting a pull request, by running
 ``black`` on all your python files.
@@ -215,3 +216,4 @@ Always make sure to format your code before submitting a pull request, by runnin
 
 .. _GitHub: https://github.com/xnx/pyvalem
 .. _PyPI: https://pypi.org/project/pyvalem/
+.. _numpydoc: https://numpydoc.readthedocs.io/en/latest/format.html
