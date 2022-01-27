@@ -4,7 +4,7 @@ Unit tests for the rotational_state module of PyValem
 
 import unittest
 
-from pyvalem.rotational_state import RotationalState, RotationalStateError
+from pyvalem.states.rotational_state import RotationalState, RotationalStateError
 
 
 class RotationalStateTest(unittest.TestCase):

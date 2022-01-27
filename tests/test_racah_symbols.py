@@ -4,7 +4,7 @@ Unit tests for the Racah symbols module of PyValem.
 
 import unittest
 
-from pyvalem.racah_symbol import RacahSymbol
+from pyvalem.states.racah_symbol import RacahSymbol
 
 
 class RacahSymbolTest(unittest.TestCase):

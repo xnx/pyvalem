@@ -4,7 +4,7 @@ Unit tests for the key-value pair states module of PyValem
 
 import unittest
 
-from pyvalem.key_value_pair import KeyValuePair, KeyValuePairError
+from pyvalem.states.key_value_pair import KeyValuePair, KeyValuePairError
 
 
 class KeyValuePairTest(unittest.TestCase):

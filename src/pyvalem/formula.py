@@ -10,7 +10,7 @@ from collections import defaultdict
 import pyparsing as pp
 
 from .atom_data import element_symbols, atoms, isotopes
-from .special_cases import special_cases
+from ._special_cases import special_cases
 
 element = pp.oneOf(element_symbols)
 # TODO don't allow leading 0

@@ -121,13 +121,13 @@ Examples:
 
     >>> state1, state2 = stateful_species.states
     >>> type(state1)
-    <class 'pyvalem.atomic_configuration.AtomicConfiguration'>
+    <class 'pyvalem.states.atomic_configuration.AtomicConfiguration'>
 
     >>> state1.orbitals
     [1s2, 2s2, 2p5]
 
     >>> type(state2)
-    <class 'pyvalem.atomic_term_symbol.AtomicTermSymbol'>
+    <class 'pyvalem.states.atomic_term_symbol.AtomicTermSymbol'>
 
     >>> state2.L, state2.J
     (1, 0.5)

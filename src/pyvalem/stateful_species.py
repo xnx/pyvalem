@@ -5,11 +5,11 @@ molecule), optionally with with one or more State objects associated with it.
 The Formula of the StatefulSpecies is separated from its States by whitespace;
 States are separated from each other by semicolons (;).
 """
-from .atomic_configuration import AtomicConfiguration
-from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
+from pyvalem.states.atomic_configuration import AtomicConfiguration
+from pyvalem.states.diatomic_molecular_configuration import DiatomicMolecularConfiguration
 from .formula import Formula
-from .key_value_pair import KeyValuePair
-from .state_parser import state_parser, STATES
+from pyvalem.states.key_value_pair import KeyValuePair
+from pyvalem.states._state_parser import state_parser, STATES
 
 
 class StatefulSpeciesError(Exception):

@@ -179,7 +179,7 @@ atoms = {}
 # Atom data is from Meija et al., "Atomic weights of the elements 2013
 # (IUPAC Technical Report)", Pure Appl. Chem. 88(3), 265-291, 2016.
 # See https://ciaaw.org/atomic-weights.htm
-with pkg_resources.open_text("pyvalem", "atomic_weights.txt") as fi:
+with pkg_resources.open_text("pyvalem", "_data_atomic_weights.txt") as fi:
     reader = csv.reader(fi, delimiter=",")
     header = ["Symbol", "Name", "Z", "atomic_weight", "atomic_weight_unc"]
     for row in reader:
@@ -199,7 +199,7 @@ isotopes = {}
 # 030002 (2017); Wang et al., "The Ame2016 atomic mass evaluation (II)",
 # Chinese Physics C41, 030003 (2017).
 # See http://amdc.impcas.ac.cn/masstables/Ame2016/mass16.txt
-with pkg_resources.open_text("pyvalem", "isotope_masses.txt") as fi:
+with pkg_resources.open_text("pyvalem", "_data_isotope_masses.txt") as fi:
     reader = csv.reader(fi, delimiter=",")
     header = ["Z", "A", "Symbol", "mass", "mass_unc", "estimated_flag"]
     iso_attribs = [

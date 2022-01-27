@@ -4,11 +4,11 @@ Unit tests for the diatomic molecular configuration module of PyValem
 
 import unittest
 
-from pyvalem.diatomic_molecular_configuration import (
+from pyvalem.states.diatomic_molecular_configuration import (
     DiatomicMolecularConfiguration,
     DiatomicMolecularConfigurationError,
 )
-from pyvalem.state import StateParseError
+from pyvalem.states._base_state import StateParseError
 
 
 class DiatomicMolecularConfigurationTest(unittest.TestCase):

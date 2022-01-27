@@ -4,7 +4,7 @@ Unit tests for the atomic term symbols module of PyValem
 
 import unittest
 
-from pyvalem.atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
+from pyvalem.states.atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
 
 
 class AtomicTermSymbolTest(unittest.TestCase):

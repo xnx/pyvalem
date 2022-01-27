@@ -5,9 +5,9 @@ Unit tests for the stateful_species module of PyValem
 import unittest
 
 from pyvalem.formula import FormulaParseError
-from pyvalem.state import StateParseError
+from pyvalem.states._base_state import StateParseError
 from pyvalem.stateful_species import StatefulSpecies, StatefulSpeciesError
-from pyvalem.vibrational_state import VibrationalState
+from pyvalem.states.vibrational_state import VibrationalState
 
 
 class StatefulSpeciesTest(unittest.TestCase):

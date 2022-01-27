@@ -7,7 +7,7 @@ labels, creating an HTML representation of the term symbol, etc.
 import pyparsing as pp
 
 from .atomic_configuration import atomic_orbital_symbols
-from .state import State, StateParseError
+from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
 molecular_orbital_symbols = (

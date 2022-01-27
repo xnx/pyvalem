@@ -6,7 +6,7 @@ an HTML representation of it, etc.
 
 import pyparsing as pp
 
-from .state import State, StateParseError
+from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
 

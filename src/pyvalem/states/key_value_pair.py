@@ -3,7 +3,7 @@ The KeyValuePair class, representing an arbitrary atomic or molecular state,
 with methods for parsing it from a string and outputting its HTML
 representation, etc.
 """
-from .state import State, StateParseError
+from pyvalem.states._base_state import State, StateParseError
 
 
 class KeyValuePairError(StateParseError):

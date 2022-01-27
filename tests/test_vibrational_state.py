@@ -4,7 +4,7 @@ Unit tests for the vibrational_state module of PyValem
 
 import unittest
 
-from pyvalem.vibrational_state import VibrationalState, VibrationalStateError
+from pyvalem.states.vibrational_state import VibrationalState, VibrationalStateError
 
 
 class VibrationalStateTest(unittest.TestCase):

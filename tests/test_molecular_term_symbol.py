@@ -4,7 +4,7 @@ Unit tests for the molecular_term_symbol module of PyValem
 
 import unittest
 
-from pyvalem.molecular_term_symbol import MolecularTermSymbol, MolecularTermSymbolError
+from pyvalem.states.molecular_term_symbol import MolecularTermSymbol, MolecularTermSymbolError
 
 
 class MolecularTermSymbolTest(unittest.TestCase):

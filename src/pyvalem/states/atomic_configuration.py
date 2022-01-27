@@ -7,7 +7,7 @@ labels, creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
-from .state import State, StateParseError
+from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums).setParseAction(lambda t: int(t[0]))
 nocc_integer = pp.Optional(pp.Word(pp.nums), default="1").setParseAction(
@@ -199,7 +199,7 @@ class AtomicConfiguration(State):
         >>> ac1 = AtomicConfiguration("1s2.2s2.2p6.3p1")
         >>> outer_orbital = ac1.orbitals[-1]
         >>> type(outer_orbital)
-        <class 'pyvalem.atomic_configuration.AtomicOrbital'>
+        <class 'pyvalem.states.atomic_configuration.AtomicOrbital'>
 
         >>> outer_orbital.n, outer_orbital.l, outer_orbital.nocc
         (3, 1, 1)

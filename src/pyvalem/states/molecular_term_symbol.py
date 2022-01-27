@@ -5,8 +5,8 @@ an HTML representation of the term symbol, etc.
 """
 import pyparsing as pp
 
-from .state import State, StateParseError
-from .utils import parse_fraction, float_to_fraction
+from pyvalem.states._base_state import State, StateParseError
+from pyvalem._utils import parse_fraction, float_to_fraction
 
 orbital_irrep_labels = (
     "Σ-",

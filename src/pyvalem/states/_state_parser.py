@@ -12,7 +12,7 @@ from .key_value_pair import KeyValuePair
 from .molecular_term_symbol import MolecularTermSymbol
 from .racah_symbol import RacahSymbol
 from .rotational_state import RotationalState
-from .state import StateParseError
+from pyvalem.states._base_state import StateParseError
 from .vibrational_state import VibrationalState
 
 # the following has two purposes: keys determine the order in which the

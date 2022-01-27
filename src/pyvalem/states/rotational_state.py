@@ -5,7 +5,7 @@ methods for parsing a string into a value and an HTML representation, etc.
 
 import pyparsing as pp
 
-from .state import State, StateParseError
+from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
 integer_string = (integer + pp.StringEnd()).setResultsName("integer")
