@@ -41,11 +41,11 @@ following grammar:
 * A limited number of formula prefixes are supported, for example ``L-CH3CH(NH2)CO2H``,
   ``cis-CH3CHCHCH3``, ``ortho-C6H4(CH3)2``
 * There are some special species:
-  * ``e-`` is the electron;
-  * ``e+`` is the positron;
-  * ``M`` is a generic third-body with no specific identity (and no defined mass or
+    * ``e-`` is the electron;
+    * ``e+`` is the positron;
+    * ``M`` is a generic third-body with no specific identity (and no defined mass or
       charge);
-  * ``hν`` (or ``hv``) is the photon.
+    * ``hν`` (or ``hv``) is the photon.
 
 
 Output as HTML, LaTeX and slugs
