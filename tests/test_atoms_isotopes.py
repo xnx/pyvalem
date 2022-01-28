@@ -22,6 +22,19 @@ class AtomTest(unittest.TestCase):
         self.assertNotEqual(carbon13_atom, isotopes["13B"])
         self.assertNotEqual(carbon13_atom, "13Co")
 
+    def test_isotope(self):
+        iso = Isotope(
+            atomic_number=18,
+            mass_number=38,
+            symbol="Ar",
+            name="Argon",
+            mass=0.42,
+            mass_unc=0.042,
+        )
+        self.assertEqual(iso.Z, 18)
+        self.assertEqual(iso.A, 38)
+        self.assertEqual(iso.N, 20)
+
 
 if __name__ == "__main__":
     unittest.main()
