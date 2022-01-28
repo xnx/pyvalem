@@ -171,7 +171,7 @@ class Formula:
     atoms, or html-save slug.
 
     Parameters
-    ---------
+    ----------
     formula : str
         PyValem-compatible string. No ``"_"`` or ``"^"`` symbols to indicate subscripts
         and superscripts. Brackets are allowed, as well as several common prefixes.
@@ -231,8 +231,7 @@ class Formula:
     """
 
     def __init__(self, formula):
-        """Initialize the Formula object by parsing the string argument formula.
-        """
+        """Initialize the Formula object by parsing the string argument formula."""
         self.formula = formula
         self.atoms = set()
         self.atom_stoich = defaultdict(int)
@@ -247,8 +246,7 @@ class Formula:
 
     @staticmethod
     def _make_prefix_html(prefix_list):
-        """Make the prefix HTML: D- and L- prefixes get written in small caps
-        """
+        """Make the prefix HTML: D- and L- prefixes get written in small caps"""
         prefix = "-".join(prefix_list)
         prefix = prefix.replace("D", '<span style="font-size: 80%;">D</span>')
         prefix = prefix.replace("L", '<span style="font-size: 80%;">L</span>')
@@ -628,8 +626,7 @@ class Formula:
         return symbol
 
     def _get_charge_string(self):
-        """Return the string representation of the charge: '+', '-', '+2', '-3', etc.
-        """
+        """Return the string representation of the charge: '+', '-', '+2', '-3', etc."""
         if not self.charge:
             return ""
         if self.charge > 0:

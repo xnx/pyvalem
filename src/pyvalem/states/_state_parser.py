@@ -4,6 +4,7 @@ State-like objects or sequences of such objects.
 """
 from collections import OrderedDict
 
+from ._base_state import StateParseError
 from .atomic_configuration import AtomicConfiguration
 from .atomic_term_symbol import AtomicTermSymbol
 from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
@@ -12,7 +13,6 @@ from .key_value_pair import KeyValuePair
 from .molecular_term_symbol import MolecularTermSymbol
 from .racah_symbol import RacahSymbol
 from .rotational_state import RotationalState
-from pyvalem.states._base_state import StateParseError
 from .vibrational_state import VibrationalState
 
 # the following has two purposes: keys determine the order in which the
