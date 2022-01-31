@@ -130,11 +130,10 @@ As ``Formula``, also ``StatefulSpecies`` have ``html`` and ``latex`` attributes.
 
 These two examples render as
 
-.. raw:: html
-    Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>
+.. raw:: latex
 
-.. raw:: html
-    sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2
+    $\mathrm{Ne}^+ \; 1s^22s^22p^5; \; {}^2P_{1/2}$\\
+    $\mathrm{{}^{52}Cr^1H} \; 1\sigma^2.2\sigma^1.1\delta^2.1\pi^2; \; {}^6\Sigma^+; \; v=0; \; J=2$\\
 
 
 Reaction
