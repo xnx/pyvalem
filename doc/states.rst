@@ -1,40 +1,63 @@
 States
 ******
 
-PyValem recognises several different kinds of quantum states and labels and is able to deduce the state type, parse quantum numbers and symmetries from provided strings, and do some validation.
+PyValem recognises several different kinds of quantum states and labels and is able to
+deduce the state type, parse quantum numbers and symmetries from provided strings,
+and do some validation.
 
-States of different types can be instantiated directly from their class or associated with a species formula as a ``StatefulSpecies`` object.
+States of different types can be instantiated directly from their class or associated
+with a species formula as a ``StatefulSpecies`` object.
 
 ``GenericExcitedState``
 =======================
 
-A "generic excited state" is simply an unspecified excitation of the species above its ground state: it may represent excitation of a single species to an unspecified quantum level or the general excitation of an ensemble of such species to a range of levels under equilibrium or non-equilibrium conditions.
+A "generic excited state" is simply an unspecified excitation of the species above its
+ground state: it may represent excitation of a single species to an unspecified quantum
+level or the general excitation of an ensemble of such species to a range of levels
+under equilibrium or non-equilibrium conditions.
 
-A ``GenericExcitedState`` object is instantiated as a string of 1-4 asterisks or as a number preceding a single asterisk. For example::
+A ``GenericExcitedState`` object is instantiated as a string of 1-4 asterisks or as a
+number preceding a single asterisk. For example:
 
-    In [1]: from pyvalem.generic_excited_state import GenericExcitedState
-    In [2]: x0 = GenericExcitedState('*')
-    In [3]: x1 = GenericExcitedState('***')
-    In [4]: x2 = GenericExcitedState('5*')
+.. code-block:: pycon
+
+    >>> from pyvalem.states import GenericExcitedState
+    >>> x0 = GenericExcitedState('*')
+    >>> x1 = GenericExcitedState('***')
+    >>> x2 = GenericExcitedState('5*')
 
 
 ``AtomicConfiguration``
 =======================
 
-The electronic configuration of atoms, ions and isotopes is represented by the ``AtomicConfiguration`` class. The string representation provided to instantiate an ``AtomicConfiguration`` object is a sequence of orbital specifiers, separated by a full stop (period, ``.``). An atomic orbital is represented by its principal quantum number, ``n``, the azimuthal quantum number, ``l`` written as the letter ``s``, ``p``, ``d``, ..., and the an occupancy (number of electrons, ``1`` or ``2``). For example::
+The electronic configuration of atoms, ions and isotopes is represented by the
+``AtomicConfiguration`` class. The string representation provided to instantiate an
+``AtomicConfiguration`` object is a sequence of orbital specifiers, separated by a
+full stop (period, ``.``). An atomic orbital is represented by its principal
+quantum number, ``n``, the azimuthal quantum number, ``l`` written as the
+letter ``s``, ``p``, ``d``, ..., and the an occupancy (number of electrons, ``1`` or
+``2``). For example:
 
-    In [1]: from pyvalem.atomic_configuration import AtomicConfiguration
-    In [2]: c0 = AtomicConfiguration('1s2')
-    In [3]: c1 = AtomicConfiguration('1s2.2s2.2p6')
-    In [4]: c2 = AtomicConfiguration('1s2.2s2.2p6.3s2.3d10')
+.. code-block:: pycon
 
-The closed-shell part of an atomic configuration can be specified by providing the corresponding noble gas element symbol in square brackets::
+    >>> from pyvalem.states import AtomicConfiguration
+    >>> c0 = AtomicConfiguration('1s2')
+    >>> c1 = AtomicConfiguration('1s2.2s2.2p6')
+    >>> c2 = AtomicConfiguration('1s2.2s2.2p6.3s2.3d10')
 
-    In [5]: c2 =  AtomicConfiguration('[Ne].3s2.3d10')
+The closed-shell part of an atomic configuration can be specified by providing the
+corresponding noble gas element symbol in square brackets:
 
-The HTML representation of the atomic configuration is returned by the ``html`` attribute::
+.. code-block:: pycon
 
-    In [5]: print(c2)
+    >>> c2 =  AtomicConfiguration('[Ne].3s2.3d10')
+
+The HTML representation of the atomic configuration is returned by the ``html``
+attribute:
+
+.. code-block:: pycon
+
+    >>> print(c2.html)
     [Ne]3s<sup>2</sup>3d<sup>10</sup>
 
 which renders as:
@@ -43,47 +66,62 @@ which renders as:
 
     [Ne]3s<sup>2</sup>3d<sup>10</sup>
 
-.. raw:: latex
+If the same atomic orbital appears more than once or an orbital is specified as being
+occupied by more than the number of electrons allowed by the Pauli exclusion principle,
+an ``AtomicConfigurationError`` is raised:
 
-    $\mathrm{[Ne]}3s^{2}3d^{10}$
+.. code-block:: pycon
 
-If the same atomic orbital appears more than once or an orbital is specified as being occupied by more than the number of electrons allowed by the Pauli exclusion principle, an ``AtomicConfigurationError`` is raised::
+    >>> c3 = AtomicConfiguration('[Ar].3s2')
+    Traceback (most recent call last):
+      ...
+    pyvalem.states.atomic_configuration.AtomicConfigurationError: Repeated subshell in [Ar].3s2
 
-    In [6]: c3 = AtomicConfiguration('[Ar].3s2')
-    ...
-    AtomicConfigurationError: Repeated subshell in [Ar].3s2
-
-    In [7]: c3 = AtomicConfiguration('1s2.2s2.2p7')
-    ...
-    AtomicConfigurationError: Too many electrons in atomic orbital: 2p7
+    >>> c3 = AtomicConfiguration('1s2.2s2.2p7')
+    Traceback (most recent call last):
+      ...
+    pyvalem.states.atomic_configuration.AtomicConfigurationError: Too many electrons in atomic orbital: 2p7
 
 
 ``AtomicTermSymbol``
 ====================
 
-The ``AtomicTermSymbol`` class represents an atomic electronic term symbol in the LS-coupling (Russell–Saunders coupling) notation. The total electronic spin quantum number, S, is specifed by a multiplicity, 2S+1, followed by the total electronic orbital angular momentum quantum number, L, as a letter, ``S``, ``P``, ``D``, ... for L = 0, 1, 2, ...; there may optionally follow a parity label, ``o`` (for odd-parity states), and a total (spin-orbit coupled) electronic angular momentum quantum number, J after an underscore character (``_``). Half (odd)-integers are specfied as fractions: ``1/2``, ``3/2``, ``5/2``, etc.
+The ``AtomicTermSymbol`` class represents an atomic electronic term symbol in the
+LS-coupling (Russell–Saunders coupling) notation.
+The total electronic spin quantum number, S, is specified by a multiplicity, 2S+1,
+followed by the total electronic orbital angular momentum quantum number, L, as a
+letter, ``S``, ``P``, ``D``, ... for L = 0, 1, 2, ...; there may optionally follow a
+parity label, ``o`` (for odd-parity states), and a total (spin-orbit coupled)
+electronic angular momentum quantum number, J after an underscore character (``_``).
+Half (odd)-integers are specified as fractions: ``1/2``, ``3/2``, ``5/2``, etc.
 
-Examples::
+Examples:
 
-    In [1]: from pyvalem.atomic_term_symbol import AtomicTermSymbol
-    In [2]: a0 = AtomicTermSymbol('3P_1/2')
-    In [3]: a1 = AtomicTermSymbol('4D')
-    In [4]: a2 = AtomicTermSymbol('2Po_1/2')
+.. code-block:: pycon
 
-``AtomicTermSymbol`` objects know about their quantum numbers, where defined::
+    >>> from pyvalem.states import AtomicTermSymbol
+    >>> a0 = AtomicTermSymbol('3P_1')
+    >>> a1 = AtomicTermSymbol('4D')
+    >>> a2 = AtomicTermSymbol('2Po_1/2')
 
-    In [5]: a0.S, a0.L, a0.J
-    Out[5]: (1.0, 1, 0.5)
+``AtomicTermSymbol`` objects know about their quantum numbers, where defined:
 
-    In [6]: a1.S, a1.L, a1.J
-    Out[6]: (1.5, 2, None)
+.. code-block:: pycon
 
-    In [7]: a2.S, a2.L, a2.J, a2.parity
-    Out[7]: (0.5, 1, 0.5, 'o')
+    >>> a0.S, a0.L, a0.J
+    (1.0, 1, 1.0)
 
-As with other states, the ``html`` attribute returns the HTML representation::
+    >>> a1.S, a1.L, a1.J
+    (1.5, 2, None)
 
-    In [8]: print(a2.html)
+    >>> a2.S, a2.L, a2.J, a2.parity
+    (0.5, 1, 0.5, 'o')
+
+As with other states, the ``html`` attribute returns the HTML representation:
+
+.. code-block:: pycon
+
+    >>> print(a2.html)
     <sup>2</sup>P<sup>o</sup><sub>1/2</sub>
 
 which renders as:
@@ -92,38 +130,51 @@ which renders as:
 
     <sup>2</sup>P<sup>o</sup><sub>1/2</sub>
 
-.. raw:: latex
+J must satisfy the "triangle rule" (\|L-S\| ≤ J ≤ L+S); if this test fails, an
+``AtomicTermSymbolError`` is raised:
 
-    ${}^{2}P^o_{1/2}$
+.. code-block:: pycon
 
-J must satisfy the "triangle rule" (\|L-S\| ≤ J ≤ L+S); if this test fails, an ``AtomicTermSymbolError`` is raised::
-
-    In [9]: a3 = AtomicTermSymbol('3P_3')
-    ...
-    AtomicTermSymbolError: Invalid atomic term symbol: 3P_3 |L-S| <= J <= L+S must be satisfied.
+    >>> a3 = AtomicTermSymbol('3P_3')
+    Traceback (most recent call last):
+      ...
+    pyvalem.states.atomic_term_symbol.AtomicTermSymbolError: Invalid atomic term symbol: 3P_3 |L-S| <= J <= L+S must be satisfied.
 
 
 ``DiatomicMolecularConfiguration``
 ==================================
 
-The electronic configuration of diatomic molecules, molecular ions and their isotopologues is represented by the ``DiatomicMolecularConfiguration`` class. This class is instantiated with a string consisting of a sequence of numbered molecular orbitals, separated by a full stop (period, ``.``).  Each orbital is denoted with a counting number (which increments for each orbital of the same symmetry), an orbital symmetry label, and an electron occupancy number.
+The electronic configuration of diatomic molecules, molecular ions and their
+isotopologues is represented by the ``DiatomicMolecularConfiguration`` class.
+This class is instantiated with a string consisting of a sequence of numbered molecular
+orbitals, separated by a full stop (period, ``.``).
+Each orbital is denoted with a counting number (which increments for each orbital of
+the same symmetry), an orbital symmetry label, and an electron occupancy number.
 
-The valid symmetry labels are the lower case greek letters, ``σ``, ``π``, and ``δ``, with an optional letter, ``u`` or ``g`` denoting the inversion symmetry for centrosymmetric molecules. For convenience, the identifiers ``sigma``, ``pi``, ``delta`` may be used as identifiers instead of the greek labels.
+The valid symmetry labels are the lower case greek letters,
+``σ``, ``π``, and ``δ``, with an optional letter, ``u`` or ``g`` denoting the inversion
+symmetry for centrosymmetric molecules.
+For convenience, the identifiers ``sigma``, ``pi``, ``delta`` may be used as
+identifiers instead of the greek labels.
 
-Examples::
+Examples:
 
-    In [1]: from pyvalem.diatomic_molecular_configuration import DiatomicMolecularConfiguration
-    In [2]: c1 = DiatomicMolecularConfiguration('1σ')
-    In [3]: c2 = DiatomicMolecularConfiguration('1σu2')
-    In [3]: c3 = DiatomicMolecularConfiguration('1piu4.1pig3')
-    In [4]: c4 = DiatomicMolecularConfiguration('1σg2.1σu2.2σg2.2σu2.1πu4.3σg2')
+.. code-block:: pycon
 
-An HTML representation of the configuration is held in the ``html`` attribute::
+    >>> from pyvalem.states import DiatomicMolecularConfiguration
+    >>> c1 = DiatomicMolecularConfiguration('1σ')
+    >>> c2 = DiatomicMolecularConfiguration('1σu2')
+    >>> c3 = DiatomicMolecularConfiguration('1piu4.1pig3')
+    >>> c4 = DiatomicMolecularConfiguration('1σg2.1σu2.2σg2.2σu2.1πu4.3σg2')
 
-    In [5]: print(c3.html)
+An HTML representation of the configuration is held in the ``html`` attribute:
+
+.. code-block:: pycon
+
+    >>> print(c3.html)
     1π<sub>u</sub><sup>4</sup>.1π<sub>g</sub><sup>3</sup>
 
-    In [6]: print(c4.html)
+    >>> print(c4.html)
     1σ<sub>g</sub><sup>2</sup>.1σ<sub>u</sub><sup>2</sup>.2σ<sub>g</sub><sup>2</sup>.2σ<sub>u</sub><sup>2</sup>.1π<sub>u</sub><sup>4</sup>.3σ<sub>g</sub><sup>2</sup>
 
 These render as:
@@ -133,43 +184,57 @@ These render as:
     1π<sub>u</sub><sup>4</sup>.1π<sub>g</sub><sup>3</sup>       <br/>
     1σ<sub>g</sub><sup>2</sup>.1σ<sub>u</sub><sup>2</sup>.2σ<sub>g</sub><sup>2</sup>.2σ<sub>u</sub><sup>2</sup>.1π<sub>u</sub><sup>4</sup>.3σ<sub>g</sub><sup>2</sup>
 
-.. raw:: latex
 
-    $1\pi_u^{4}1\pi_g^{3}$ and 
-    $1\sigma_g^{2}1\sigma_u^{2}2\sigma_g^{2}2\sigma_u^{2}1\pi_u^{4}3\sigma_g^{2}$
+An attempt to fill an orbital with too many electrons raises a
+``DiatomicMolecularConfigurationError``, as does repeating an orbital:
 
-An attempt to fill an orbital with too many electrons raises a ``DiatomicMolecularConfigurationError``, as does repeating an orbital::
+.. code-block:: pycon
 
-    In [7]: c5 = DiatomicMolecularConfiguration('1σ2.2σ2.3σ3')
-    ...
-    DiatomicMolecularConfigurationError: Only two electrons allowed in σ orbital, but received 3
+    >>> c5 = DiatomicMolecularConfiguration('1σ2.2σ2.3σ3')
+    Traceback (most recent call last):
+      ...
+    pyvalem.states.diatomic_molecular_configuration.DiatomicMolecularConfigurationError: Only two electrons allowed in σ orbital, but received 3
 
-    In [8]: c6 = DiatomicMolecularConfiguration('1σ2.2σ2.2σ1')
-    ...
-    DiatomicMolecularConfigurationError: Repeated orbitals in 1σ2.2σ2.2σ1
+    >>> c6 = DiatomicMolecularConfiguration('1σ2.2σ2.2σ1')
+    Traceback (most recent call last):
+      ...
+    pyvalem.states.diatomic_molecular_configuration.DiatomicMolecularConfigurationError: Repeated orbitals in 1σ2.2σ2.2σ1
 
 
 ``MolecularTermSymbol``
 =======================
 
-The ``MolecularTermSymbol`` class represents a molecular electronic term symbol. It is instantiated with a string providing the spin multiplicity (2S+1), electronic orbital angular momentum symmetry label and (optionally) the quantum number Ω in the Hund's case (a) formulation.
+The ``MolecularTermSymbol`` class represents a molecular electronic term symbol.
+It is instantiated with a string providing the spin multiplicity (2S+1),
+electronic orbital angular momentum symmetry label and (optionally) the quantum
+number Ω in the Hund's case (a) formulation.
 
-Symmetry labels are specified as an appropriate letter combination representing the irreducible representation of the electronic orbital wavefunction. For molecules with a centre of symmetry, the ``u``/``g`` label comes last, preceded by any ``+``/``-`` label denoting the reflection symmetry of the wavefunction. Do not use a caret (``^``) or underscore (``_``) character to indicate superscripts or subscripts. For linear molecules, the irrep symbols ``Σ``, ``Π``, ``Δ`` and ``Φ`` may be replaced with ``SIGMA``, ``PI``, ``DELTA``, and ``PHI``.
+Symmetry labels are specified as an appropriate letter combination representing the
+irreducible representation of the electronic orbital wave function. For molecules with
+a centre of symmetry, the ``u``/``g`` label comes last, preceded by any ``+``/``-``
+label denoting the reflection symmetry of the wave function. Do not use a caret (``^``)
+or underscore (``_``) character to indicate superscripts or subscripts.
+For linear molecules, the irrep symbols ``Σ``, ``Π``, ``Δ`` and ``Φ`` may be replaced
+with ``SIGMA``, ``PI``, ``DELTA``, and ``PHI``.
 
-If a term symbol has a label, this is given before the term symbol itself, which should be enclosed with parentheses.
+If a term symbol has a label, this is given before the term symbol itself, which
+should be enclosed with parentheses.
 
-Examples::
+Examples:
 
-    In [1]: from pyvalem.molecular_term_symbol import MolecularTermSymbol
-    In [2]: c1 = MolecularTermSymbol('1Σ-')
-    In [3]: c2 = MolecularTermSymbol('1SIGMA-')
-    In [4]: c3 = MolecularTermSymbol('3Σ+g')
-    In [5]: c4 = MolecularTermSymbol('3SIGMA+g')
-    In [7]: c5 = MolecularTermSymbol('b(4Π_-3/2)')
-    In [8]: c6 = MolecularTermSymbol("A'(1A1g_0)")
-    In [9]: c7 = MolecularTermSymbol('A(1A")')
+.. code-block:: pycon
 
-The ``html`` attribute returns the HTML representation of the molecular term symbol. The examples above are represented by:
+    >>> from pyvalem.states import MolecularTermSymbol
+    >>> c1 = MolecularTermSymbol('1Σ-')
+    >>> c2 = MolecularTermSymbol('1SIGMA-')
+    >>> c3 = MolecularTermSymbol('3Σ+g')
+    >>> c4 = MolecularTermSymbol('3SIGMA+g')
+    >>> c5 = MolecularTermSymbol('b(4Π_-3/2)')
+    >>> c6 = MolecularTermSymbol("A'(1A1g_0)")
+    >>> c7 = MolecularTermSymbol('A(1A")')
+
+The ``html`` attribute returns the HTML representation of the molecular term symbol.
+The examples above are represented by:
 
 .. raw:: html
 
@@ -181,40 +246,43 @@ The ``html`` attribute returns the HTML representation of the molecular term sym
     A'(<sup>1</sup>A<sub>1g</sub><sub>0</sub>)		<br/>
     A(<sup>1</sup>A")		<br/>
 
-.. raw:: latex
 
-    ${}^{1}\Sigma^-\\
-    {}^{1}\Sigma^-\\
-    {}^{3}\Sigma^+_{g}\\
-    {}^{3}\Sigma^+_{g}\\
-    b({}^{4}\Pi_{-3/2})\\
-    A'({}^{1}A_{1g}{}_{0})\\
-    A({}^{1}A'')$
+``MolecularTermSymbol`` objects know about their total spin angular momentum quantum
+number, S, the electronic orbital angular momentum wave function irrep, the projection
+of the total angular momentum along the symmetry axis, Ω, and the term label.
+For example:
 
+.. code-block:: pycon
 
-``MolecularTermSymbol`` objects know about their total spin angular momentum quantum number, S, the electronic orbital angular momentum wavefunction irrep, the projection of the total angular momentum along the symmetry axis, Ω, and the term label. For example::
-
-    In [10]: c6 = MolecularTermSymbol('X(4Πu_-3/2)')
-    In [11]: c6.S, c6.term_label, c6.irrep, c6.Omega
-    Out[11]: (1.5, 'X', 'Πu', -1.5)
+    >>> c6 = MolecularTermSymbol('X(4Πu_-3/2)')
+    >>> c6.S, c6.term_label, c6.irrep, c6.Omega
+    (1.5, 'X', 'Πu', -1.5)
 
 
 ``VibrationalState``
 ====================
 
-Molecular vibrational states of diatomic and polyatomic molecules are represented by the ``VibrationalState`` class. For diatomic molecules, this class is instantiated with a string of the form ``v=n`` for ``n=0,1,2,...``. Polyatomic vibrational states are initialised with a string giving the number of quanta in each labelled normal mode. Unspecified vibrational excitation is denoted ``v=*``. For example::
+Molecular vibrational states of diatomic and polyatomic molecules are represented by
+the ``VibrationalState`` class. For diatomic molecules, this class is instantiated
+with a string of the form ``v=n`` for ``n=0,1,2,...``. Polyatomic vibrational states
+are initialised with a string giving the number of quanta in each labelled normal mode.
+Unspecified vibrational excitation is denoted ``v=*``. For example:
 
-    In [1]: from pyvalem.vibrational_state import VibrationalState
-    In [2]: v0 = VibrationalState('v=0')
-    In [3]: v1 = VibrationalState('v=*')
-    In [4]: v2 = VibrationalState('3v2+v3')
-    In [5]: v3 = VibrationalState('ν1+ν2')
-    In [6]: v4 = VibrationalState('2v1 + 3v4')
-    In [7]: v5 = VibrationalState('2ν1+1ν2+ν3')
+.. code-block:: pycon
 
-The attribute ``html`` holds an HTML representation of the vibrational state::
+    >>> from pyvalem.states import VibrationalState
+    >>> v0 = VibrationalState('v=0')
+    >>> v1 = VibrationalState('v=*')
+    >>> v2 = VibrationalState('3v2+v3')
+    >>> v3 = VibrationalState('ν1+ν2')
+    >>> v4 = VibrationalState('2v1+3v4')
+    >>> v5 = VibrationalState('2ν1+1ν2+ν3')
 
-    In [8]: print(v5.html)
+The attribute ``html`` holds an HTML representation of the vibrational state:
+
+.. code-block:: pycon
+
+    >>> print(v5.html)
     2ν<sub>1</sub> + ν<sub>2</sub> + ν<sub>3</sub>
 
 This renders as:
@@ -223,35 +291,43 @@ This renders as:
 
     2ν<sub>1</sub> + ν<sub>2</sub> + ν<sub>3</sub>
 
-.. raw:: latex
-
-    $2\nu_{1} + \nu_{2} + \nu_{3}$
-
 
 ``RotationalState``
 ===================
 
-A single class, ``RotationalState``, represents the total rotational angular momentum (excluding nuclear spin) quantum number, J, for both atoms and molecules. It is instantiated with a string, ``J=n``, where ``n`` is an integer or half integer (expressed as a fraction or in decimal notation). Three different levels of unspecified rotation excitation may alternatively be specified by providing ``n`` as one to three asterisks. The parsed value of J is available as an attribute with that name.
+A single class, ``RotationalState``, represents the total rotational angular momentum
+(excluding nuclear spin) quantum number, J, for both atoms and molecules.
+It is instantiated with a string, ``J=n``, where ``n`` is an integer or half integer
+(expressed as a fraction or in decimal notation).
+Three different levels of unspecified rotation excitation may alternatively be
+specified by providing ``n`` as one to three asterisks.
+The parsed value of J is available as an attribute with that name.
 
-Examples::
+Examples:
 
-    In [1]: from pyvalem.rotational_state import RotationalState
-    In [2]: r0 = RotationalState('J=0')
-    In [3]: r1 = RotationalState('J=3/2')
-    In [4]: r2 = RotationalState('J=1.5')
-    In [5]: r3 = RotationalState('J=*')
-    In [6]: print(r1.J)
+.. code-block:: pycon
+
+    >>> from pyvalem.states import RotationalState
+    >>> r0 = RotationalState('J=0')
+    >>> r1 = RotationalState('J=3/2')
+    >>> r2 = RotationalState('J=1.5')
+    >>> r3 = RotationalState('J=*')
+    >>> print(r1.J)
     1.5
 
 
 ``KeyValuePair``
 ================
 
-The ``KeyValuePair`` class represents an arbitrary quantum number or symmetry provided as a (key, value) pair. It is instantiated with a string of the form ``key=value``. For example::
+The ``KeyValuePair`` class represents an arbitrary quantum number or symmetry provided
+as a (key, value) pair. It is instantiated with a string of the form ``key=value``.
+For example:
 
-    In [1]: from pyvalem.key_value_pair import KeyValuePair
-    In [2]: kv1 = KeyValuePair('n=1')
-    In [3]: kv2 = KeyValuePair('C = 45a#')
+.. code-block:: pycon
+
+    >>> from pyvalem.states import KeyValuePair
+    >>> kv1 = KeyValuePair('n=1')
+    >>> kv2 = KeyValuePair('C = 45a#')
 
 
 
