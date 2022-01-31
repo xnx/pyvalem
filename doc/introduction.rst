@@ -134,6 +134,10 @@ These two examples render as:
 
     Ne<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup>; <sup>2</sup>P<sub>1/2</sub>
 
+.. raw:: html
+
+    <sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2
+
 
 Reaction
 --------
