@@ -134,6 +134,7 @@ class FormulaTest(unittest.TestCase):
             ),
             "hv": ("hν", "hν", r"h\nu", "hv", 0, None, 0, {}),
         }
+        f["e"] = f["e-"]
         f["hν"] = f["hv"]
 
         for f_str in f:

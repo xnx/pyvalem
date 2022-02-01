@@ -129,6 +129,8 @@ class ReactionParseTest(unittest.TestCase):
             ],
             ["H + H + M -> H2 + M", "2H + M -> H2 + M"],
             ["Kr + hv -> Kr + 2hv", "Kr + hv -> Kr + hv + hv"],
+            ["Kr + hv -> Kr *", "Kr + hν -> Kr *"],
+            ["Kr + e- -> Kr- *", "Kr + e -> Kr- *"],
         ]
         for r1, r2 in equal:
             self.assertEqual(Reaction(r1), Reaction(r2))
@@ -186,14 +188,20 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(r.reactants_text_count_map, {"e-": 2, "C2": 1})
         self.assertEqual(r.products_text_count_map, {"C-": 2})
         r = Reaction("e- + e- + hv -> ", strict=False)
-        self.assertEqual(r.reactants_text_count_map, {"e-": 2, "hv": 1})
+        self.assertEqual(r.reactants_text_count_map, {"e-": 2, "hν": 1})
         self.assertEqual(r.products_text_count_map, {})
         r = Reaction("1e- + 1e- + 2hv -> ", strict=False)
-        self.assertEqual(r.reactants_text_count_map, {"e-": 2, "hv": 2})
+        self.assertEqual(r.reactants_text_count_map, {"e-": 2, "hν": 2})
         r = Reaction("e- + O2 X(3Σ-g) -> ", strict=False)
         self.assertEqual(r.reactants_text_count_map, {"e-": 1, "O2 X(3Σ-g)": 1})
         r = Reaction("e- + O2 X(3SIGMA-g) -> ", strict=False)
-        self.assertEqual(r.reactants_text_count_map, {"e-": 1, "O2 X(3SIGMA-g)": 1})
+        self.assertEqual(r.reactants_text_count_map, {"e-": 1, "O2 X(3Σ-g)": 1})
+
+    def test_reaction_with_e(self):
+        r = Reaction("e + C2 + e -> C- + C-")
+        self.assertEqual(r.reactants_text_count_map, {"e-": 2, "C2": 1})
+        self.assertEqual(r.products_text_count_map, {"C-": 2})
+        self.assertEqual(repr(r), "2e- + C2 → C- + C-")
 
 
 if __name__ == "__main__":
