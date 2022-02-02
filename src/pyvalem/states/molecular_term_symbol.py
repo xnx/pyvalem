@@ -151,8 +151,13 @@ greek_letters = {
     "GAMMAu": "Γu",
 }
 
-latex_terms = {"Σ": r"\Sigma", "Π": r"\Pi", "Δ": r"\Delta", "Φ": r"\Phi",
-               "Γ": r"\Gamma"}
+latex_terms = {
+    "Σ": r"\Sigma",
+    "Π": r"\Pi",
+    "Δ": r"\Delta",
+    "Φ": r"\Phi",
+    "Γ": r"\Gamma",
+}
 
 integer = pp.Word(pp.nums)
 molecule_Smult = integer.setResultsName("Smult")
