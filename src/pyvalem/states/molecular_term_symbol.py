@@ -39,6 +39,12 @@ orbital_irrep_labels = (
     "PHI",
     "PHIg",
     "PHIu",
+    "Γ",
+    "Γg",
+    "Γu",
+    "GAMMA",
+    "GAMMAg",
+    "GAMMAu",
     "A",
     "A'",
     'A"',
@@ -140,9 +146,18 @@ greek_letters = {
     "PHI": "Φ",
     "PHIg": "Φg",
     "PHIu": "Φu",
+    "GAMMA": "Γ",
+    "GAMMAg": "Γg",
+    "GAMMAu": "Γu",
 }
 
-latex_terms = {"Σ": r"\Sigma", "Π": r"\Pi", "Δ": r"\Delta", "Φ": r"\Phi"}
+latex_terms = {
+    "Σ": r"\Sigma",
+    "Π": r"\Pi",
+    "Δ": r"\Delta",
+    "Φ": r"\Phi",
+    "Γ": r"\Gamma",
+}
 
 integer = pp.Word(pp.nums)
 molecule_Smult = integer.setResultsName("Smult")
