@@ -315,6 +315,9 @@ class Formula:
         # photons, electrons, positrons and "M", denoting an unspecified
         # "third-body" in many reactions. Note that M does not have a defined
         # charge or mass.
+        if formula == "e":
+            # Quietly convert e to e-.
+            self.formula = formula = "e-"
         if formula in special_cases:
             for attr, val in special_cases[formula].items():
                 setattr(self, attr, val)

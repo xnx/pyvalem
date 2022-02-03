@@ -249,6 +249,7 @@ class Reaction:
                             )
                     ss = StatefulSpecies(ss_str)
                     species.append((n, ss))
+                    ss_str = str(ss)
                     if ss_str not in species_map:
                         species_map[ss_str] = 0
                     species_map[ss_str] += n
