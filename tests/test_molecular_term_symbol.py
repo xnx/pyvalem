@@ -72,6 +72,18 @@ class MolecularTermSymbolTest(unittest.TestCase):
         self.assertEqual(str(m3), "3Σ+u")
         self.assertEqual(m3.html, "<sup>3</sup>Σ<sup>+</sup><sub>u</sub>")
 
+        m3 = MolecularTermSymbol("4GAMMA")
+        self.assertEqual(m3.Smult, 4)
+        self.assertEqual(m3.irrep, "Γ")
+        self.assertEqual(str(m3), "4Γ")
+        self.assertEqual(m3.html, "<sup>4</sup>Γ")
+
+        m3 = MolecularTermSymbol("2GAMMAg")
+        self.assertEqual(m3.Smult, 2)
+        self.assertEqual(m3.irrep, "Γg")
+        self.assertEqual(str(m3), "2Γg")
+        self.assertEqual(m3.html, "<sup>2</sup>Γ<sub>g</sub>")
+
         m3 = MolecularTermSymbol('A(1A")')
         self.assertEqual(str(m3), 'A(1A")')
         self.assertEqual(m3.html, 'A<sup>1</sup>A"')
