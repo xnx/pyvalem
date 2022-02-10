@@ -68,7 +68,7 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(r2.reactants[1][1].states[1].__repr__(), "X(3Σ-g)")
         self.assertEqual(
             r2.html,
-            "CO v=1 + O<sub>2</sub> J=2; "
+            "CO v=1 + O<sub>2</sub> J=2 "
             "X<sup>3</sup>Σ<sup>-</sup><sub>g</sub> → "
             "CO<sub>2</sub> + O",
         )

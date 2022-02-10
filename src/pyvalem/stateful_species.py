@@ -139,7 +139,7 @@ class StatefulSpecies:
     def html(self):
         if not self.states:
             return self.formula.html
-        return "{} {}".format(self.formula.html, "; ".join(s.html for s in self.states))
+        return "{} {}".format(self.formula.html, " ".join(s.html for s in self.states))
 
     @property
     def latex(self):

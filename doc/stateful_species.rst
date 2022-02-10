@@ -26,13 +26,13 @@ An HTML representation is accessible through the ``html`` attribute:
 .. code-block:: pycon
 
     >>> print(ss4.html)
-    CrH 1σ<sup>2</sup>.2σ<sup>1</sup>.1π<sup>4</sup>.3σ<sup>1</sup>; <sup>6</sup>Σ<sup>+</sup>
+    CrH 1σ<sup>2</sup>.2σ<sup>1</sup>.1π<sup>4</sup>.3σ<sup>1</sup> <sup>6</sup>Σ<sup>+</sup>
 
 This example renders as:
 
 .. raw:: html
 
-    CrH 1σ<sup>2</sup>.2σ<sup>1</sup>.1π<sup>4</sup>.3σ<sup>1</sup>; <sup>6</sup>Σ<sup>+</sup>
+    CrH 1σ<sup>2</sup>.2σ<sup>1</sup>.1π<sup>4</sup>.3σ<sup>1</sup> <sup>6</sup>Σ<sup>+</sup>
 
 
 The ``Formula`` object and a list of the parse ``State`` objects are returned by the
@@ -70,4 +70,4 @@ This is checked for:
     >>> StatefulSpecies('Li 1s2.2s1; 1s2.2p1')
     Traceback (most recent call last):
       ...
-    pyvalem.stateful_species.StatefulSpeciesError: Multiple states of type AtomicConfiguration specified for Li 1s2.2p1;1s2.2s1
+    pyvalem.stateful_species.StatefulSpeciesError: Multiple states of type AtomicConfiguration specified for Li 1s2.2p;1s2.2s

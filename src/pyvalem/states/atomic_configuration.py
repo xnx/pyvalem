@@ -63,7 +63,7 @@ class AtomicOrbital:
     l : int, optional
         The azimuthal quantum number (0, 1, 2, ..., n-1)
         At least one of {`l`, `lletter`} must be passed.
-    nocc : int, default: 0
+    nocc : int, default: 1
         Number of occupied electrons.
     lletter : str, optional
         The letter corresponding to l: 's', 'p', 'd', ... for l = 0, 1, 2, ...
@@ -115,7 +115,9 @@ class AtomicOrbital:
         self._validate_atomic_orbital()
 
     def __repr__(self):
-        return "{}{}{}".format(self.n, self.lletter, self.nocc)
+        if self.nocc != 1:
+            return "{}{}{}".format(self.n, self.lletter, self.nocc)
+        return "{}{}".format(self.n, self.lletter)
 
     @property
     def html(self):
@@ -125,7 +127,9 @@ class AtomicOrbital:
         -------
         str
         """
-        return "{}{}<sup>{}</sup>".format(self.n, self.lletter, self.nocc)
+        if self.nocc != 1:
+            return "{}{}<sup>{}</sup>".format(self.n, self.lletter, self.nocc)
+        return "{}{}".format(self.n, self.lletter)
 
     @property
     def latex(self):
@@ -135,7 +139,9 @@ class AtomicOrbital:
         -------
         str
         """
-        return "{}{}^{{{}}}".format(self.n, self.lletter, self.nocc)
+        if self.nocc != 1:
+            return "{}{}^{{{}}}".format(self.n, self.lletter, self.nocc)
+        return "{}{}".format(self.n, self.lletter)
 
     def _validate_atomic_orbital(self):
         """Validator method for the atomic orbital class.
@@ -209,11 +215,11 @@ class AtomicConfiguration(State):
     (3, 1, 1)
 
     >>> repr(ac1)
-    '1s2.2s2.2p6.3p1'
+    '1s2.2s2.2p6.3p'
 
     >>> ac2 = AtomicConfiguration("[Ne].3p")
     >>> repr(ac2)
-    '1s2.2s2.2p6.3p1'
+    '1s2.2s2.2p6.3p'
     """
 
     def __init__(self, state_str):

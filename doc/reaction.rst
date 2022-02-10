@@ -23,7 +23,7 @@ Examples
 An HTML representation of the reaction is stored as the ``html`` attribute::
 
     >>> print(r2.html)
-    CO v=1 + O<sub>2</sub> J=2; X<sup>3</sup>Σ<sup>-</sup><sub>g</sub> → CO<sub>2</sub> + O
+    CO v=1 + O<sub>2</sub> J=2 X<sup>3</sup>Σ<sup>-</sup><sub>g</sub> → CO<sub>2</sub> + O
     >>> print(r4.html)
     C<sub>6</sub>H<sub>5</sub>OH + 7O<sub>2</sub> → 6CO<sub>2</sub> + 3H<sub>2</sub>O
 

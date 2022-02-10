@@ -18,7 +18,7 @@ class AtomicConfigurationTest(unittest.TestCase):
         c2 = AtomicConfiguration("1s2.2s2.2p6")
         c3 = AtomicConfiguration("1s2.2s2.2p6.3s2.3d10")
         c4 = AtomicConfiguration("[He].2s1")
-        c5 = AtomicConfiguration("2s2.2p1.3s1")
+        c5 = AtomicConfiguration("2s2.2p1.3s")
 
         self.assertRaises(AtomicConfigurationError, AtomicConfiguration, "s4.w2")
         self.assertRaises(AtomicConfigurationError, AtomicConfiguration, "1s 2.2s2")
@@ -71,8 +71,8 @@ class AtomicConfigurationTest(unittest.TestCase):
     def test_atomic_configuration_repr(self):
         c1 = AtomicConfiguration("1s2.2s2.2p6.3s2.3p6.4s2.3d")
         c2 = AtomicConfiguration("[Ar].4s2.3d1")
-        self.assertEqual(repr(c1), "1s2.2s2.2p6.3s2.3p6.4s2.3d1")
-        self.assertEqual(repr(c2), "1s2.2s2.2p6.3s2.3p6.4s2.3d1")
+        self.assertEqual(repr(c1), "1s2.2s2.2p6.3s2.3p6.4s2.3d")
+        self.assertEqual(repr(c2), "1s2.2s2.2p6.3s2.3p6.4s2.3d")
 
     def test_atomic_configuration_default_nocc(self):
         c1 = AtomicConfiguration("1s")

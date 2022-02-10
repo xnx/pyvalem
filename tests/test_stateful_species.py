@@ -68,7 +68,7 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertTrue(ss1.verify_atomic_configuration())
         ss2 = StatefulSpecies("Ar+ 1s2.2s2.2p6.3s2.3p6")
         ss3 = StatefulSpecies("Ar+ [Ne].3s2.3p6")
-        ss4 = StatefulSpecies("Ar+ [Ne].3s2.3p6.4s1")
+        ss4 = StatefulSpecies("Ar+ [Ne].3s2.3p6.4s")
         for ss in (ss2, ss3, ss4):
             self.assertRaises(StatefulSpeciesError, ss.verify_atomic_configuration)
 
@@ -97,10 +97,10 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertEqual(repr(ss2), "(235U) 3*;l=0;n=1")
 
         for ss_text in ["C+ 4P;2s2.2p1", "C+ 2s2.2p1;4P"]:
-            self.assertEqual(repr(StatefulSpecies(ss_text)), "C+ 2s2.2p1;4P")
+            self.assertEqual(repr(StatefulSpecies(ss_text)), "C+ 2s2.2p;4P")
 
         for ss_text in ["C+ 2P;2s2.2p1", "C+ 2s2.2p1;2P"]:
-            self.assertEqual(repr(StatefulSpecies(ss_text)), "C+ 2s2.2p1;2P")
+            self.assertEqual(repr(StatefulSpecies(ss_text)), "C+ 2s2.2p;2P")
 
 
 if __name__ == "__main__":

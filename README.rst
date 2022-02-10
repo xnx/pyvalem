@@ -140,7 +140,7 @@ As ``Formula``, also ``StatefulSpecies`` have ``html`` and ``latex`` attributes.
     \mathrm{Ne}^{+} \; 1s^{2}2s^{2}2p^{5}; \; {}^{2}P_{1/2}
 
     >>> StatefulSpecies('(52Cr)(1H) 1sigma2.2sigma1.1delta2.1pi2; 6SIGMA+; v=0; J=2').html
-    '<sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup>; <sup>6</sup>Σ<sup>+</sup>; v=0; J=2'
+    '<sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup> <sup>6</sup>Σ<sup>+</sup> v=0 J=2'
 
 
 Reaction
@@ -155,13 +155,13 @@ separated by ``' -> '``, such as
     >>> from pyvalem.reaction import Reaction
     >>> reaction = Reaction('He+2 + H -> He+ 3p1 + H+ + hv')
     >>> reaction
-    He+2 + H → He+ 3p1 + H+ + hν
+    He+2 + H → He+ 3p + H+ + hν
 
     >>> reaction.html
-    'He<sup>2+</sup> + H → He<sup>+</sup> 3p<sup>1</sup> + H<sup>+</sup> + hν'
+    'He<sup>2+</sup> + H → He<sup>+</sup> 3p + H<sup>+</sup> + hν'
 
     >>> print(reaction.latex)
-    \mathrm{He}^{2+} + \mathrm{H} \rightarrow \mathrm{He}^{+} \; 3p^{1} + \mathrm{H}^{+} + h\nu
+    \mathrm{He}^{2+} + \mathrm{H} \rightarrow \mathrm{He}^{+} \; 3p + \mathrm{H}^{+} + h\nu
 
 The ``Reaction`` class also watches out for charge balance and stoichiometry
 conservation during instantiation.
