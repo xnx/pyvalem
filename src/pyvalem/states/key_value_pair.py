@@ -31,9 +31,15 @@ class KeyValuePair(State):
         """
         Parse state_str into a KeyValuePair object.
 
-        Whitespace is tolerated in the input, i.e both 'key=value' and
-        'key = value' are parsed, but no spaces are inserted in the output.
+        Whitespace is not tolerated in the input, i.e only 'key=value' and not
+        'key = value' are allowed. No spaces are inserted in the output.
         """
+
+        if any(c.isspace() for c in state_str):
+            raise KeyValuePairError(
+                "No whitespace allowed in key-value pair: {}".format(state_str)
+            )
+
         try:
             key, value = state_str.split("=")
         except ValueError:

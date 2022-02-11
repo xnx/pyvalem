@@ -15,13 +15,9 @@ class KeyValuePairTest(unittest.TestCase):
         self.assertEqual(str(kv1), "n=1")
         self.assertEqual(kv1.html, "n=1")
 
-        kv2 = KeyValuePair("C = 45a#")
-        self.assertEqual(kv2.key, "C")
-        self.assertEqual(kv2.value, "45a#")
-        self.assertEqual(str(kv2), "C=45a#")
-        self.assertEqual(kv2.html, "C=45a#")
-
-        self.assertRaises(KeyValuePairError, KeyValuePair, "*")
+        self.assertRaises(KeyValuePairError, KeyValuePair, "C = 3")
+        self.assertRaises(KeyValuePairError, KeyValuePair, "k= 3")
+        self.assertRaises(KeyValuePairError, KeyValuePair, "k =v")
 
     def test_key_value_pair_equality(self):
         kv1 = KeyValuePair("nd=1")
@@ -32,16 +28,6 @@ class KeyValuePairTest(unittest.TestCase):
         self.assertEqual(kv1, kv2)
         self.assertNotEqual(kv1, kv3)
         self.assertNotEqual(kv2, kv4)
-
-    def test_key_value_pair_repr(self):
-        kv1 = KeyValuePair("n=2")
-        kv2 = KeyValuePair("n =2")
-        kv3 = KeyValuePair("n= 2")
-        kv4 = KeyValuePair("n = 2")
-        kv5 = KeyValuePair("n  = 2")
-        self.assertTrue(
-            repr(kv1) == repr(kv2) == repr(kv3) == repr(kv4) == repr(kv5) == "n=2"
-        )
 
     def test_html_escaping(self):
         kv1 = KeyValuePair('S="5<n<9"')

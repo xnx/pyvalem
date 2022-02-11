@@ -321,13 +321,12 @@ Examples:
 
 The ``KeyValuePair`` class represents an arbitrary quantum number or symmetry provided
 as a (key, value) pair. It is instantiated with a string of the form ``key=value``.
+Whitespace within a key-value pair is illegal.
 For example:
 
 .. code-block:: pycon
 
     >>> from pyvalem.states import KeyValuePair
     >>> kv1 = KeyValuePair('n=1')
-    >>> kv2 = KeyValuePair('C = 45a#')
-
-
-
+    >>> kv2 = KeyValuePair('|M|=2')
+    >>> kv3 = KeyValuePair('sym=anti')

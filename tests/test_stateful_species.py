@@ -16,11 +16,11 @@ class StatefulSpeciesTest(unittest.TestCase):
         _ = StatefulSpecies("Ar *")
         _ = StatefulSpecies("CrH 1sigma2.2sigma1.1pi4.3sigma1; 6SIGMA+")
         _ = StatefulSpecies("H(35Cl) J=2")
-        _ = StatefulSpecies("OH X(2Π_1/2; J=2")
+        _ = StatefulSpecies("OH X(2Π_1/2, J=2")
 
-        _ = StatefulSpecies("HCl v=2;J=0")
+        _ = StatefulSpecies("HCl v=2 J=0")
         _ = StatefulSpecies("C2H3Cl")
-        _ = StatefulSpecies("C2H2 v2+v1;J=10;X(1SIGMA+u)")
+        _ = StatefulSpecies("C2H2 v2+v1 J=10;X(1SIGMA+u)")
         _ = StatefulSpecies("CO *")
 
         ss1 = StatefulSpecies("NCO v2+3v1;J=10.5;a(2Σ-g)")
@@ -55,10 +55,10 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "HCl v=0;v=1")
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "H 1s1;2s1")
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "H2 1sigma1;2sigma1")
-        self.assertRaises(StatefulSpeciesError, StatefulSpecies, "CO J=0;J=1")
+        self.assertRaises(StatefulSpeciesError, StatefulSpecies, "CO J=0; J=1")
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "CO X(1PIu);2Σ-")
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "Ar *;**")
-        self.assertRaises(StatefulSpeciesError, StatefulSpecies, "Ar 2S;2P_3/2")
+        self.assertRaises(StatefulSpeciesError, StatefulSpecies, "Ar 2S, 2P_3/2")
         # StatefulSpecies('CH3Cl J=2;Ka=1;Kc=2')
 
     def test_atomic_configuration_verification(self):

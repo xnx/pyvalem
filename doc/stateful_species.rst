@@ -7,8 +7,9 @@ with one or more quantum states of labels, and can be represented by an instance
 
 A ``StatefulSpecies`` object can be instantiated by providing a string consisting of
 the formula (which can be parsed into a ``Formula`` object), followed by whitespace
-and a semicolon delimited sequence of strings that can be parsed by one of the
-``State`` classes described previously.
+and a whitespace-delimited sequence of strings that can be parsed by one of the
+``State`` classes described previously. For clarity, a semi-colon or comma can also be
+used as a delimiter between states.
 The state type is deduced from the format of the string.
 
 Examples:
@@ -16,9 +17,9 @@ Examples:
 .. code-block:: pycon
 
     >>> from pyvalem.stateful_species import StatefulSpecies
-    >>> ss1 = StatefulSpecies('HCl v=2;J=0')
+    >>> ss1 = StatefulSpecies('HCl v=2 J=0')
     >>> ss2 = StatefulSpecies('NCO v2+3v1;J=10.5;a(2Σ-g)')
-    >>> ss3 = StatefulSpecies('Ar+ 1s2.2s2.2p5; 2P_3/2')
+    >>> ss3 = StatefulSpecies('Ar+ 1s2.2s2.2p5, 2P_3/2')
     >>> ss4 = StatefulSpecies('CrH 1sigma2.2sigma1.1pi4.3sigma1; 6SIGMA+')
 
 An HTML representation is accessible through the ``html`` attribute:
