@@ -19,21 +19,21 @@ class AtomicTermSymbolTest(unittest.TestCase):
 
         a0 = AtomicTermSymbol("1S_0")
         self.assertEqual(a0.html, "<sup>1</sup>S<sub>0</sub>")
-        self.assertEqual(a0.latex, "{}^{1}S_{0}")
+        self.assertEqual(a0.latex, r"{}^{1}\mathrm{S}_{0}")
         self.assertEqual(a0.S, 0)
         self.assertEqual(a0.L, 0)
         self.assertEqual(a0.J, 0)
 
         a1 = AtomicTermSymbol("4D")
         self.assertEqual(a1.html, "<sup>4</sup>D")
-        self.assertEqual(a1.latex, "{}^{4}D")
+        self.assertEqual(a1.latex, r"{}^{4}\mathrm{D}")
         self.assertEqual(a1.S, 1.5)
         self.assertEqual(a1.L, 2)
         self.assertIsNone(a1.J)
 
         a2 = AtomicTermSymbol("2Po_1/2")
         self.assertEqual(a2.html, "<sup>2</sup>P<sup>o</sup><sub>1/2</sub>")
-        self.assertEqual(a2.latex, "{}^{2}P^o_{1/2}")
+        self.assertEqual(a2.latex, r"{}^{2}\mathrm{P}^o_{1/2}")
         self.assertEqual(a2.parity, "o")
         self.assertEqual(a2.L, 1)
 

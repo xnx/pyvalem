@@ -45,7 +45,7 @@ class FormulaTest(unittest.TestCase):
                 "(1H)(14N)(16O)3(18O)",
                 "<sup>14</sup>N<sup>1</sup>H<sup>16</sup>O<sub>2</sub>"
                 "<sup>18</sup>O<sup>16</sup>O",
-                r"^{14}\mathrm{N}^{1}\mathrm{H}^{16}\mathrm{O}_{2}^{18}\mathrm{O}^{16}"
+                r"{}^{14}\mathrm{N}{}^{1}\mathrm{H}{}^{16}\mathrm{O}_{2}{}^{18}\mathrm{O}{}^{16}"
                 r"\mathrm{O}",
                 "14N-1H-16O2-18O-16O",
             ),

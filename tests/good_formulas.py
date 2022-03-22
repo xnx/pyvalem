@@ -18,7 +18,7 @@ good_formulas = {
         "slug": "79Br",
         "rmm": 78.918337601,
         "natoms": 1,
-        "latex": r"^{79}\mathrm{Br}",
+        "latex": r"{}^{79}\mathrm{Br}",
     },
     "(2H)+": {
         "stoichiometric_formula": "(2H)+",

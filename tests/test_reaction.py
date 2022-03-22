@@ -75,7 +75,7 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(
             r2.latex,
             r"\mathrm{C}\mathrm{O} \; v=1 + "
-            r"\mathrm{O}_{2} \; J=2; \; "
+            r"\mathrm{O}_{2} \; J=2 \; "
             r"X{}^{3}\Sigma^-_{g} \rightarrow "
             r"\mathrm{C}\mathrm{O}_{2} + \mathrm{O}",
         )

@@ -376,7 +376,7 @@ class Formula:
                     # number so symbol is the ParseResults ['z', 'Sy']:
                     mass_number, atom_symbol = (int(atom_symbol[0]), atom_symbol[1])
                     symbol_html = "<sup>%d</sup>%s" % (mass_number, atom_symbol)
-                    symbol_latex = r"^{{{0:d}}}\mathrm{{{1:s}}}".format(
+                    symbol_latex = r"{{}}^{{{0:d}}}\mathrm{{{1:s}}}".format(
                         mass_number, atom_symbol
                     )
                     atom_symbol = "%d%s" % (mass_number, atom_symbol)

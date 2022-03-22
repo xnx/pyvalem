@@ -3,7 +3,7 @@ The StatefulSpecies class representing a chemical species (e.g. atom,
 molecule), optionally with with one or more State objects associated with it.
 
 The Formula of the StatefulSpecies is separated from its States by whitespace;
-States are separated from each other by semicolons (;).
+States are separated from each other by semicolons (;) or whitespace.
 """
 from pyvalem.states.atomic_configuration import AtomicConfiguration
 from pyvalem.states.diatomic_molecular_configuration import (
@@ -147,5 +147,5 @@ class StatefulSpecies:
         if not self.states:
             return self.formula.latex
         return r"{} \; {}".format(
-            self.formula.latex, r"; \; ".join(s.latex for s in self.states)
+            self.formula.latex, r" \; ".join(s.latex for s in self.states)
         )

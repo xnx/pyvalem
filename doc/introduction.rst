@@ -73,7 +73,7 @@ and its molar mass.
     'H<sub>2</sub><sup>18</sup>O'
 
     >>> print(Formula('H2(18O)').latex)
-    \mathrm{H}_{2}^{18}\mathrm{O}
+    \mathrm{H}_{2}{}^{18}\mathrm{O}
 
     >>> Formula('(235U)').mass
     235.04392819
@@ -123,7 +123,7 @@ As ``Formula``, also ``StatefulSpecies`` have ``html`` and ``latex`` attributes.
 .. code-block:: pycon
 
     >>> print(stateful_species.latex)
-    \mathrm{Ne}^{+} \; 1s^{2}2s^{2}2p^{5}; \; {}^{2}P_{1/2}
+    \mathrm{Ne}^{+} \; 1s^{2}2s^{2}2p^{5} \; {}^{2}\mathrm{P}_{1/2}
 
     >>> StatefulSpecies('(52Cr)(1H) 1sigma2.2sigma1.1delta2.1pi2; 6SIGMA+; v=0; J=2').html
     '<sup>52</sup>Cr<sup>1</sup>H 1σ<sup>2</sup>.2σ<sup>1</sup>.1δ<sup>2</sup>.1π<sup>2</sup> <sup>6</sup>Σ<sup>+</sup> v=0 J=2'
