@@ -169,9 +169,16 @@ molecule_Omegastr = (
 molecule_term = (
     molecule_Smult + molecule_irrep + pp.Optional(pp.Suppress("_") + molecule_Omegastr)
 )
-term_label = pp.Combine(
+
+# Term Symbol label can be a single letter (perhaps followed by ' or ") ...
+term_label_let = pp.Combine(
     pp.Word(pp.srange("[A-Za-z]")) + pp.Optional(pp.oneOf(("'", '"')))
 ).setResultsName("term_label")
+# ... or a number. The open bracket is required but suppressed to distinguish
+# this type of term label from the spin multiplicity.
+term_label_num = integer.setResultsName("term_label") + pp.Suppress("(")
+term_label = term_label_let | term_label_num
+
 molecule_term_with_label = (
     pp.Optional(term_label)
     + pp.Suppress(pp.Optional("("))

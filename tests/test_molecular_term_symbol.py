@@ -121,6 +121,13 @@ class MolecularTermSymbolTest(unittest.TestCase):
         m4 = MolecularTermSymbol("4DELTA")
         self.assertTrue(repr(m3) == repr(m4) == "4Δ")
 
+    def test_term_symbol_label(self):
+        m1 = MolecularTermSymbol("1(2B1)")
+        self.assertEqual(repr(m1), "1(2B1)")
+        self.assertEqual(m1.term_label, "1")
+        self.assertRaises(MolecularTermSymbolError, MolecularTermSymbol, "1'(A\")")
+        self.assertRaises(MolecularTermSymbolError, MolecularTermSymbol, '-2(A")')
+
 
 if __name__ == "__main__":
     unittest.main()
