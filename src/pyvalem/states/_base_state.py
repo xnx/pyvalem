@@ -66,3 +66,7 @@ class State(ABC):
 
     def __hash__(self):
         return hash(self.__repr__())
+
+    @property
+    def ordering(self):
+        return repr(self)

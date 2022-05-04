@@ -51,3 +51,9 @@ class KeyValuePair(State):
 
     def __repr__(self):
         return self.state_str
+
+    @property
+    def ordering(self):
+        if self.key == "n":
+            return 0
+        return ord(self.key)

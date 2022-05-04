@@ -94,13 +94,17 @@ class StatefulSpeciesTest(unittest.TestCase):
         ss2 = StatefulSpecies("(235U) l=0;***;n=1")
         ss3 = StatefulSpecies("(235U) l=0;n=1;***")
         self.assertEqual(repr(ss2), repr(ss3))
-        self.assertEqual(repr(ss2), "(235U) 3*;l=0;n=1")
+        self.assertEqual(repr(ss2), "(235U) 3*;n=1;l=0")
 
         for ss_text in ["C+ 4P;2s2.2p1", "C+ 2s2.2p1;4P"]:
             self.assertEqual(repr(StatefulSpecies(ss_text)), "C+ 2s2.2p;4P")
 
         for ss_text in ["C+ 2P;2s2.2p1", "C+ 2s2.2p1;2P"]:
             self.assertEqual(repr(StatefulSpecies(ss_text)), "C+ 2s2.2p;2P")
+
+    def test_stateful_species_key_value_pair_ordering(self):
+        ss1 = StatefulSpecies("H n=3;l=1")
+        self.assertEqual(repr(ss1), "H n=3;l=1")
 
 
 if __name__ == "__main__":

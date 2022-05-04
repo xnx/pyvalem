@@ -38,7 +38,7 @@ class StatefulSpecies:
         """Return a canonical text representation of the StatefulSpecies."""
         if self.states:
             states_sorted = sorted(
-                self.states, key=lambda state: (STATES[type(state)], repr(state))
+                self.states, key=lambda state: (STATES[type(state)], state.ordering)
             )
             return "{} {}".format(
                 self.formula, ";".join(repr(state) for state in states_sorted)
