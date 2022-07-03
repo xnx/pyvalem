@@ -310,6 +310,9 @@ class Formula:
 
         if any(s in formula for s in ("++", "--", "+-", "-+")):
             raise FormulaParseError("Invalid formula syntax: {}".format(formula))
+        # NB whilst NH2+CH3CHO2- is allowed, things like 'Li+2-' are not...
+        if re.search(r"[+-]\d+[+-]", formula):
+            raise FormulaParseError("Invalid formula syntax: {}".format(formula))
 
         # We make a particular exception for various special cases, including
         # photons, electrons, positrons and "M", denoting an unspecified

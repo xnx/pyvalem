@@ -107,6 +107,14 @@ class FormulaTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, Formula, "H--")
         self.assertRaises(FormulaParseError, Formula, "H+-")
         self.assertRaises(FormulaParseError, Formula, "H-+")
+        self.assertRaises(FormulaParseError, Formula, "Li-2+")
+
+        cf2 = Formula("NH2+CH3CHO2-")
+        self.assertEqual(
+            cf2.html,
+            "NH<sub>2</sub><sup>+</sup>CH<sub>3</sub>CHO<sub>2</sub><sup>-</sup>",
+        )
+        self.assertEqual(cf2.charge, 0)
 
     def test_special_formulas(self):
         # stoichiometric_formula, html, latex, slug, rmm, natoms, charge, atoms
