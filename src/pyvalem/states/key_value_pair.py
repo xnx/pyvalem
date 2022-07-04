@@ -55,8 +55,8 @@ class KeyValuePair(State):
     @property
     def ordering(self):
         if self.key == "n":
-        # Move up n to the first position for ordering by replacing it with
-        # a space (ASCII 32, the first printable character and not a real valid
-        # key.
+            # Move up n to the first position for ordering by replacing it with
+            # a space (ASCII 32, the first printable character and not a real valid
+            # key.
             return " "
         return self.key
