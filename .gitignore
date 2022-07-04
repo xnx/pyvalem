@@ -3,6 +3,7 @@
 *.swo
 .DS_Store
 res/
+activate
 
 # PyCharm
 .idea
