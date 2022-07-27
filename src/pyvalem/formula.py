@@ -200,9 +200,10 @@ class Formula:
 
     Notes
     -----
-    The ``__repr__`` method is overloaded to provide a *canonicalised* representation
-    of the formula. The idea is that two formulas representing the same physical entity
-    will have the same ``repr(formula)`` representation.
+    The ``__repr__`` method is intended to be a *canonicalised* representation
+    of the formula, but no check is made to ensure that a single formula is used
+    to describe a unique species (e.g. "HD" and "DH" and "H(2H)" all have
+    different __repr__ representations.
 
     Examples
     --------
@@ -321,6 +322,10 @@ class Formula:
         if formula == "e":
             # Quietly convert e to e-.
             self.formula = formula = "e-"
+
+        if self.formula == "hv":
+            self.formula = "hν"
+
         if formula in special_cases:
             for attr, val in special_cases[formula].items():
                 setattr(self, attr, val)
@@ -506,12 +511,13 @@ class Formula:
         return "", "", ""
 
     def __repr__(self):
-        if self.formula == "hv":
-            return "hν"
         return self.formula
 
+    def __hash__(self):
+        return hash(self.formula)
+
     def __eq__(self, other):
-        return repr(self.formula) == repr(other.formula)
+        return self.formula == other.formula
 
     def _stoichiometric_formula_atomic_number(self):
         """Return a list of atoms/isotopes and their stoichiometries.

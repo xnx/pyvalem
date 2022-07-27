@@ -163,6 +163,16 @@ class FormulaTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, Formula, "H3O^+")
         self.assertRaises(FormulaParseError, Formula, "H_2S")
 
+    def test_formula_hash(self):
+        f1 = Formula("hv")
+        f2 = Formula("Ar")
+        test_dict = {f1: 0, f2: "a"}
+        test_set = set((f1, f1, f2))
+
+        f3 = Formula("hν")
+        self.assertEqual(hash(f1), hash(f3))
+        self.assertEqual(repr(f1), repr(f3))
+
 
 if __name__ == "__main__":
     unittest.main()
