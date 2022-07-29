@@ -18,11 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = "pyvalem"
-copyright = "2020, Christian Hill"
+copyright = "2022, Christian Hill"
 author = "Christian Hill"
 
 # The full version, including alpha/beta/rc tags
-release = "2.0"
+release = "2.5.10"
 
 
 # -- General configuration ---------------------------------------------------
