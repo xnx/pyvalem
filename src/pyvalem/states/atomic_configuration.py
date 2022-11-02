@@ -16,6 +16,7 @@ nocc_integer = pp.Optional(pp.Word(pp.nums), default="1").setParseAction(
 
 # NB no "j" orbital.
 atomic_orbital_symbols = tuple("spdfghiklmnoqrtuvwxyz")
+
 noble_gases = ["He", "Ne", "Ar", "Kr", "Xe", "Rn"]
 noble_gas_configs = {
     "He": "1s2",
@@ -25,6 +26,12 @@ noble_gas_configs = {
     "Xe": "[Kr].4d10.5s2.5p6",
     "Rn": "[Xe].4f14.5d10.6s2.6p6",
 }
+# Expand out the noble gas configurations to explicitly list all orbitals.
+for i, elm in enumerate(noble_gases[1:], start=1):
+    s = noble_gases[i - 1]
+    c = noble_gas_configs[s]
+    noble_gas_configs[elm] = noble_gas_configs[elm].replace(f"[{s}]", c)
+
 noble_gas_nelectrons = {"He": 2, "Ne": 10, "Ar": 18, "Kr": 36, "Xe": 54, "Rn": 86}
 
 noble_gas = pp.oneOf(["[{}]".format(symbol) for symbol in noble_gases])
@@ -223,11 +230,11 @@ class AtomicConfiguration(State):
     """
 
     def __init__(self, state_str):
-        self.state_str = state_str
+        self.state_str = self._contract_to_noble_gas_config(state_str)
         self.orbitals = []
         self.noble_gas_config = None
         self.nelectrons = 0
-        self._parse_state(state_str)
+        self._parse_state(self.state_str)
 
     def _parse_state(self, state_str):
         """Parses the `AtomicConfiguration` instance from the supplied `state_str`.
@@ -298,7 +305,7 @@ class AtomicConfiguration(State):
         return "".join(latex_chunks)
 
     def _expand_noble_gas_config(self, config):
-        """Recursively expand out the noble gas notation to orbitals.
+        """Expand out the noble gas notation to orbitals.
 
         For example:
         '[He].2s1' -> '1s2.2s2',
@@ -316,14 +323,20 @@ class AtomicConfiguration(State):
 
         if config[0] != "[":
             return config
-        return (
-            self._expand_noble_gas_config(noble_gas_configs[config[1:3]]) + config[4:]
-        )
+        return noble_gas_configs[config[1:3]] + config[4:]
+
+    def _contract_to_noble_gas_config(self, state_str):
+        """Replace explicit atomic orbital sequence with noble gas notation."""
+        for noble_gas in noble_gases[::-3]:
+            config = noble_gas_configs[noble_gas]
+            if config in state_str:
+                state_str = state_str.replace(config, f"[{noble_gas}]")
+        return state_str
 
     def __repr__(self):
         """See the `State` base class."""
         if self.noble_gas_config:
-            state_repr = self._expand_noble_gas_config(self.noble_gas_config)
+            state_repr = noble_gas_configs[self.noble_gas_config[1:3]]
             if self.orbitals:
                 state_repr += "." + ".".join(repr(orbital) for orbital in self.orbitals)
             return state_repr
