@@ -69,9 +69,14 @@ class AtomicConfigurationTest(unittest.TestCase):
         self.assertEqual(c5.state_str, "[Ne].3s")
         self.assertEqual(c5.html, "[Ne]3s")
 
-        c5 = AtomicConfiguration("1s2.2s2.2p6")
-        self.assertEqual(repr(c5), "1s2.2s2.2p6")
-        self.assertEqual(c5.state_str, "1s2.2s2.2p6")
+        c6 = AtomicConfiguration("1s2.2s2.2p6")
+        self.assertEqual(repr(c6), "1s2.2s2.2p6")
+        self.assertEqual(c6.state_str, "1s2.2s2.2p6")
+
+        c7 = AtomicConfiguration("1s2.2s2.2p6.3s2.3p6.3d10.4s2.4p6.4d10.5s2.5p6.5d1")
+        self.assertEqual(repr(c7), "1s2.2s2.2p6.3s2.3p6.3d10.4s2.4p6.4d10.5s2.5p6.5d")
+        self.assertEqual(c7.state_str, "[Xe].5d1")
+        self.assertEqual(c7.html, "[Xe]5d")
 
     def test_excited_atomic_configuration(self):
         c1 = AtomicConfiguration("5g1")

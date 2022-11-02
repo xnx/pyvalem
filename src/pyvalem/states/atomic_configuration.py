@@ -327,7 +327,7 @@ class AtomicConfiguration(State):
 
     def _contract_to_noble_gas_config(self, state_str):
         """Replace explicit atomic orbital sequence with noble gas notation."""
-        for noble_gas in noble_gases[::-3]:
+        for noble_gas in noble_gases[:1:-1]:
             config = noble_gas_configs[noble_gas]
             if config in state_str:
                 state_str = state_str.replace(config, f"[{noble_gas}]")
