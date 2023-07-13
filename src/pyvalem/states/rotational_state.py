@@ -30,7 +30,6 @@ class RotationalState(State):
         self._parse_state(state_str)
 
     def _parse_state(self, state_str):
-
         try:
             k, v = state_str.split("=")
             if k.strip() != "J":

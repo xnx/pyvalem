@@ -191,6 +191,12 @@ installed into the virtual environment in editable mode with
 
     pip install -e .[dev]
 
+or on zsh:
+
+.. code-block:: zsh
+
+   pip install -e .'[dev]'
+
 The ``[dev]`` extra installs (apart from the package dependencies) also several
 development-related packages, such as ``pytest``, ``black``, ``tox`` or ``ipython.``
 The tests can then be executed by running (from the project root directory)

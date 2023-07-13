@@ -203,7 +203,6 @@ class MolecularTermSymbol(State):
         self._parse_state(state_str)
 
     def _parse_state(self, state_str):
-
         try:
             components = molecule_term_with_label.parseString(state_str)
         except pp.ParseException:

@@ -12,7 +12,6 @@ from pyvalem.states.vibrational_state import VibrationalState
 
 class StatefulSpeciesTest(unittest.TestCase):
     def test_stateful_species_parsing(self):
-
         _ = StatefulSpecies("Ar *")
         _ = StatefulSpecies("CrH 1sigma2.2sigma1.1pi4.3sigma1; 6SIGMA+")
         _ = StatefulSpecies("H(35Cl) J=2")
@@ -45,7 +44,6 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertEqual(ss4.states[0].html, "3p'[3/2]<sub>1</sub>")
 
     def test_stateful_species_equality(self):
-
         ss1 = StatefulSpecies("HCl v=2;J=0")
         ss2 = StatefulSpecies("HCl J=0;v=2")
 

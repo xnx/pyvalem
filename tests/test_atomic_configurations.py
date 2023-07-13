@@ -12,7 +12,6 @@ from pyvalem.states.atomic_configuration import (
 
 class AtomicConfigurationTest(unittest.TestCase):
     def test_atomic_configuration(self):
-
         c0 = AtomicConfiguration("1s2")
         c1 = AtomicConfiguration("1s2.2s2")
         c2 = AtomicConfiguration("1s2.2s2.2p6")

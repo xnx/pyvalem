@@ -87,7 +87,7 @@ class AtomicTermSymbol(State):
 
     @property
     def latex(self):
-        latex_chunks = ["{{}}^{{{}}}\mathrm{{{}}}".format(self.Smult, self.Lletter)]
+        latex_chunks = [r"{{}}^{{{}}}\mathrm{{{}}}".format(self.Smult, self.Lletter)]
         if self.parity:
             latex_chunks.append("^o")
         if self.J is not None:

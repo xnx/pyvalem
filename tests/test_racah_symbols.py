@@ -9,7 +9,6 @@ from pyvalem.states.racah_symbol import RacahSymbol
 
 class RacahSymbolTest(unittest.TestCase):
     def test_racah_symbol(self):
-
         r0 = RacahSymbol("5s'[1/2]_1")
         self.assertEqual(r0.html, "5s'[1/2]<sub>1</sub>")
         self.assertEqual(r0.principal, 5)

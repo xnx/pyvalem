@@ -70,7 +70,6 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertRaises(VibrationalStateError, VibrationalState, "v=***x")
 
     def test_vibrational_state_equality(self):
-
         v1 = VibrationalState("v1+3v4")
         v2 = VibrationalState("ν1+3ν4")
         v3 = VibrationalState("3v4+v1")
@@ -86,7 +85,6 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertNotEqual(v6, v7)
 
     def test_vibrational_state_repr(self):
-
         v1 = VibrationalState("3v1+v3")
         v2 = VibrationalState("3ν1+ν3")
         self.assertTrue(repr(v1) == repr(v2) == "3ν1+ν3")
