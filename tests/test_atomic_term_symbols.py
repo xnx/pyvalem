@@ -51,6 +51,17 @@ class AtomicTermSymbolTest(unittest.TestCase):
         self.assertEqual(a0, a1)
         self.assertNotEqual(a0, a2)
 
+    def test_moore_label(self):
+        a0 = AtomicTermSymbol("a5D")
+        a1 = AtomicTermSymbol("z3Po")
+        a2 = AtomicTermSymbol("2F")
+        a3 = AtomicTermSymbol("e5D_4")
+        self.assertEqual(a0.moore_label, "a")
+        self.assertEqual(a1.moore_label, "z")
+        self.assertEqual(a2.moore_label, "")
+        self.assertEqual(a3.moore_label, "e")
+        self.assertRaises(AtomicTermSymbolError, AtomicTermSymbol, "A5D")
+
 
 if __name__ == "__main__":
     unittest.main()

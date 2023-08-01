@@ -13,6 +13,11 @@ atom_L_symbols = "S P D F G H I K L M N O Q R T U V W X Y Z".split()
 
 integer = pp.Word(pp.nums)
 
+# The single, lowercase letter label given in the Multiplet Table of C. E. Moore
+# NBS Circ, No. 488 (1950) and sometimes used to distinguish terms with the same
+# S, L from the same configuration. See e.g. G. Nave et al., Astrophys. J. Suppl. Ser.
+# 94:221-459 (1994).
+moore_label = pp.Char("abcdefghijklmnopqrstuvwxyz").setResultsName("moore_label")
 atom_Smult = integer.setResultsName("Smult")
 atom_Lletter = pp.oneOf(atom_L_symbols).setResultsName("Lletter")
 atom_Jstr = (
@@ -20,7 +25,8 @@ atom_Jstr = (
 ).setResultsName("Jstr")
 atom_parity = pp.Literal("o").setResultsName("parity")
 atom_term = (
-    atom_Smult
+    pp.Optional(moore_label)
+    + atom_Smult
     + atom_Lletter
     + pp.Optional(atom_parity)
     + pp.Optional(pp.Suppress("_") + atom_Jstr)
@@ -41,6 +47,7 @@ class AtomicTermSymbol(State):
         self.L = None
         self.parity = None
         self.J = None
+        self.moore_letter = ""
         self._parse_state(state_str)
 
     def _parse_state(self, state_str):
@@ -55,6 +62,7 @@ class AtomicTermSymbol(State):
         self.Lletter = components.Lletter
         self.L = atom_L_symbols.index(components.Lletter)
         self.parity = components.get("parity")
+        self.moore_label = components.get("moore_label", "")
         try:
             self.J = parse_fraction(components.Jstr)
         except ValueError as err:
@@ -77,7 +85,11 @@ class AtomicTermSymbol(State):
 
     @property
     def html(self):
-        html_chunks = ["<sup>{0:d}</sup>{1:s}".format(self.Smult, self.Lletter)]
+        html_chunks = [
+            "{0}<sup>{1:d}</sup>{2:s}".format(
+                self.moore_letter, self.Smult, self.Lletter
+            )
+        ]
         if self.parity:
             html_chunks.append("<sup>o</sup>")
         if self.J is not None:
@@ -87,7 +99,11 @@ class AtomicTermSymbol(State):
 
     @property
     def latex(self):
-        latex_chunks = [r"{{}}^{{{}}}\mathrm{{{}}}".format(self.Smult, self.Lletter)]
+        latex_chunks = [
+            r"{}{{}}^{{{}}}\mathrm{{{}}}".format(
+                self.moore_letter, self.Smult, self.Lletter
+            )
+        ]
         if self.parity:
             latex_chunks.append("^o")
         if self.J is not None:

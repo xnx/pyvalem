@@ -13,6 +13,7 @@ from pyvalem.states.vibrational_state import VibrationalState
 class StatefulSpeciesTest(unittest.TestCase):
     def test_stateful_species_parsing(self):
         _ = StatefulSpecies("Ar *")
+        _ = StatefulSpecies("Fe e5G")
         _ = StatefulSpecies("CrH 1sigma2.2sigma1.1pi4.3sigma1; 6SIGMA+")
         _ = StatefulSpecies("H(35Cl) J=2")
         _ = StatefulSpecies("OH X(2Π_1/2, J=2")
@@ -103,6 +104,13 @@ class StatefulSpeciesTest(unittest.TestCase):
     def test_stateful_species_key_value_pair_ordering(self):
         ss1 = StatefulSpecies("H n=3;l=1")
         self.assertEqual(repr(ss1), "H n=3;l=1")
+
+    def test_atomic_term_symbols(self):
+        ss1 = StatefulSpecies("Fe+ a3D")
+        self.assertEqual(ss1.states[0].moore_label, "a")
+        self.assertEqual(ss1.states[0].S, 1)
+
+        self.assertRaises(StateParseError, StatefulSpecies, "Ti +2 A5D")
 
 
 if __name__ == "__main__":
