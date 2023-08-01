@@ -140,7 +140,7 @@ J must satisfy the "triangle rule" (\|L-S\| ≤ J ≤ L+S); if this test fails, 
       ...
     pyvalem.states.atomic_term_symbol.AtomicTermSymbolError: Invalid atomic term symbol: 3P_3 |L-S| <= J <= L+S must be satisfied.
 
-A single, lowercase letter label to distinguish term symbols with the same ``S``, ``L`` that arise from the same atomic configuration; the convention assumed to be followed is that of C. E. Moore, NBS Circ, No. 488 (1950). See e.g. G. Nave et al., Astrophys. J. Suppl. Ser. 94:221-459 (1994). Terms with the same ``S`` and ``L`` of even parity are labelled in order of increasing energy as ``a``, ``b``, etc.; terms with odd parity are labelled in order of increasing energy as ``z``, ``y``, ``x``, etc.
+A single, lowercase letter label may be used to distinguish term symbols with the same ``S``, ``L`` that arise from the same atomic configuration; the convention assumed to be followed is that of C. E. Moore, NBS Circ, No. 488 (1950). See e.g. G. Nave et al., Astrophys. J. Suppl. Ser. 94:221-459 (1994). Terms with the same ``S`` and ``L`` of even parity are labelled in order of increasing energy as ``a``, ``b``, etc.; terms with odd parity are labelled in order of increasing energy as ``z``, ``y``, ``x``, etc.
 
 .. code-block:: pycon
 
