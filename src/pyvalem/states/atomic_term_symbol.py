@@ -47,7 +47,7 @@ class AtomicTermSymbol(State):
         self.L = None
         self.parity = None
         self.J = None
-        self.moore_letter = ""
+        self.moore_label = ""
         self._parse_state(state_str)
 
     def _parse_state(self, state_str):
@@ -87,7 +87,7 @@ class AtomicTermSymbol(State):
     def html(self):
         html_chunks = [
             "{0}<sup>{1:d}</sup>{2:s}".format(
-                self.moore_letter, self.Smult, self.Lletter
+                self.moore_label, self.Smult, self.Lletter
             )
         ]
         if self.parity:
@@ -101,7 +101,7 @@ class AtomicTermSymbol(State):
     def latex(self):
         latex_chunks = [
             r"{}{{}}^{{{}}}\mathrm{{{}}}".format(
-                self.moore_letter, self.Smult, self.Lletter
+                self.moore_label, self.Smult, self.Lletter
             )
         ]
         if self.parity:

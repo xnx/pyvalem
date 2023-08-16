@@ -60,6 +60,9 @@ class AtomicTermSymbolTest(unittest.TestCase):
         self.assertEqual(a1.moore_label, "z")
         self.assertEqual(a2.moore_label, "")
         self.assertEqual(a3.moore_label, "e")
+        self.assertEqual(a0.html, "a<sup>5</sup>D")
+        self.assertEqual(a0.latex, r"a{}^{5}\mathrm{D}")
+        self.assertEqual(a1.latex, r"z{}^{3}\mathrm{P}^o")
         self.assertRaises(AtomicTermSymbolError, AtomicTermSymbol, "A5D")
 
 
