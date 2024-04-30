@@ -65,6 +65,21 @@ class AtomicTermSymbolTest(unittest.TestCase):
         self.assertEqual(a1.latex, r"z{}^{3}\mathrm{P}^o")
         self.assertRaises(AtomicTermSymbolError, AtomicTermSymbol, "A5D")
 
+    def test_seniority_label(self):
+        a0 = AtomicTermSymbol("2D{1}_3/2")
+        a1 = AtomicTermSymbol("2D{2}_3/2")
+        a2 = AtomicTermSymbol("4I{3}")
+        self.assertEqual(a0.seniority, 1)
+        self.assertEqual(a1.seniority, 2)
+        self.assertEqual(a2.seniority, 3)
+
+        self.assertEqual(a0.html, "<sup>2</sup>D1<sub>3/2</sub>")
+        self.assertEqual(a0.latex, r"{}^{2}\mathrm{D}1_{3/2}")
+        self.assertEqual(a1.html, "<sup>2</sup>D2<sub>3/2</sub>")
+        self.assertEqual(a1.latex, r"{}^{2}\mathrm{D}2_{3/2}")
+        self.assertEqual(a2.html, "<sup>4</sup>I3")
+        self.assertEqual(a2.latex, r"{}^{4}\mathrm{I}3")
+
 
 if __name__ == "__main__":
     unittest.main()

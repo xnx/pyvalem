@@ -24,11 +24,13 @@ atom_Jstr = (
     integer + pp.Optional(pp.Suppress("/") + "2") + pp.StringEnd()
 ).setResultsName("Jstr")
 atom_parity = pp.Literal("o").setResultsName("parity")
+seniority = pp.Suppress("{") + integer.setResultsName("seniority") + pp.Suppress("}")
 atom_term = (
     pp.Optional(moore_label)
     + atom_Smult
     + atom_Lletter
     + pp.Optional(atom_parity)
+    + pp.Optional(seniority)
     + pp.Optional(pp.Suppress("_") + atom_Jstr)
     + pp.StringEnd()
 )
@@ -48,6 +50,7 @@ class AtomicTermSymbol(State):
         self.parity = None
         self.J = None
         self.moore_label = ""
+        self.seniority = None
         self._parse_state(state_str)
 
     def _parse_state(self, state_str):
@@ -62,6 +65,8 @@ class AtomicTermSymbol(State):
         self.Lletter = components.Lletter
         self.L = atom_L_symbols.index(components.Lletter)
         self.parity = components.get("parity")
+        if components.get("seniority"):
+            self.seniority = int(components.get("seniority"))
         self.moore_label = components.get("moore_label", "")
         try:
             self.J = parse_fraction(components.Jstr)
@@ -92,6 +97,8 @@ class AtomicTermSymbol(State):
         ]
         if self.parity:
             html_chunks.append("<sup>o</sup>")
+        if self.seniority:
+            html_chunks.append(str(self.seniority))
         if self.J is not None:
             j_str = float_to_fraction(self.J)
             html_chunks.append("<sub>{0:s}</sub>".format(j_str))
@@ -106,6 +113,8 @@ class AtomicTermSymbol(State):
         ]
         if self.parity:
             latex_chunks.append("^o")
+        if self.seniority:
+            latex_chunks.append(str(self.seniority))
         if self.J is not None:
             j_str = float_to_fraction(self.J)
             latex_chunks.append("_{{{}}}".format(j_str))

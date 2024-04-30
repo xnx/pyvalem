@@ -112,6 +112,14 @@ class StatefulSpeciesTest(unittest.TestCase):
 
         self.assertRaises(StateParseError, StatefulSpecies, "Ti +2 A5D")
 
+    def test_compoundLScoupling_species(self):
+        ss1 = StatefulSpecies("N 2s2.2p2(3P)6d 4F")
+        self.assertEqual(ss1.formula.formula, "N")
+        scl = ss1.states[0]
+        sat = ss1.states[1]
+        self.assertEqual(scl.html, "2s<sup>2</sup>2p<sup>2</sup>(<sup>3</sup>P)6d")
+        self.assertEqual(sat.html, "<sup>4</sup>F")
+
 
 if __name__ == "__main__":
     unittest.main()
