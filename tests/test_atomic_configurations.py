@@ -43,6 +43,7 @@ class AtomicConfigurationTest(unittest.TestCase):
         c0 = AtomicConfiguration("1s2")
         c1 = AtomicConfiguration("1s2.2s2")
         c2 = AtomicConfiguration("[Ar].4s2.3d10.4p5")
+        c3 = AtomicConfiguration("1s2.2p")
 
         self.assertEqual(c0.html, "1s<sup>2</sup>")
         self.assertEqual(c1.html, "1s<sup>2</sup>2s<sup>2</sup>")
@@ -51,6 +52,10 @@ class AtomicConfigurationTest(unittest.TestCase):
         self.assertEqual(c0.latex, "1s^{2}")
         self.assertEqual(c1.latex, "1s^{2}2s^{2}")
         self.assertEqual(c2.latex, r"\mathrm{[Ar]}4s^{2}3d^{10}4p^{5}")
+
+        self.assertEqual(repr(c3), "1s2.2p")
+        self.assertEqual(c3.html, "1s<sup>2</sup>2p")
+        self.assertEqual(c3.latex, "1s^{2}2p")
 
     def test_atomic_configuration_equality(self):
         c1 = AtomicConfiguration("[Ar].4s2.3d10.4p5")
@@ -101,6 +106,13 @@ class AtomicConfigurationTest(unittest.TestCase):
         self.assertEqual(c3.nelectrons, 3)
         self.assertEqual(c3.orbitals[0].nocc, 1)
         self.assertEqual(c3.orbitals[1].nocc, 2)
+
+    def test_atomic_configuration_unspecified_n(self):
+        c1 = AtomicConfiguration("1s2.np")
+        self.assertEqual(c1.nelectrons, 3)
+        self.assertEqual(str(c1), "1s2.np")
+        self.assertEqual(c1.html, "1s<sup>2</sup><em>n</em>p")
+        self.assertEqual(c1.latex, "1s^{2}np")
 
 
 if __name__ == "__main__":

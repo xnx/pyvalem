@@ -37,7 +37,7 @@ noble_gas_nelectrons = {"He": 2, "Ne": 10, "Ar": 18, "Kr": 36, "Xe": 54, "Rn": 8
 noble_gas = pp.oneOf(["[{}]".format(symbol) for symbol in noble_gases])
 
 atom_orbital = pp.Group(
-    integer.setResultsName("n")
+    (integer | "n").setResultsName("n")
     + pp.oneOf(atomic_orbital_symbols).setResultsName("lletter")
     + nocc_integer.setResultsName("nocc")
 )
@@ -92,6 +92,7 @@ class AtomicOrbital:
 
     def __init__(self, n, l=None, nocc=0, lletter=None):
         self.n = n
+        self.incompletely_specified = False
         if l is None:
             self.lletter = lletter
             try:
@@ -134,9 +135,14 @@ class AtomicOrbital:
         -------
         str
         """
+
+        if self.n == "n":
+            s_n = "<em>n</em>"
+        else:
+            s_n = str(self.n)
         if self.nocc != 1:
-            return "{}{}<sup>{}</sup>".format(self.n, self.lletter, self.nocc)
-        return "{}{}".format(self.n, self.lletter)
+            return f"{s_n}{self.lletter}<sup>{self.nocc}</sup>"
+        return f"{s_n}{self.lletter}"
 
     @property
     def latex(self):
@@ -160,13 +166,20 @@ class AtomicOrbital:
         ------
         AtomicOrbitalError
         """
-        if self.l > self.n - 1:
-            raise AtomicOrbitalError("l >= n in atomic orbital {}".format(self))
-        if self.nocc < 0:
-            raise AtomicOrbitalError(
-                "Negative nocc = {} not allowed in"
-                " orbital: {}".format(self.nocc, self.nocc)
-            )
+
+        if self.n == "n":
+            self.incompletely_specified = True
+        else:
+            # Do checks on n
+            if self.l > self.n - 1:
+                raise AtomicOrbitalError("l >= n in atomic orbital {}".format(self))
+            if self.nocc < 0:
+                raise AtomicOrbitalError(
+                    "Negative nocc = {} not allowed in"
+                    " orbital: {}".format(self.nocc, self.nocc)
+                )
+        # Even if the orbital is incompletely specified, we can still check
+        # the number of electrons against the quantum number l.
         if self.nocc > 2 * (2 * self.l + 1):
             raise AtomicOrbitalError(
                 "Too many electrons in atomic" " orbital: {}".format(self)

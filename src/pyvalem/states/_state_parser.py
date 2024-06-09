@@ -15,6 +15,7 @@ from .racah_symbol import RacahSymbol
 from .rotational_state import RotationalState
 from .vibrational_state import VibrationalState
 from .compound_LS_coupling import CompoundLSCoupling
+from .J1K_LK_coupling import J1K_LK_Coupling
 
 # the following has two purposes: keys determine the order in which the
 # states are parsed, and the values determine the sorting order of states
@@ -27,10 +28,11 @@ STATES = OrderedDict(
         (AtomicTermSymbol, 2),
         (DiatomicMolecularConfiguration, 1),
         (MolecularTermSymbol, 2),
-        (VibrationalState, 3),
-        (RotationalState, 4),
-        (RacahSymbol, 5),
-        (KeyValuePair, 6),
+        (J1K_LK_Coupling, 3),
+        (VibrationalState, 4),
+        (RotationalState, 5),
+        (RacahSymbol, 6),
+        (KeyValuePair, 7),
     ]
 )
 

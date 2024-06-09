@@ -120,6 +120,17 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertEqual(scl.html, "2s<sup>2</sup>2p<sup>2</sup>(<sup>3</sup>P)6d")
         self.assertEqual(sat.html, "<sup>4</sup>F")
 
+        ss2 = StatefulSpecies("Fe+3 3d5(b2D)4s 3D_3")
+
+    def test_incomplete_atomic_orbital_specification(self):
+        ss1 = StatefulSpecies("Al 3s2.nd; y2D")
+        self.assertEqual(ss1.html, "Al 3s<sup>2</sup><em>n</em>d y<sup>2</sup>D")
+
+    def test_J1K_LK_coupling(self):
+        _ = StatefulSpecies("C 2s2.2p(2Po_1/2)5g 2[7/2]o_3")
+        _ = StatefulSpecies("Ne+3 2s2.2p2(3P_2)5g 2[6]_11/2")
+        _ = StatefulSpecies("Ne+3 2s2.2p2(3P_2)5g 2[6]")
+
 
 if __name__ == "__main__":
     unittest.main()
