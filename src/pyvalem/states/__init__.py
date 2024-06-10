@@ -13,3 +13,8 @@ from .vibrational_state import VibrationalState, VibrationalStateError
 from .generic_excited_state import GenericExcitedState, GenericExcitedStateError
 from .key_value_pair import KeyValuePair, KeyValuePairError
 from .compound_LS_coupling import CompoundLSCoupling, CompoundLSCouplingError
+from .J1K_LK_coupling import (
+    J1K_LK_Coupling,
+    J1K_LK_CouplingError,
+    J1K_LK_CouplingValidationError,
+)
