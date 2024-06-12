@@ -9,6 +9,7 @@ class StatesImportTest(unittest.TestCase):
         self.assertIn("AtomicTermSymbol", states.__dict__)
         self.assertIn("CompoundLSCoupling", states.__dict__)
 
+
 class StatesInitFileTest(unittest.TestCase):
     def test___init___imports(self):
         for StateClass in STATES.keys():
