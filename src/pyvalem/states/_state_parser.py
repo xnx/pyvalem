@@ -16,6 +16,7 @@ from .rotational_state import RotationalState
 from .vibrational_state import VibrationalState
 from .compound_LS_coupling import CompoundLSCoupling
 from .J1K_LK_coupling import J1K_LK_Coupling
+from .J1J2_coupling import J1J2_Coupling
 
 # the following has two purposes: keys determine the order in which the
 # states are parsed, and the values determine the sorting order of states
@@ -29,6 +30,7 @@ STATES = OrderedDict(
         (DiatomicMolecularConfiguration, 1),
         (MolecularTermSymbol, 2),
         (J1K_LK_Coupling, 3),
+        (J1J2_Coupling, 3),
         (VibrationalState, 4),
         (RotationalState, 5),
         (RacahSymbol, 6),

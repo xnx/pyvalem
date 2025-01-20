@@ -18,3 +18,4 @@ from .J1K_LK_coupling import (
     J1K_LK_CouplingError,
     J1K_LK_CouplingValidationError,
 )
+from .J1J2_coupling import J1J2_Coupling, J1J2_CouplingError

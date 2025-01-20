@@ -54,3 +54,6 @@ class CompoundLSCouplingTest(unittest.TestCase):
         self.assertEqual(
             s3.html, """5p<sup>5</sup>(<sup>2</sup>P<sup>o</sup><sub>3/2</sub>)6d"""
         )
+
+        s4 = CompoundLSCoupling("4d9(2D_5/2)5s")
+        self.assertEqual(s4.html, """4d<sup>9</sup>(<sup>2</sup>D<sub>5/2</sub>)5s""")

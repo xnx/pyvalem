@@ -29,7 +29,7 @@ class StatefulSpecies:
 
         i = s.index(" ")
         self.formula = Formula(s[:i])
-        s = s.replace(";", " ").replace(",", " ")
+        s = s.replace(";", " ").replace(", ", " ")
         self.states = state_parser(s[i + 1 :].split())
 
         self._verify_states()

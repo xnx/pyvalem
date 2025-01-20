@@ -8,7 +8,7 @@ long_description = (root / "README.rst").read_text(encoding="utf-8")
 
 setup(
     name="pyvalem",
-    version="2.7.1",
+    version="2.8.0",
     description="A package for managing simple chemical species and states",
     long_description=long_description,
     long_description_content_type="text/x-rst",
@@ -29,6 +29,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3 :: Only",
         "Operating System :: OS Independent",
     ],

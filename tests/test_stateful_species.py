@@ -16,7 +16,7 @@ class StatefulSpeciesTest(unittest.TestCase):
         _ = StatefulSpecies("Fe e5G")
         _ = StatefulSpecies("CrH 1sigma2.2sigma1.1pi4.3sigma1; 6SIGMA+")
         _ = StatefulSpecies("H(35Cl) J=2")
-        _ = StatefulSpecies("OH X(2Π_1/2, J=2")
+        _ = StatefulSpecies("OH X(2Π_1/2) J=2")
 
         _ = StatefulSpecies("HCl v=2 J=0")
         _ = StatefulSpecies("C2H3Cl")
@@ -57,7 +57,7 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "CO J=0; J=1")
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "CO X(1PIu);2Σ-")
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "Ar *;**")
-        self.assertRaises(StatefulSpeciesError, StatefulSpecies, "Ar 2S, 2P_3/2")
+        self.assertRaises(StatefulSpeciesError, StatefulSpecies, "Ar 2S 2P_3/2")
         # StatefulSpecies('CH3Cl J=2;Ka=1;Kc=2')
 
     def test_atomic_configuration_verification(self):
@@ -122,6 +122,8 @@ class StatefulSpeciesTest(unittest.TestCase):
 
         ss2 = StatefulSpecies("Fe+3 3d5(b2D)4s 3D_3")
 
+        ss3 = StatefulSpecies("Pd 4d9(2D_5/2)5s 2[5/2]")
+
     def test_incomplete_atomic_orbital_specification(self):
         ss1 = StatefulSpecies("Al 3s2.nd; y2D")
         self.assertEqual(ss1.html, "Al 3s<sup>2</sup><em>n</em>d y<sup>2</sup>D")
@@ -130,6 +132,10 @@ class StatefulSpeciesTest(unittest.TestCase):
         _ = StatefulSpecies("C 2s2.2p(2Po_1/2)5g 2[7/2]o_3")
         _ = StatefulSpecies("Ne+3 2s2.2p2(3P_2)5g 2[6]_11/2")
         _ = StatefulSpecies("Ne+3 2s2.2p2(3P_2)5g 2[6]")
+
+    def test_J1J2_coupling(self):
+        _ = StatefulSpecies("Pd 6s2.6p.7s (3/2,1/2)")
+        _ = StatefulSpecies("Bi 5d4.6s(6D)31d (1/2,3/2)o_2")
 
 
 if __name__ == "__main__":
