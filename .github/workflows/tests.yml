@@ -2,31 +2,55 @@ name: tests
 
 on:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  build-n-test:
-    name: Install and test the package
+  test:
+    name: Python ${{ matrix.python-version }}, pyparsing ${{ matrix.pyparsing }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
+        pyparsing: ["latest"]
+        include:
+          # The oldest supported Python and pyparsing together.
+          - python-version: "3.11"
+            pyparsing: "3.1.0"
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install the package and its development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . --group dev
+      - name: Install the oldest supported pyparsing
+        if: matrix.pyparsing != 'latest'
+        run: python -m pip install "pyparsing==${{ matrix.pyparsing }}"
+      - name: Test
+        run: python -m pytest --cov
+
+  lint:
+    name: Lint and format
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: "3.9"
-    - name: Install the package locally
-      run: |
-        python -m pip install --upgrade pip
-        pip install .
-    - name: Install dependencies for testing
-      run: |
-        pip install pytest-cov
-        pip install black
-    - name: Test with pytest
-      run: |
-        pytest --cov
-    - name: Check code format
-      run: |
-        black --check .
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install ruff
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --group dev
+      - run: ruff check --output-format github
+      - run: ruff format --check
