@@ -38,16 +38,7 @@ Examples
 """
 
 import csv
-import platform
-
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    # for python < 3.7, use the importlib-resources backport
-    # noinspection PyUnresolvedReferences
-    import importlib_resources as pkg_resources
-
-PYTHON3_VERSION = int(platform.python_version_tuple()[1])
+from importlib.resources import files
 
 
 class Atom:
@@ -202,16 +193,8 @@ atoms = {}
 # Atom data is from Meija et al., "Atomic weights of the elements 2013
 # (IUPAC Technical Report)", Pure Appl. Chem. 88(3), 265-291, 2016.
 # See https://ciaaw.org/atomic-weights.htm
-if PYTHON3_VERSION < 9:
-    # NB Python 3.8 and below use open_text:
-    with pkg_resources.open_text("pyvalem", "_data_atomic_weights.txt") as fi:
-        read_atom_data(fi, atoms)
-else:
-    # NB Python 3.9 and above use importlib.resources.files:
-    with pkg_resources.files("pyvalem").joinpath("_data_atomic_weights.txt").open(
-        "r", encoding="utf8"
-    ) as fi:
-        read_atom_data(fi, atoms)
+with files("pyvalem").joinpath("_data_atomic_weights.txt").open(encoding="utf8") as fi:
+    read_atom_data(fi, atoms)
 
 
 def read_isotope_data(fi, isotopes):
@@ -254,13 +237,5 @@ isotopes = {}
 # 030002 (2017); Wang et al., "The Ame2016 atomic mass evaluation (II)",
 # Chinese Physics C41, 030003 (2017).
 # See http://amdc.impcas.ac.cn/masstables/Ame2016/mass16.txt
-if PYTHON3_VERSION < 9:
-    # NB Python 3.8 and below use open_text:
-    with pkg_resources.open_text("pyvalem", "_data_isotope_masses.txt") as fi:
-        read_isotope_data(fi, isotopes)
-else:
-    # NB Python 3.9 and above use importlib.resources.files:
-    with pkg_resources.files("pyvalem").joinpath("_data_isotope_masses.txt").open(
-        "r", encoding="utf8"
-    ) as fi:
-        read_isotope_data(fi, isotopes)
+with files("pyvalem").joinpath("_data_isotope_masses.txt").open(encoding="utf8") as fi:
+    read_isotope_data(fi, isotopes)
