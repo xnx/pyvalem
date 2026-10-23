@@ -127,7 +127,7 @@ prefix_tokens = {
 }
 # The LaTeX equivalents of these prefix tokens.
 latex_prefix_dict = {
-    "(±)": r"\pm",
+    "(±)": r"(\pm)",
     "Δ": r"\Delta",
     "Λ": r"\Lambda",
     "α": r"\alpha",

@@ -46,7 +46,7 @@ class ReactionParseTest(unittest.TestCase):
             r"2\mathrm{H} + \mathrm{He} + 2\mathrm{H} \rightarrow "
             r"\mathrm{He} + 4\mathrm{H}",
             r"\mathrm{e}^+ + \mathrm{H} + h\nu \rightarrow \mathrm{H}^{+}",
-            r"\mathrm{H} + \mathrm{H} + \mathrm{e}^- + 2\mathrm{H} \rightlefthooks "
+            r"\mathrm{H} + \mathrm{H} + \mathrm{e}^- + 2\mathrm{H} \rightleftharpoons "
             r"\mathrm{e}^- + \mathrm{e}^- + 4\mathrm{H} + \mathrm{e}^+ + h\nu",
             r"\mathrm{W}^{26+} + \mathrm{M} \rightarrow "
             r"\mathrm{e}^- + \mathrm{W}^{28+} + \mathrm{M} + \mathrm{e}^-",

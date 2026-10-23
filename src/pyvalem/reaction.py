@@ -148,7 +148,7 @@ class Reaction:
         "<->": "⇌",
         "<=>": "⇌",
     }
-    latex_sep = {"→": r"\rightarrow", "⇌": r"\rightlefthooks"}
+    latex_sep = {"→": r"\rightarrow", "⇌": r"\rightleftharpoons"}
 
     light_species = ("e-", "e+", "hv", "hν")
 

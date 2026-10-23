@@ -62,6 +62,12 @@ class FormulaTest(unittest.TestCase):
             self.assertEqual(cf.latex, latex)
             self.assertEqual(cf.slug, slug)
 
+    def test_prefix_latex(self):
+        self.assertEqual(
+            Formula("(±)-CHClBrF").latex,
+            r"(\pm)-\mathrm{C}\mathrm{H}\mathrm{Cl}\mathrm{Br}\mathrm{F}",
+        )
+
     def test_moieties(self):
         cf = Formula("H2NC(CH3)2CO2H")
         self.assertEqual(
