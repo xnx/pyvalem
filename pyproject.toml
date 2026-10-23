@@ -33,7 +33,7 @@ Homepage = "https://github.com/xnx/pyvalem"
 Issues = "https://github.com/xnx/pyvalem/issues"
 
 [dependency-groups]
-dev = ["pytest>=8", "pytest-cov", "ruff==0.17.2"]
+dev = ["hypothesis", "pytest>=8", "pytest-cov", "ruff==0.17.2"]
 docs = ["sphinx"]
 
 [tool.hatch.version]
