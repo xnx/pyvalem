@@ -30,11 +30,12 @@ hν + HCl → H+ + Cl + e-
 
 import re
 
+from .exceptions import PyValemError
 from .formula import FormulaParseError
 from .stateful_species import StatefulSpecies
 
 
-class ReactionParseError(Exception):
+class ReactionParseError(PyValemError):
     pass
 
 
@@ -153,6 +154,12 @@ class Reaction:
     light_species = ("e-", "e+", "hv", "hν")
 
     def __init__(self, r_str, strict=True):
+        if not isinstance(r_str, str):
+            raise TypeError(
+                "Reaction must be created from a str, not {}".format(
+                    type(r_str).__name__
+                )
+            )
         # If the Reaction string has no products, add a space after the
         # separator (e.g. 'Ar + e- ->' becomes 'Ar + e- -> ').
         for sep in Reaction.RP_SEPARATORS:

@@ -15,6 +15,7 @@ creating an HTML representation of the term symbol, etc.
 import pyparsing as pp
 
 from pyvalem._utils import float_to_fraction, parse_fraction
+from pyvalem.exceptions import PyValemError
 from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
@@ -38,7 +39,7 @@ class J1J2_CouplingError(StateParseError):
     pass
 
 
-class J1J2_CouplingValidationError(ValueError):
+class J1J2_CouplingValidationError(PyValemError):
     pass
 
 

@@ -26,7 +26,7 @@ class GenericExcitedState(State):
         if "*" in state_str:
             if state_str.count("*") == len(state_str):
                 if len(state_str) > 4:
-                    raise StateParseError(
+                    raise GenericExcitedStateError(
                         "Invalid excited state value: {0}"
                         " Can be *, **, ***, or ****".format(state_str)
                     )

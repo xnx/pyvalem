@@ -25,6 +25,7 @@ import pyparsing as pp
 
 from ._special_cases import special_cases
 from .atom_data import atoms, element_symbols, isotopes
+from .exceptions import PyValemError
 
 element = pp.one_of(element_symbols)
 # TODO: don't allow leading 0
@@ -171,7 +172,7 @@ def _atom_order(atom):
     return atom.Z, atom.mass is not None, atom.mass or 0
 
 
-class FormulaError(Exception):
+class FormulaError(PyValemError):
     pass
 
 
@@ -249,6 +250,12 @@ class Formula:
 
     def __init__(self, formula):
         """Initialize the Formula object by parsing the string argument formula."""
+        if not isinstance(formula, str):
+            raise TypeError(
+                "Formula must be created from a str, not {}".format(
+                    type(formula).__name__
+                )
+            )
         self.formula = formula
         self.atoms = set()
         self.atom_stoich = defaultdict(int)

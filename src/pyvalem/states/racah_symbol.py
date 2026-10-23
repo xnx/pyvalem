@@ -34,6 +34,10 @@ racah_symbol_template = (
 )
 
 
+class RacahSymbolError(StateParseError):
+    pass
+
+
 class RacahSymbol(State):
     """
     The RacahSymbol class representing an atomic state in Racah notation.
@@ -59,7 +63,7 @@ class RacahSymbol(State):
         try:
             components = racah_symbol_template.parse_string(state_str, parse_all=True)
         except pp.ParseException as err:
-            raise StateParseError(
+            raise RacahSymbolError(
                 "Invalid Racah notation syntax: {}".format(state_str)
             ) from err
         self.principal = int(components.principal)

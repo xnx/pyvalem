@@ -13,15 +13,22 @@ from pyvalem.states.diatomic_molecular_configuration import (
 )
 from pyvalem.states.key_value_pair import KeyValuePair
 
+from .exceptions import PyValemError
 from .formula import Formula
 
 
-class StatefulSpeciesError(Exception):
+class StatefulSpeciesError(PyValemError):
     pass
 
 
 class StatefulSpecies:
     def __init__(self, s):
+        if not isinstance(s, str):
+            raise TypeError(
+                "StatefulSpecies must be created from a str, not {}".format(
+                    type(s).__name__
+                )
+            )
         s = s.strip()
         if " " not in s:
             # No states, just a Formula

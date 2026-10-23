@@ -8,8 +8,10 @@ one of those and don't instantiate State objects directly.
 import html
 from abc import ABC, abstractmethod
 
+from pyvalem.exceptions import PyValemError
 
-class StateError(Exception):
+
+class StateError(PyValemError):
     """A base class for state related exceptions."""
 
     pass
@@ -24,6 +26,15 @@ class StateParseError(StateError):
 # noinspection PyUnresolvedReferences
 class State(ABC):
     multiple_allowed = False
+
+    def __new__(cls, state_str, *args, **kwargs):
+        if not isinstance(state_str, str):
+            raise TypeError(
+                "{} must be created from a str, not {}".format(
+                    cls.__name__, type(state_str).__name__
+                )
+            )
+        return super().__new__(cls)
 
     @property
     def html(self):

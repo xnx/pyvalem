@@ -7,6 +7,7 @@ reactions of atoms, ions and small molecules.
 1
 """
 
+from .exceptions import PyValemError
 from .formula import Formula, FormulaError, FormulaParseError
 from .reaction import (
     Reaction,
@@ -22,6 +23,7 @@ __all__ = [
     "Formula",
     "FormulaError",
     "FormulaParseError",
+    "PyValemError",
     "Reaction",
     "ReactionChargeError",
     "ReactionParseError",
