@@ -164,6 +164,33 @@ class FormulaTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, Formula, "H3O^+")
         self.assertRaises(FormulaParseError, Formula, "H_2S")
 
+    def test_unspecified_stoichiometry(self):
+        f = Formula("CxH4")
+        self.assertIsNone(f.natoms)
+        self.assertIsNone(f.rmm)
+        self.assertEqual(dict(f.atom_stoich), {"C": None, "H": 4})
+        self.assertEqual(f.html, "C<sub>x</sub>H<sub>4</sub>")
+        self.assertEqual(f.stoichiometric_formula("hill"), "CxH4")
+
+        f = Formula("FxC")
+        self.assertEqual(dict(f.atom_stoich), {"F": None, "C": 1})
+
+        f = Formula("(CH2)x")
+        self.assertIsNone(f.natoms)
+        self.assertEqual(dict(f.atom_stoich), {"C": None, "H": None})
+        self.assertEqual(f.html, "(CH<sub>2</sub>)<sub>x</sub>")
+        self.assertEqual(f.latex, r"(\mathrm{C}\mathrm{H}_{2})_{x}")
+        self.assertEqual(f.slug, "_l_CH2_r_x")
+
+        f = Formula("CuSO4.xH2O")
+        self.assertIsNone(f.rmm)
+        self.assertEqual(dict(f.atom_stoich), {"Cu": 1, "S": 1, "O": None, "H": None})
+        self.assertEqual(f.html, "CuSO<sub>4</sub>xH<sub>2</sub>O")
+
+        # The charge of a charged moiety with an unspecified count is undefined.
+        self.assertRaises(FormulaParseError, Formula, "(NH4+)x")
+        self.assertRaises(FormulaParseError, Formula, "xNH4+")
+
     def test_comparison_with_other_types(self):
         self.assertNotEqual(Formula("H2"), "H2")
         self.assertNotEqual(Formula("H2"), None)

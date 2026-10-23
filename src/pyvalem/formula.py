@@ -155,6 +155,11 @@ complexChemicalFormula = (
 slug_charge_sign = {"+": "p", "-": "m"}
 
 
+def _count(s):
+    """Return the stoichiometry string s as an int, or None if it is "x"."""
+    return None if s == "x" else int(s)
+
+
 class FormulaError(Exception):
     pass
 
@@ -361,17 +366,23 @@ class Formula:
                 html_chunks.append("(")
                 latex_chunks.append("(")
                 slug_chunks.append("_l_")
-                poststoich = int(moiety["poststoich"])
-                stoich = prestoich * poststoich
+                poststoich = _count(moiety["poststoich"])
+                stoich = None if poststoich is None else prestoich * poststoich
             else:
-                # unbracketed fragment, e.g. H2O, 2NH3, ...
-                stoich = int(moiety["stoich"])
-                if stoich > 1:
+                # unbracketed fragment, e.g. H2O, 2NH3, xH2O, ...
+                stoich = _count(moiety["stoich"])
+                if stoich is None or stoich > 1:
                     slug_chunks.append(moiety["stoich"])
                     html_chunks.append(moiety["stoich"])
                     latex_chunks.append(moiety["stoich"])
             charge = int(moiety["charge"])
-            self.charge += charge * stoich
+            if charge:
+                if stoich is None:
+                    raise FormulaParseError(
+                        "Undefined charge for a moiety with an unspecified"
+                        " stoichiometry in formula {}".format(formula)
+                    )
+                self.charge += charge * stoich
             for atom in moiety["atoms"]:
                 atom_symbol, atom_stoich = atom
 
@@ -418,27 +429,28 @@ class Formula:
 
                 self.atoms.add(atom)
 
-                try:
-                    i_atom_stoich = int(atom_stoich)
-                    total_atom_stoich = i_atom_stoich * stoich
-                    self.natoms += total_atom_stoich
-                    try:
-                        self.rmm += atom.mass * total_atom_stoich
-                    except TypeError:
-                        # No atomic weight for some elements (e.g. Tc, Pm)
-                        self.rmm = None
-                except ValueError:
+                count = _count(atom_stoich)
+                if count is None or stoich is None:
                     # Some formulas don't have well-defined stoichiometries,
-                    # e.g. 'CFx'
+                    # e.g. 'CFx', '(CH2)x', 'CuSO4.xH2O'
                     total_atom_stoich = None
                     self.natoms = self.rmm = None
-                try:
-                    self.atom_stoich[atom_symbol] += total_atom_stoich
-                except TypeError:
+                else:
+                    total_atom_stoich = count * stoich
+                    if self.natoms is not None:
+                        self.natoms += total_atom_stoich
+                    if self.rmm is not None:
+                        if atom.mass is None:
+                            # No atomic weight for some elements (e.g. Tc, Pm)
+                            self.rmm = None
+                        else:
+                            self.rmm += atom.mass * total_atom_stoich
+                if total_atom_stoich is None or self.atom_stoich[atom_symbol] is None:
                     # There's not much we can do for the stoichiometry if this
                     # atom occurs with an undefined value.
-                    # noinspection PyTypeChecker
                     self.atom_stoich[atom_symbol] = None
+                else:
+                    self.atom_stoich[atom_symbol] += total_atom_stoich
 
                 html_chunks.append(symbol_html)
                 latex_chunks.append(symbol_latex)
@@ -464,10 +476,11 @@ class Formula:
                 slug_chunks.append("_r_")
                 # if i == nmoieties and nmoieties != 1:
                 #    slug_chunks.append('_d_')
-                if poststoich > 1:
-                    html_chunks.append("<sub>{:d}</sub>".format(poststoich))
-                    latex_chunks.append("_{{{0:d}}}".format(poststoich))
-                    slug_chunks.append("{:d}".format(poststoich))
+                if poststoich is None or poststoich > 1:
+                    s_poststoich = "x" if poststoich is None else str(poststoich)
+                    html_chunks.append("<sub>{}</sub>".format(s_poststoich))
+                    latex_chunks.append("_{{{0}}}".format(s_poststoich))
+                    slug_chunks.append(s_poststoich)
 
             if "radical" in moiety:
                 html_chunks.append("&#183;")

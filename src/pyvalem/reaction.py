@@ -376,10 +376,11 @@ class Reaction:
         stoich = {}
         for n, ss in side:
             for sp, nn in ss.formula.atom_stoich.items():
-                if sp in stoich:
-                    stoich[sp] += n * nn
-                else:
-                    stoich[sp] = n * nn
+                if nn is None or stoich.get(sp, 0) is None:
+                    # An unspecified stoichiometry, e.g. in CFx.
+                    stoich[sp] = None
+                elif nn:
+                    stoich[sp] = stoich.get(sp, 0) + n * nn
         return stoich
 
     def stoichiometry_conserved(self):

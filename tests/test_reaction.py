@@ -135,6 +135,11 @@ class ReactionParseTest(unittest.TestCase):
         for r1, r2 in equal:
             self.assertEqual(Reaction(r1), Reaction(r2))
 
+    def test_unspecified_stoichiometry(self):
+        self.assertTrue(Reaction("CFx -> C + Fx").stoichiometry_conserved())
+        self.assertRaises(ReactionStoichiometryError, Reaction, "CFx -> CF2")
+        self.assertRaises(ReactionStoichiometryError, Reaction, "CxH4 -> C + 2H2")
+
     def test_reaction_hash(self):
         r1, r2 = Reaction("H + H -> H2"), Reaction("2H -> H2")
         self.assertEqual(r1, r2)
