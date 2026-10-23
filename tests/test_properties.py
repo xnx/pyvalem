@@ -63,6 +63,14 @@ class NoUnexpectedExceptionsTest(unittest.TestCase):
 
 class RoundTripTest(unittest.TestCase):
     @given(strings)
+    def test_formula(self, s):
+        formula = parse(Formula, s)
+        if formula is not None:
+            again = parse(Formula, repr(formula))
+            self.assertEqual(again, formula)
+            self.assertEqual(repr(again), repr(formula))
+
+    @given(strings)
     def test_states(self, s):
         for StateClass in STATES:
             state = parse(StateClass, s)

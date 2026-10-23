@@ -23,21 +23,20 @@ from itertools import pairwise
 
 import pyparsing as pp
 
-from ._deprecation import warn_deprecated
 from ._special_cases import special_cases
 from .atom_data import atoms, element_symbols, isotopes
 from .exceptions import PyValemError
 
 element = pp.one_of(element_symbols)
-# TODO: don't allow leading 0
-integer = pp.Word(pp.nums)
-integer_or_x = integer | pp.Literal("x")
+# A count is a positive integer, without leading zeros.
+count = pp.Regex(r"[1-9][0-9]*")
+count_or_x = count | pp.Literal("x")
 plusminus = pp.Literal("+") | pp.Literal("-")
 
 # An isotope looks like '(1H)', '(13C)', etc.; strip the parentheses.
 isotope = (
     pp.Group(
-        pp.Suppress(pp.Literal("(")) + integer + element + pp.Suppress(pp.Literal(")"))
+        pp.Suppress(pp.Literal("(")) + count + element + pp.Suppress(pp.Literal(")"))
     )
     | pp.Literal("D")
     | pp.Literal("T")
@@ -45,14 +44,14 @@ isotope = (
 
 # some named components of a formula
 # stoich comes before or after a "bare" element symbol, e.g. 3Br2.
-pp_stoich = pp.Optional(integer_or_x, default="1").set_results_name("stoich")
+pp_stoich = pp.Optional(count_or_x, default="1").set_results_name("stoich")
 # prestoich comes before a bracketed element group, e.g. 2(NH3).
-pp_prestoich = pp.Optional(integer, default="1").set_results_name("prestoich")
+pp_prestoich = pp.Optional(count, default="1").set_results_name("prestoich")
 # poststoich comes after a bracketed element group, e.g. (H2O)3.
-pp_poststoich = pp.Optional(integer_or_x, default="1").set_results_name("poststoich")
+pp_poststoich = pp.Optional(count_or_x, default="1").set_results_name("poststoich")
 # the charge is always defined and defaults to '0'.
 pp_charge = pp.Optional(
-    pp.Combine(pp.Group(plusminus + pp.Optional(integer, default="1"))), default="0"
+    pp.Combine(pp.Group(plusminus + pp.Optional(count, default="1"))), default="0"
 ).set_results_name("charge")
 # An elementRef is either an element symbol or an isotope symbol plus a
 # stoichiometry which is 1 if not given.
@@ -83,13 +82,13 @@ bracketedChemicalFormula = pp.Group(
 )
 
 # A chemical_formula_fragment is either one of the above ChemicalFormula
-# types, optionally prefixed with a period ('.')
-chemical_formula_fragment = pp.Optional(pp.Suppress(".")) + (
-    chargedChemicalFormula | bracketedChemicalFormula
-)
-chemical_formula_fragments = pp.OneOrMore(chemical_formula_fragment).set_results_name(
-    "formula"
-)
+# types; fragments after the first may be separated by a period ('.'), as in
+# CuSO4.5H2O.
+chemical_formula_fragment = chargedChemicalFormula | bracketedChemicalFormula
+chemical_formula_fragments = (
+    chemical_formula_fragment
+    + pp.ZeroOrMore(pp.Optional(pp.Literal(".")) + chemical_formula_fragment)
+).set_results_name("formula")
 
 # These are the formula prefix tokens we recognise and their slugs
 # NB be careful to ensure that the slugs remain case-insensitive!
@@ -138,7 +137,7 @@ latex_prefix_dict = {
 }
 
 # also allow a comma-separated list of integers, e.g. 1,1,2-
-prefix_parser = pp.DelimitedList(pp.OneOrMore(integer), combine=True)
+prefix_parser = pp.DelimitedList(count, combine=True)
 keys_list = list(prefix_tokens.keys())
 for pt in keys_list:
     prefix_parser |= pp.Keyword(pt)
@@ -148,13 +147,13 @@ prefix_list_parser = (
 ).set_results_name("prefix")
 
 # Finally, a complexChemicalFormula is a prefix, followed by one or more
-# chemical_formula_fragments.
+# chemical_formula_fragments. A formula contains no whitespace.
 complexChemicalFormula = (
     pp.Optional(prefix_list_parser)
     + chemical_formula_fragments
     + pp_charge
     + pp.StringEnd()
-)
+).leave_whitespace()
 # replace '+' and '-' with 'p' and 'm' to make slugs for e.g. URLs.
 slug_charge_sign = {"+": "p", "-": "m"}
 
@@ -178,6 +177,13 @@ class FormulaError(PyValemError):
 
 
 class FormulaParseError(FormulaError):
+    pass
+
+
+class FormulaValidationError(FormulaParseError):
+    """Raised for a formula with valid syntax that can't describe a species,
+    such as one with an unknown isotope."""
+
     pass
 
 
@@ -268,16 +274,6 @@ class Formula:
         self.slug = ""
         self.mass = 0.0
         self._parse_formula(formula)
-        if any(c.isspace() for c in formula):
-            warn_deprecated(
-                "Whitespace in a formula, as in {!r}, is deprecated.".format(formula)
-            )
-        if re.search(r"(?<![0-9])0", formula):
-            warn_deprecated(
-                "Leading zeros and zero counts, as in {}, are deprecated.".format(
-                    formula
-                )
-            )
 
     @staticmethod
     def _make_prefix_html(prefix_list):
@@ -363,47 +359,66 @@ class Formula:
             return
 
         try:
-            moieties = complexChemicalFormula.parse_string(formula, parse_all=True)
+            parse_results = complexChemicalFormula.parse_string(formula, parse_all=True)
         except pp.ParseException as err:
             raise FormulaParseError("Invalid formula syntax: %s" % formula) from err
+
+        # The moieties, each with whether a period separates it from the previous one.
+        moieties, separated = [], False
+        for token in parse_results["formula"]:
+            if isinstance(token, str):
+                separated = True
+            else:
+                moieties.append((token, separated))
+                separated = False
 
         html_chunks = []
         latex_chunks = []
         slug_chunks = []
-        # calculate relative molecular mass as the sum of the atomic weights
+        # The canonical form of the formula is as written, except that counts of
+        # 1 are omitted and charges of +1 and -1 are written + and -.
+        canonical_chunks = []
 
         # make the prefix html and slug
-        if "prefix" in moieties:
+        if "prefix" in parse_results:
+            prefix = parse_results["prefix"]
             # Locants are separated by commas, so consecutive numeric prefixes
             # (1-1-C2H4Cl2) are invalid: they would also make the same slug as
             # the comma-separated list (1,1-C2H4Cl2).
-            numeric = [token[0].isdigit() for token in moieties["prefix"]]
+            numeric = [token[0].isdigit() for token in prefix]
             if any(a and b for a, b in pairwise(numeric)):
                 raise FormulaParseError("Invalid formula syntax: {}".format(formula))
-            html_chunks.append(self._make_prefix_html(moieties["prefix"]))
-            latex_chunks.append(self._make_prefix_latex(moieties["prefix"]))
-            slug_chunks.append(self._make_prefix_slug(moieties["prefix"]))
+            html_chunks.append(self._make_prefix_html(prefix))
+            latex_chunks.append(self._make_prefix_latex(prefix))
+            slug_chunks.append(self._make_prefix_slug(prefix))
+            canonical_chunks.append("-".join(prefix) + "-")
 
-        # A charge after the last moiety is only allowed if that moiety is
-        # bracketed, as in (H2O)2+: an unbracketed moiety takes the charge that
-        # follows it as its own (as in NH2+CH3CHO2-), so a further charge, as in
-        # Li+2-, is invalid.
-        if moieties["charge"] != "0" and "prestoich" not in moieties["formula"][-1]:
-            raise FormulaParseError("Invalid formula syntax: {}".format(formula))
-        # Only the last moiety may have an unbracketed charge: NH2+CH3CHO2- is
-        # deprecated in favour of (NH2+)CH3CHO2-.
+        # Only the last moiety may have an unbracketed charge: NH2+CH3CHO2- must be
+        # written (NH2+)CH3CHO2-.
         if any(
             "prestoich" not in moiety and moiety["charge"] != "0"
-            for moiety in moieties["formula"][:-1]
+            for moiety, _ in moieties[:-1]
         ):
-            warn_deprecated(
-                "An unbracketed charge before the end of a formula, as in {}, is"
-                " deprecated: put the charged moiety in brackets.".format(formula)
+            raise FormulaParseError(
+                "Invalid formula syntax: {}: only the last moiety may have an"
+                " unbracketed charge".format(formula)
             )
+        # A charge after the last moiety is the charge of the whole formula. It
+        # is only allowed after a bracketed moiety, as in (H2O)2+, because an
+        # unbracketed moiety takes the charge that follows it as its own (so
+        # Li+2- is invalid), and only if no moiety has a charge of its own (so
+        # (H2O+)2+ is invalid).
+        total_charge = int(parse_results["charge"])
+        if total_charge and (
+            "prestoich" not in moieties[-1][0]
+            or any(moiety["charge"] != "0" for moiety, _ in moieties)
+        ):
+            raise FormulaParseError("Invalid formula syntax: {}".format(formula))
 
-        moieties, total_charge = moieties["formula"], int(moieties["charge"])
         nmoieties = len(moieties)
-        for i, moiety in enumerate(moieties):
+        for i, (moiety, separated) in enumerate(moieties):
+            if separated:
+                canonical_chunks.append(".")
             poststoich = 0
             if "prestoich" in moiety:
                 # bracketed fragment, e.g. (OH)2, 3(HO2+), ...
@@ -412,9 +427,11 @@ class Formula:
                     slug_chunks.append(moiety["prestoich"])
                     html_chunks.append(moiety["prestoich"])
                     latex_chunks.append(moiety["prestoich"])
+                    canonical_chunks.append(moiety["prestoich"])
                 html_chunks.append("(")
                 latex_chunks.append("(")
                 slug_chunks.append("_l_")
+                canonical_chunks.append("(")
                 poststoich = _count(moiety["poststoich"])
                 stoich = None if poststoich is None else prestoich * poststoich
             else:
@@ -424,10 +441,11 @@ class Formula:
                     slug_chunks.append(moiety["stoich"])
                     html_chunks.append(moiety["stoich"])
                     latex_chunks.append(moiety["stoich"])
+                    canonical_chunks.append(moiety["stoich"])
             charge = int(moiety["charge"])
             if charge:
                 if stoich is None:
-                    raise FormulaParseError(
+                    raise FormulaValidationError(
                         "Undefined charge for a moiety with an unspecified"
                         " stoichiometry in formula {}".format(formula)
                     )
@@ -435,6 +453,10 @@ class Formula:
             for atom in moiety["atoms"]:
                 atom_symbol, atom_stoich = atom
 
+                if isinstance(atom_symbol, pp.ParseResults):
+                    canonical_chunks.append("({}{})".format(*atom_symbol))
+                else:
+                    canonical_chunks.append(atom_symbol)
                 if atom_symbol == "D":
                     atom_symbol = isotope.parse_string("(2H)")[0]
                 if atom_symbol == "T":
@@ -460,7 +482,7 @@ class Formula:
                     try:
                         atom = isotopes[atom_symbol]
                     except KeyError as err:
-                        raise FormulaParseError(
+                        raise FormulaValidationError(
                             "Unknown isotope symbol {} in formula {}".format(
                                 atom_symbol, formula
                             )
@@ -507,6 +529,13 @@ class Formula:
                     html_chunks.append("<sub>{}</sub>".format(atom_stoich))
                     latex_chunks.append("_{{{0}}}".format(atom_stoich))
                     slug_chunks.append(str(atom_stoich))
+                    canonical_chunks.append(atom_stoich)
+
+            # A radical dot comes after the atoms, before any charge.
+            if "radical" in moiety:
+                html_chunks.append("&#183;")
+                latex_chunks.append(r"\cdot")
+                canonical_chunks.append("·")
 
             (
                 moiety_charge_html,
@@ -516,31 +545,29 @@ class Formula:
             html_chunks.append(moiety_charge_html)
             latex_chunks.append(moiety_charge_latex)
             slug_chunks.append(moiety_charge_slug)
-            # if i < nmoieties-1 and nmoieties != 1:
-            #    slug_chunks.append('_d_')
+            canonical_chunks.append(self._charge_text(charge))
 
             if "poststoich" in moiety:
                 html_chunks.append(")")
                 latex_chunks.append(")")
                 slug_chunks.append("_r_")
-                # if i == nmoieties and nmoieties != 1:
-                #    slug_chunks.append('_d_')
+                canonical_chunks.append(")")
                 if poststoich is None or poststoich > 1:
                     s_poststoich = "x" if poststoich is None else str(poststoich)
                     html_chunks.append("<sub>{}</sub>".format(s_poststoich))
                     latex_chunks.append("_{{{0}}}".format(s_poststoich))
                     slug_chunks.append(s_poststoich)
+                    canonical_chunks.append(s_poststoich)
 
+            # NB the slug keeps the radical at the end of the moiety, so that
+            # existing slugs don't change.
             if "radical" in moiety:
-                html_chunks.append("&#183;")
-                latex_chunks.append(r"\cdot")
                 slug_chunks.append("_dot")
             if i != nmoieties - 1:
                 slug_chunks.append("-")
 
         if total_charge:
-            # TODO Refactor and test further
-            self.charge = int(total_charge)
+            self.charge = total_charge
             (
                 moiety_charge_html,
                 moiety_charge_latex,
@@ -549,7 +576,9 @@ class Formula:
             html_chunks.append(moiety_charge_html)
             latex_chunks.append(moiety_charge_latex)
             slug_chunks.append(moiety_charge_slug)
+            canonical_chunks.append(self._charge_text(total_charge))
 
+        self.formula = "".join(canonical_chunks)
         self.html = "".join(html_chunks)
         self.latex = "".join(latex_chunks)
         # strip the leading '-' if the formula began with an isotope
@@ -705,12 +734,14 @@ class Formula:
 
     def _get_charge_string(self):
         """Return the string representation of the charge: '+', '-', '+2', '-3', etc."""
-        if not self.charge:
+        return self._charge_text(self.charge)
+
+    @staticmethod
+    def _charge_text(charge):
+        """Return charge as it is written in a formula: '', '+', '-', '+2', etc."""
+        if not charge:
             return ""
-        if self.charge > 0:
-            if self.charge > 1:
-                return "+{:d}".format(self.charge)
-            return "+"
-        if self.charge == -1:
-            return "-"
-        return str(self.charge)
+        sign = "+" if charge > 0 else "-"
+        if abs(charge) == 1:
+            return sign
+        return "{}{:d}".format(sign, abs(charge))

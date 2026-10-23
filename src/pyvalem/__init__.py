@@ -8,7 +8,7 @@ reactions of atoms, ions and small molecules.
 """
 
 from .exceptions import PyValemDeprecationWarning, PyValemError
-from .formula import Formula, FormulaError, FormulaParseError
+from .formula import Formula, FormulaError, FormulaParseError, FormulaValidationError
 from .reaction import (
     Reaction,
     ReactionChargeError,
@@ -17,12 +17,13 @@ from .reaction import (
 )
 from .stateful_species import StatefulSpecies, StatefulSpeciesError
 
-__version__ = "2.10.0"
+__version__ = "3.0.0.dev0"
 
 __all__ = [
     "Formula",
     "FormulaError",
     "FormulaParseError",
+    "FormulaValidationError",
     "PyValemDeprecationWarning",
     "PyValemError",
     "Reaction",

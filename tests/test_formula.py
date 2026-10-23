@@ -4,8 +4,7 @@ Unit tests for the formula module of PyValem
 
 import unittest
 
-from pyvalem import PyValemDeprecationWarning
-from pyvalem.formula import Formula, FormulaParseError
+from pyvalem.formula import Formula, FormulaParseError, FormulaValidationError
 
 from .good_formulas import good_formulas
 
@@ -122,12 +121,10 @@ class FormulaTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, Formula, "H-+")
         self.assertRaises(FormulaParseError, Formula, "Li-2+")
 
-        # An unbracketed charge before the end of the formula is deprecated.
-        with self.assertWarns(PyValemDeprecationWarning):
-            cf2 = Formula("NH2+CH3CHO2-")
+        cf2 = Formula("(NH2+)CH3CHO2-")
         self.assertEqual(
             cf2.html,
-            "NH<sub>2</sub><sup>+</sup>CH<sub>3</sub>CHO<sub>2</sub><sup>-</sup>",
+            "(NH<sub>2</sub><sup>+</sup>)CH<sub>3</sub>CHO<sub>2</sub><sup>-</sup>",
         )
         self.assertEqual(cf2.charge, 0)
 
@@ -146,6 +143,74 @@ class FormulaTest(unittest.TestCase):
             with self.subTest(s):
                 self.assertRaises(FormulaParseError, Formula, s)
         self.assertEqual(Formula("(H2O)2+").charge, 1)
+
+    def test_invalid_syntax(self):
+        invalid = {
+            "whitespace": ("H2 O", " H2O", "H2O ", "Ca (OH)2", "H2O +"),
+            "leading zeros and zero counts": (
+                "H02",
+                "H0",
+                "0H2O",
+                "(H2O)0",
+                "Ar+02",
+                "H2O+0",
+                "(013C)",
+                "01,1-C2H4Cl2",
+            ),
+            "unbracketed charge before the end": (
+                "NH2+CH3CHO2-",
+                "NH2-CH3",
+                "H+CH3",
+                "Na+.Cl-",
+            ),
+            "conflicting charges": ("(H2O+)2+", "(NH4+)2(SO4)-2"),
+            "separators": (".H2O", "H2O.", "H2O..H2O"),
+        }
+        for reason, formulas in invalid.items():
+            for s in formulas:
+                with self.subTest(reason=reason, formula=s):
+                    with self.assertRaises(FormulaParseError) as cm:
+                        Formula(s)
+                    self.assertNotIsInstance(cm.exception, FormulaValidationError)
+
+    def test_invalid_species(self):
+        for s in ("(99H)", "(27N)", "(NH4+)x"):
+            with self.subTest(s):
+                self.assertRaises(FormulaValidationError, Formula, s)
+
+    def test_canonical_form(self):
+        canonical = {
+            "H+1": "H+",
+            "OH-1": "OH-",
+            "H1": "H",
+            "1H2O": "H2O",
+            "(H2O)1": "(H2O)",
+            "1(H2O)": "(H2O)",
+            "Co(H2O)6+2": "Co(H2O)6+2",
+            "SiO2.1H2O": "SiO2.H2O",
+            "D-": "D-",
+            "D2O": "D2O",
+            "(2H)2O": "(2H)2O",
+            "cis-1,2-CHFCHF": "cis-1,2-CHFCHF",
+            "e": "e-",
+            "hv": "hν",
+        }
+        for s, expected in canonical.items():
+            with self.subTest(s):
+                f = Formula(s)
+                self.assertEqual(repr(f), expected)
+                self.assertEqual(Formula(expected), f)
+        self.assertEqual(Formula("H+1"), Formula("H+"))
+        self.assertNotEqual(Formula("D"), Formula("(2H)"))
+
+    def test_radical_dot_rendering(self):
+        # The dot goes where it is written: after the atoms, before any charge.
+        f = Formula("OH·-")
+        self.assertEqual(f.html, "OH&#183;<sup>-</sup>")
+        self.assertEqual(f.latex, r"\mathrm{O}\mathrm{H}\cdot^{-}")
+        f = Formula("(OH·)2")
+        self.assertEqual(f.html, "(OH&#183;)<sub>2</sub>")
+        self.assertEqual(f.slug, "_l_OH_r_2_dot")
 
     def test_special_formulas(self):
         # stoichiometric_formula, html, latex, slug, rmm, natoms, charge, atoms

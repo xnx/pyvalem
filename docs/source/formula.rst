@@ -39,10 +39,14 @@ following grammar:
   For example, ``H2O``, ``(1H)2(16O)``, ``C2H6OH``, ``CH3CH2OH``, ``NH+``, ``CO3+2``.
 * Moieties within formula can be bracketed for clarity, for example ``CH3C(CH3)2CH3``.
   A charged moiety anywhere but at the end of the formula must be bracketed, as in the
-  zwitterion ``(NH3+)CH2CO2-``; an unbracketed one, as in ``NH3+CH2CO2-``, is
-  deprecated and will be an error in PyValem 3.0.
+  zwitterion ``(NH3+)CH2CO2-``. A charge after a bracketed moiety at the end, as in
+  ``(H2O)2+``, is the charge of the whole formula, so no moiety may then have a charge
+  of its own.
 * Counts and charges are written without leading zeros, and a formula contains no
-  whitespace (both are deprecated, and will be errors in PyValem 3.0).
+  whitespace.
+* The canonical form of a formula, given by ``repr()``, is as written except that
+  counts of 1 are omitted and charges of 1 are written ``+`` and ``-``: ``H+1`` and
+  ``H+`` are the same formula.
 * A limited number of formula prefixes are supported, for example ``L-CH3CH(NH2)CO2H``,
   ``cis-CH3CHCHCH3``, ``ortho-C6H4(CH3)2``
 * There are some special species:

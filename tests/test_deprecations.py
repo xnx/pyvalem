@@ -5,7 +5,7 @@ Unit tests for the warnings about input that PyValem 3.0 will reject.
 import unittest
 import warnings
 
-from pyvalem import Formula, PyValemDeprecationWarning, Reaction, StatefulSpecies
+from pyvalem import PyValemDeprecationWarning, Reaction, StatefulSpecies
 from pyvalem.states import (
     AtomicTermSymbol,
     J1J2_Coupling,
@@ -16,58 +16,6 @@ from pyvalem.states import (
     VibrationalState,
 )
 from pyvalem.states._state_parser import state_parser
-
-
-class FormulaDeprecationTest(unittest.TestCase):
-    def test_whitespace(self):
-        for s in ("H2 O", " H2O", "H2O ", "Ca (OH)2", "H2O +"):
-            with (
-                self.subTest(s),
-                self.assertWarnsRegex(PyValemDeprecationWarning, "Whitespace"),
-            ):
-                Formula(s)
-
-    def test_leading_zeros_and_zero_counts(self):
-        for s in (
-            "H02",
-            "H0",
-            "0H2O",
-            "(H2O)0",
-            "Ar+02",
-            "H2O+0",
-            "(013C)",
-            "01,1-C2H4Cl2",
-        ):
-            with (
-                self.subTest(s),
-                self.assertWarnsRegex(PyValemDeprecationWarning, "zero"),
-            ):
-                Formula(s)
-
-    def test_unbracketed_charge_before_the_end(self):
-        for s in ("NH2+CH3CHO2-", "NH2-CH3", "H+CH3", "Na+.Cl-"):
-            with (
-                self.subTest(s),
-                self.assertWarnsRegex(PyValemDeprecationWarning, "brackets"),
-            ):
-                Formula(s)
-
-    def test_valid_formulas_dont_warn(self):
-        with warnings.catch_warnings():
-            warnings.simplefilter("error")
-            for s in (
-                "H2O",
-                "(NH3+)CH2CO2-",
-                "Co(H2O)6+2",
-                "(H2O)2+",
-                "C10H8",
-                "(40Ar)+",
-                "D-",
-                "trans-2-C4H8",
-                "SiO2.2H2O",
-                "e-",
-            ):
-                Formula(s)
 
 
 class StateDeprecationTest(unittest.TestCase):

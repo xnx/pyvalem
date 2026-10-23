@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.0.0 (unreleased)
+
+### Changed
+
+- Formulas are parsed strictly: whitespace, leading zeros and zero counts, an
+  unbracketed charge before the end of the formula, and a separator (`.`) at
+  the start or end are errors. A charge after a bracketed moiety at the end is
+  the charge of the whole formula, so a moiety may no longer also have its own
+  (`(H2O+)2+` was +1).
+- The canonical form of a formula (`repr()` and the `formula` attribute) omits
+  counts of 1 and writes charges of 1 as `+` and `-`, so `H+1` equals `H+`.
+- An unknown isotope, and a charged moiety with an unspecified count, raise the
+  new `FormulaValidationError`, a `FormulaParseError`.
+
+### Fixed
+
+- The HTML and LaTeX of a radical put the dot where it is written, after the
+  atoms and before any charge: `(OH·)2` was rendered as `(OH)₂·`.
+
 ## 2.10.0 (24 October 2026)
 
 ### Deprecated
