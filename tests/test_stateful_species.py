@@ -74,6 +74,9 @@ class StatefulSpeciesTest(unittest.TestCase):
         ss4 = StatefulSpecies("Ar+ [Ne].3s2.3p6.4s")
         for ss in (ss2, ss3, ss4):
             self.assertRaises(StatefulSpeciesError, ss.verify_atomic_configuration)
+        # There is nothing to verify without an atomic configuration.
+        self.assertTrue(StatefulSpecies("He").verify_atomic_configuration())
+        self.assertTrue(StatefulSpecies("He 1S").verify_atomic_configuration())
 
     def test_diatomic_configuration_inversion_parity(self):
         ss1 = StatefulSpecies("H2 1sigmag2; 1SIGMA+g")
@@ -81,8 +84,13 @@ class StatefulSpeciesTest(unittest.TestCase):
         ss2 = StatefulSpecies("H2 1sigma2")
         ss3 = StatefulSpecies("HD 1sigmag2")
         ss4 = StatefulSpecies("H2 1sigma1.2sigmau1")
-        for ss in (ss2, ss3, ss4):
+        # A heteronuclear diatomic has no inversion parity labels at all.
+        ss5 = StatefulSpecies("CO 1σg2.2σ2")
+        for ss in (ss2, ss3, ss4, ss5):
             self.assertRaises(StatefulSpeciesError, ss.verify_diatomic_inversion_parity)
+        self.assertTrue(
+            StatefulSpecies("CO 1σ2.2σ2").verify_diatomic_inversion_parity()
+        )
 
     def test_multiple_key_value_pair_states(self):
         _ = StatefulSpecies("Ar+ n=2;2P;|M|=1")

@@ -86,7 +86,7 @@ class StatefulSpecies:
 
     def verify_atomic_configuration(self):
         atomic_configurations = self.get_states_of_type(AtomicConfiguration)
-        if len(atomic_configurations) != 1:
+        if len(atomic_configurations) > 1:
             raise StatefulSpeciesError(
                 "Multiple AtomicConfigurations specified for {}".format(self)
             )
@@ -121,10 +121,14 @@ class StatefulSpecies:
                 "Multiple DiatomicConfigurations specified for {}".format(self)
             )
         diatomic_configuration = diatomic_configurations[0]
-        has_parity_label = all(
+        parity_labels = [
             orbital.symbol[-1] in "gu" for orbital in diatomic_configuration.orbitals
-        )
-        if has_parity_label == homonuclear_diatomic:
+        ]
+        # Every orbital of a homonuclear diatomic has a parity label, and no
+        # orbital of a heteronuclear one does.
+        if homonuclear_diatomic and all(parity_labels):
+            return True
+        if not homonuclear_diatomic and not any(parity_labels):
             return True
         s_homohetero = "homo" if homonuclear_diatomic else "hetero"
         raise StatefulSpeciesError(
