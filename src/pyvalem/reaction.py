@@ -411,7 +411,12 @@ class Reaction:
         return reactants_total_charge == products_total_charge
 
     def __eq__(self, other):
+        if not isinstance(other, Reaction):
+            return NotImplemented
         return repr(self) == repr(other)
+
+    def __hash__(self):
+        return hash(repr(self))
 
     @property
     def html(self):

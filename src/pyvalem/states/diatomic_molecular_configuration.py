@@ -92,15 +92,16 @@ class DiatomicMolecularOrbital:
     def __repr__(self):
         return "{:d}{:s}{:d}".format(self.n, self.symbol, self.count)
 
+    def _key(self):
+        return self.n, self.symbol, self.count
+
     def __hash__(self):
-        return hash((self.n, self.symbol, self.count))
+        return hash(self._key())
 
     def __eq__(self, other):
-        return (
-            self.n == other.n
-            and self.symbol == other.symbol
-            and self.count == other.count
-        )
+        if not isinstance(other, DiatomicMolecularOrbital):
+            return NotImplemented
+        return type(self) is type(other) and self._key() == other._key()
 
     def validate_molecular_orbital(self):
         if self.symbol == "σ":
@@ -156,16 +157,8 @@ class AltDiatomicMolecularOrbital(DiatomicMolecularOrbital):
     def __repr__(self):
         return "{}{}-{}{}".format(self.n, self.lletter, self.symbol, self.count)
 
-    def __hash__(self):
-        return hash((self.n, self.lletter, self.symbol, self.count))
-
-    def __eq__(self, other):
-        return (
-            self.n == self.n
-            and self.lletter == self.lletter
-            and self.symbol == self.symbol
-            and self.count == self.count
-        )
+    def _key(self):
+        return self.n, self.lletter, self.symbol, self.count
 
     @property
     def html(self):
@@ -253,9 +246,6 @@ class DiatomicMolecularConfiguration(State):
     def __repr__(self):
         return ".".join([str(orbital) for orbital in self.orbitals])
 
-    def __hash__(self):
-        return hash(self.state_str)
-
     @property
     def html(self):
         html_chunks = []
@@ -271,6 +261,3 @@ class DiatomicMolecularConfiguration(State):
             for orbital in self.orbitals:
                 latex_chunks.append(orbital.latex)
         return "".join(latex_chunks)
-
-    def __eq__(self, other):
-        return self.orbitals == other.orbitals

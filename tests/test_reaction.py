@@ -135,6 +135,13 @@ class ReactionParseTest(unittest.TestCase):
         for r1, r2 in equal:
             self.assertEqual(Reaction(r1), Reaction(r2))
 
+    def test_reaction_hash(self):
+        r1, r2 = Reaction("H + H -> H2"), Reaction("2H -> H2")
+        self.assertEqual(r1, r2)
+        self.assertEqual(hash(r1), hash(r2))
+        self.assertEqual(len({r1, r2}), 1)
+        self.assertNotEqual(r1, "H + H → H2")
+
     def test_reaction_inequality(self):
         unequal = [
             ["H + He + H -> 2H + He", "He + 2H -> He + 2H"],

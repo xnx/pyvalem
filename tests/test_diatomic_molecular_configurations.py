@@ -5,6 +5,7 @@ Unit tests for the diatomic molecular configuration module of PyValem
 import unittest
 
 from pyvalem.states._base_state import StateParseError
+from pyvalem.states.atomic_configuration import AtomicConfiguration
 from pyvalem.states.diatomic_molecular_configuration import (
     DiatomicMolecularConfiguration,
     DiatomicMolecularConfigurationError,
@@ -91,6 +92,26 @@ class DiatomicMolecularConfigurationTest(unittest.TestCase):
         c4 = DiatomicMolecularConfiguration("1σg2.1σu2.2σg2.2σu2.1πu4.3σg1")
         c5 = DiatomicMolecularConfiguration("1σg2.1σu2.2σg2.2σu2.1πu4.3σg1")
         self.assertEqual(c4, c5)
+
+    def test_alt_diatomic_molecular_configuration_equality(self):
+        c1 = DiatomicMolecularConfiguration("1s-σg2")
+        self.assertEqual(c1, DiatomicMolecularConfiguration("1s-sigmag2"))
+        self.assertNotEqual(c1, DiatomicMolecularConfiguration("2p-πu4"))
+        self.assertNotEqual(c1, DiatomicMolecularConfiguration("1s-σg1"))
+        self.assertNotEqual(c1, DiatomicMolecularConfiguration("1σg2"))
+
+    def test_hash_is_consistent_with_equality(self):
+        c1 = DiatomicMolecularConfiguration("1σg2.1σu1")
+        c2 = DiatomicMolecularConfiguration("1sigmag2.1sigmau1")
+        self.assertEqual(c1, c2)
+        self.assertEqual(hash(c1), hash(c2))
+        self.assertEqual(len({c1, c2}), 1)
+
+    def test_comparison_with_other_types(self):
+        c = DiatomicMolecularConfiguration("1σg2")
+        self.assertNotEqual(c, "1σg2")
+        self.assertNotEqual(c, AtomicConfiguration("1s2"))
+        self.assertNotEqual(c, None)
 
     def test_diatomic_molecular_configuration_repr(self):
         c1 = DiatomicMolecularConfiguration("1σu2")

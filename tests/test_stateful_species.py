@@ -50,6 +50,10 @@ class StatefulSpeciesTest(unittest.TestCase):
 
         self.assertEqual(ss1, ss2)
 
+    def test_stateful_species_equality_of_equivalent_states(self):
+        self.assertEqual(StatefulSpecies("N2 1σg2"), StatefulSpecies("N2 1sigmag2"))
+        self.assertNotEqual(StatefulSpecies("H"), "H")
+
     def test_state_appears_at_most_once(self):
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "HCl v=0;v=1")
         self.assertRaises(StatefulSpeciesError, StatefulSpecies, "H 1s1;2s1")

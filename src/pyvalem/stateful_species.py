@@ -53,6 +53,8 @@ class StatefulSpecies:
         equal States (in any order).
         """
 
+        if not isinstance(other, StatefulSpecies):
+            return NotImplemented
         return self.formula == other.formula and set(self.states) == set(other.states)
 
     def __hash__(self):

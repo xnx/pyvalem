@@ -164,6 +164,10 @@ class FormulaTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, Formula, "H3O^+")
         self.assertRaises(FormulaParseError, Formula, "H_2S")
 
+    def test_comparison_with_other_types(self):
+        self.assertNotEqual(Formula("H2"), "H2")
+        self.assertNotEqual(Formula("H2"), None)
+
     def test_formula_hash(self):
         f1 = Formula("hv")
         f2 = Formula("Ar")

@@ -519,6 +519,8 @@ class Formula:
         return hash(self.formula)
 
     def __eq__(self, other):
+        if not isinstance(other, Formula):
+            return NotImplemented
         return self.formula == other.formula
 
     def _stoichiometric_formula_atomic_number(self):
