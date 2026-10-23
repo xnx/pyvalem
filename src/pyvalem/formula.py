@@ -163,13 +163,19 @@ def _count(s):
     return None if s == "x" else int(s)
 
 
-def _atom_order(atom):
-    """Sort atoms and isotopes by atomic number, then mass.
+def _isotope_rank(atom):
+    """An element comes before its isotopes, which are in order of mass number."""
+    return atom.A if atom.is_isotope else 0
 
-    An element without a standard atomic weight (e.g. Tc) comes before its
-    isotopes.
-    """
-    return atom.Z, atom.mass is not None, atom.mass or 0
+
+def _atomic_number_order(atom):
+    """Sort key for atoms and isotopes in order of atomic number."""
+    return atom.Z, _isotope_rank(atom)
+
+
+def _alphabetical_order(atom):
+    """Sort key for atoms and isotopes in alphabetical order of element symbol."""
+    return atom.symbol.lstrip("0123456789"), _isotope_rank(atom)
 
 
 class FormulaError(PyValemError):
@@ -614,14 +620,11 @@ class Formula:
             return NotImplemented
         return self.formula == other.formula
 
-    def _stoichiometric_formula_atomic_number(self):
-        """Return a list of atoms/isotopes and their stoichiometries.
-
-        The returned list is sorted in order of increasing atomic number.
-        """
-
+    def _atom_strings(self, atoms):
+        """Return the atoms and isotopes with their stoichiometries, in the order
+        given."""
         atom_strs = []
-        for atom in sorted(self.atoms, key=_atom_order):
+        for atom in atoms:
             if atom.is_isotope:
                 symbol = "({})".format(atom.symbol)
             else:
@@ -631,14 +634,22 @@ class Formula:
             )
         return atom_strs
 
+    def _stoichiometric_formula_atomic_number(self):
+        """Return a list of atoms/isotopes and their stoichiometries.
+
+        The returned list is sorted in order of increasing atomic number. Each
+        element comes before its isotopes, which are in order of mass number.
+        """
+        return self._atom_strings(sorted(self.atoms, key=_atomic_number_order))
+
     def _stoichiometric_formula_alphabetical(self):
         """Return a list of atoms/isotopes and their stoichiometries.
 
-        The returned list is sorted in alphabetical order.
+        The returned list is sorted in alphabetical order of element symbol.
+        Each element comes before its isotopes, which are in order of mass
+        number.
         """
-        atom_strs = self._stoichiometric_formula_atomic_number()
-        atom_strs.sort()
-        return atom_strs
+        return self._atom_strings(sorted(self.atoms, key=_alphabetical_order))
 
     def _stoichiometric_formula_hill(self):
         """Return a list of atoms/isotopes and their stoichiometries.
@@ -646,31 +657,14 @@ class Formula:
         The returned list is sorted in "Hill notation": first carbon, then
         hydrogen, then all other chemical elements in alphabetical order.
         If the species contains H but no C, all elements are listed in
-        alphabetical order, including hydrogen.
+        alphabetical order, including hydrogen. Isotopes are listed with their
+        element, as in the alphabetical order.
         """
-        c_h_strs = []
-        atom_strs = []
-        contains_c = False
-        for atom in sorted(self.atoms, key=_atom_order):
-            if atom.is_isotope:
-                symbol = "({})".format(atom.symbol)
-            else:
-                symbol = atom.symbol
-            if symbol == "C":
-                c_h_strs.insert(0, self._get_symbol_stoich("C", self.atom_stoich["C"]))
-                contains_c = True
-            elif symbol == "H":
-                c_h_strs.insert(1, self._get_symbol_stoich("H", self.atom_stoich["H"]))
-            else:
-                atom_strs.append(
-                    self._get_symbol_stoich(symbol, self.atom_stoich[atom.symbol])
-                )
-
-        if not contains_c:
-            atom_strs = c_h_strs + atom_strs
-            c_h_strs = []
-        atom_strs.sort()
-        return c_h_strs + atom_strs
+        atoms = sorted(self.atoms, key=_alphabetical_order)
+        if any(atom.Z == 6 for atom in atoms):
+            # NB a stable sort, so each group stays in alphabetical order.
+            atoms.sort(key=lambda atom: {6: 0, 1: 1}.get(atom.Z, 2))
+        return self._atom_strings(atoms)
 
     def stoichiometric_formula(self, fmt="atomic number"):
         """Return a string representation of the stoichiometric formula.

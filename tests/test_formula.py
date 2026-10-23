@@ -30,6 +30,22 @@ class FormulaTest(unittest.TestCase):
         self.assertEqual(cf.stoichiometric_formula("alphabetical"), "BrH")
         self.assertEqual(cf.stoichiometric_formula("hill"), "BrH")
 
+    def test_stoichiometric_formula_with_isotopes(self):
+        # Isotopes are listed with their element, after the element itself.
+        cases = {
+            "(13C)H3Cl": ("H3(13C)Cl", "(13C)ClH3", "(13C)H3Cl"),
+            "HDO": ("H(2H)O", "H(2H)O", "H(2H)O"),
+            "DCl": ("(2H)Cl", "Cl(2H)", "Cl(2H)"),
+            "CH3D": ("H3(2H)C", "CH3(2H)", "CH3(2H)"),
+            "H(1H)": ("H(1H)", "H(1H)", "H(1H)"),
+        }
+        for s, (atomic_number, alphabetical, hill) in cases.items():
+            with self.subTest(s):
+                f = Formula(s)
+                self.assertEqual(f.stoichiometric_formula(), atomic_number)
+                self.assertEqual(f.stoichiometric_formula("alphabetical"), alphabetical)
+                self.assertEqual(f.stoichiometric_formula("hill"), hill)
+
     def test_html_latex_and_slug(self):
         f = (
             ("NO+", "NO+", "NO<sup>+</sup>", r"\mathrm{N}\mathrm{O}^{+}", "NO_p"),

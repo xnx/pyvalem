@@ -13,6 +13,10 @@
   counts of 1 and writes charges of 1 as `+` and `-`, so `H+1` equals `H+`.
 - An unknown isotope, and a charged moiety with an unspecified count, raise the
   new `FormulaValidationError`, a `FormulaParseError`.
+- In stoichiometric formulas, isotopes are listed with their element, after the
+  element itself. In alphabetical order every isotope used to come first (so
+  DCl gave `(2H)Cl`, now `Cl(2H)`), and Hill order now treats isotopes of
+  carbon and hydrogen as carbon and hydrogen (`(13C)H3Cl`, not `(13C)ClH3`).
 
 ### Fixed
 
