@@ -238,17 +238,18 @@ class Reaction:
         ):
             for side_fragment in side_str.split(" + "):
                 if side_fragment.strip():
-                    patt = r"(\d*)(.*)"
-                    n, ss_str = re.match(patt, side_fragment).groups()
-                    if not n:
-                        n = 1
-                    else:
-                        try:
-                            n = int(n)
-                        except ValueError as err:
-                            raise ReactionParseError(
-                                "Failed to parse {}".format(side_fragment)
-                            ) from err
+                    # A leading number is the coefficient, unless it is a locant
+                    # prefix of the formula itself, as in 1,2-C2H4Cl2.
+                    n, ss_str = re.fullmatch(
+                        r"([0-9]*)(.*)", side_fragment, re.DOTALL
+                    ).groups()
+                    if ss_str[:1] in (",", "-"):
+                        n, ss_str = "", side_fragment
+                    n = int(n) if n else 1
+                    if n == 0:
+                        raise ReactionParseError(
+                            "Invalid coefficient 0 in {}".format(side_fragment)
+                        )
                     ss = StatefulSpecies(ss_str)
                     species.append((n, ss))
                     ss_str = str(ss)
@@ -338,16 +339,21 @@ class Reaction:
         return expanded_terms
 
     @staticmethod
-    def _silent_n(n):
-        return str(n) if n != 1 else ""
+    def _term(n, s, space=" "):
+        """Return the text of the term n s, omitting a coefficient of 1.
+
+        A space separates the coefficient from a species that starts with a
+        digit, as in 2 1,2-C2H4Cl2.
+        """
+        if n == 1:
+            return s
+        if s[:1].isdigit():
+            return "{}{}{}".format(n, space, s)
+        return "{}{}".format(n, s)
 
     def __str__(self):
-        reactants_str = " + ".join(
-            "{}{}".format(self._silent_n(n), str(ss)) for n, ss in self.reactants
-        )
-        products_str = " + ".join(
-            "{}{}".format(self._silent_n(n), str(ss)) for n, ss in self.products
-        )
+        reactants_str = " + ".join(self._term(n, str(ss)) for n, ss in self.reactants)
+        products_str = " + ".join(self._term(n, str(ss)) for n, ss in self.products)
         return "{} {} {}".format(reactants_str, self.sep, products_str).strip()
 
     def __repr__(self):
@@ -363,12 +369,8 @@ class Reaction:
         reactants = self._expand_terms(reactants)
         products = self._expand_terms(products)
 
-        reactants_repr = " + ".join(
-            "{}{}".format(self._silent_n(n), repr(ss)) for n, ss in reactants
-        )
-        products_repr = " + ".join(
-            "{}{}".format(self._silent_n(n), repr(ss)) for n, ss in products
-        )
+        reactants_repr = " + ".join(self._term(n, repr(ss)) for n, ss in reactants)
+        products_repr = " + ".join(self._term(n, repr(ss)) for n, ss in products)
         return "{} {} {}".format(reactants_repr, self.sep, products_repr).strip()
 
     @staticmethod
@@ -427,12 +429,8 @@ class Reaction:
         -------
         str
         """
-        reactants_html = " + ".join(
-            "{}{}".format(self._silent_n(n), ss.html) for n, ss in self.reactants
-        )
-        products_html = " + ".join(
-            "{}{}".format(self._silent_n(n), ss.html) for n, ss in self.products
-        )
+        reactants_html = " + ".join(self._term(n, ss.html) for n, ss in self.reactants)
+        products_html = " + ".join(self._term(n, ss.html) for n, ss in self.products)
         return "{} {} {}".format(reactants_html, self.sep, products_html).strip()
 
     @property
@@ -444,10 +442,10 @@ class Reaction:
         str
         """
         reactants_latex = " + ".join(
-            "{}{}".format(self._silent_n(n), ss.latex) for n, ss in self.reactants
+            self._term(n, ss.latex, r"\,") for n, ss in self.reactants
         )
         products_latex = " + ".join(
-            "{}{}".format(self._silent_n(n), ss.latex) for n, ss in self.products
+            self._term(n, ss.latex, r"\,") for n, ss in self.products
         )
         return "{} {} {}".format(
             reactants_latex, self.latex_sep[self.sep], products_latex

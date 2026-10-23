@@ -140,6 +140,29 @@ class ReactionParseTest(unittest.TestCase):
         self.assertRaises(ReactionStoichiometryError, Reaction, "CFx -> CF2")
         self.assertRaises(ReactionStoichiometryError, Reaction, "CxH4 -> C + 2H2")
 
+    def test_locant_prefixes(self):
+        r = Reaction("1,2-C2H4Cl2 -> C2H3Cl + HCl")
+        self.assertEqual(r.reactants[0][0], 1)
+        self.assertEqual(str(r.reactants[0][1]), "1,2-C2H4Cl2")
+        self.assertEqual(
+            str(Reaction("2-C4H9OH -> C4H8 + H2O")), "2-C4H9OH → C4H8 + H2O"
+        )
+
+        # A coefficient is separated by a space from a species starting with a digit.
+        r = Reaction("2 1,2-C2H4Cl2 -> 2C2H3Cl + 2HCl")
+        self.assertEqual(r.reactants[0][0], 2)
+        self.assertEqual(str(r), "2 1,2-C2H4Cl2 → 2C2H3Cl + 2HCl")
+        self.assertEqual(Reaction(str(r)), r)
+        self.assertTrue(r.html.startswith("2 1,2-C<sub>2</sub>"))
+        self.assertTrue(r.latex.startswith(r"2\,1,2-\mathrm{C}_{2}"))
+
+    def test_zero_coefficient(self):
+        with self.assertRaisesRegex(ReactionParseError, "coefficient"):
+            Reaction("0H2 + O2 -> O2")
+
+    def test_whole_term_is_parsed(self):
+        self.assertRaises(ReactionParseError, Reaction, "H2\nXyz + O2 -> H2O2")
+
     def test_reaction_hash(self):
         r1, r2 = Reaction("H + H -> H2"), Reaction("2H -> H2")
         self.assertEqual(r1, r2)
