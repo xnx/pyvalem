@@ -7,6 +7,8 @@ import unittest
 from pyvalem.states.atomic_configuration import (
     AtomicConfiguration,
     AtomicConfigurationError,
+    AtomicOrbital,
+    AtomicOrbitalError,
 )
 
 
@@ -106,6 +108,41 @@ class AtomicConfigurationTest(unittest.TestCase):
         self.assertEqual(c3.nelectrons, 3)
         self.assertEqual(c3.orbitals[0].nocc, 1)
         self.assertEqual(c3.orbitals[1].nocc, 2)
+
+    def test_principal_quantum_numbers_above_9(self):
+        c = AtomicConfiguration("10s2.10p1")
+        self.assertEqual(c.nelectrons, 3)
+        self.assertEqual(repr(c), "10s2.10p")
+        AtomicConfiguration("[Xe].4f14.5d10.6s2.10s1.10p1")
+        self.assertRaises(AtomicConfigurationError, AtomicConfiguration, "10s2.10s1")
+        self.assertRaises(AtomicConfigurationError, AtomicConfiguration, "12p.12p")
+
+    def test_noble_gas_contraction(self):
+        # Only a leading closed shell is written in noble-gas notation.
+        c = AtomicConfiguration("1s2.2s2.2p6.3s2.3p6.4s1")
+        self.assertEqual(c.state_str, "[Ar].4s1")
+        c = AtomicConfiguration("11s2.2s2.2p6.3s2.3p6")
+        self.assertEqual(c.state_str, "11s2.2s2.2p6.3s2.3p6")
+        self.assertEqual(c.nelectrons, 18)
+        c = AtomicConfiguration("4s2.1s2.2s2.2p6.3s2.3p6")
+        self.assertEqual(c.nelectrons, 20)
+
+    def test_atomic_orbital(self):
+        o = AtomicOrbital(n=2, l=1)
+        self.assertEqual(o.nocc, 1)
+        self.assertEqual(repr(o), "2p")
+        self.assertEqual(AtomicOrbital(n=3, lletter="d", nocc=10).l, 2)
+        invalid = (
+            {"n": 2, "lletter": "j"},
+            {"n": 2},
+            {"n": 3, "l": -1},
+            {"n": 30, "l": 21},
+            {"n": 2, "l": 1, "lletter": "s"},
+            {"n": 2, "l": 1, "nocc": -1},
+        )
+        for kwargs in invalid:
+            with self.subTest(**kwargs):
+                self.assertRaises(AtomicOrbitalError, AtomicOrbital, **kwargs)
 
     def test_atomic_configuration_unspecified_n(self):
         c1 = AtomicConfiguration("1s2.np")

@@ -5,6 +5,8 @@ Methods are implemented for parsing a string into quantum numbers and
 labels, creating an HTML representation of the term symbol, etc.
 """
 
+import re
+
 import pyparsing as pp
 
 from pyvalem.states._base_state import State, StateParseError
@@ -90,14 +92,14 @@ class AtomicOrbital:
         If inconsistent quantum numbers are passed to the constructor.
     """
 
-    def __init__(self, n, l=None, nocc=0, lletter=None):
+    def __init__(self, n, l=None, nocc=1, lletter=None):
         self.n = n
         self.incompletely_specified = False
         if l is None:
             self.lletter = lletter
             try:
                 self.l = atomic_orbital_symbols.index(lletter)
-            except IndexError as err:
+            except ValueError as err:
                 raise AtomicOrbitalError(
                     'Invalid azimuthal quantum number label, lletter="{}"'.format(
                         lletter
@@ -105,15 +107,14 @@ class AtomicOrbital:
                 ) from err
         else:
             self.l = l
-            try:
-                self.lletter = atomic_orbital_symbols[l]
-            except IndexError as err:
+            if not 0 <= l < len(atomic_orbital_symbols):
                 raise AtomicOrbitalError(
                     "Invalid azimuthal quantum"
-                    " number, l={}. Must be in range 0 < l < {}".format(
+                    " number, l={}. Must be in range 0 <= l < {}".format(
                         l, len(atomic_orbital_symbols)
                     )
-                ) from err
+                )
+            self.lletter = atomic_orbital_symbols[l]
             if lletter and lletter != self.lletter:
                 raise AtomicOrbitalError(
                     "Inconsistent azimuthal quantum"
@@ -177,7 +178,7 @@ class AtomicOrbital:
             if self.nocc < 0:
                 raise AtomicOrbitalError(
                     "Negative nocc = {} not allowed in orbital: {}".format(
-                        self.nocc, self.nocc
+                        self.nocc, self
                     )
                 )
         # Even if the orbital is incompletely specified, we can still check
@@ -273,7 +274,10 @@ class AtomicConfiguration(State):
         # Expand out noble gas notation, if used, and check that the
         # subshells 1s, 2s, 2p, ... are unique.
         subshells = self._expand_noble_gas_config(state_str)
-        subshells = [subshell[:2] for subshell in subshells.split(".")]
+        subshells = [
+            re.match(r"(\d+|n)[a-z]", subshell).group()
+            for subshell in subshells.split(".")
+        ]
 
         for i, parsed_orbital in enumerate(parse_results):
             if not i and isinstance(parsed_orbital, str):
@@ -340,11 +344,12 @@ class AtomicConfiguration(State):
         return noble_gas_configs[config[1:3]] + config[4:]
 
     def _contract_to_noble_gas_config(self, state_str):
-        """Replace explicit atomic orbital sequence with noble gas notation."""
+        """Replace a leading closed-shell sequence of orbitals with noble gas
+        notation."""
         for noble_gas in noble_gases[:1:-1]:
             config = noble_gas_configs[noble_gas]
-            if config in state_str:
-                state_str = state_str.replace(config, f"[{noble_gas}]")
+            if state_str == config or state_str.startswith(config + "."):
+                return f"[{noble_gas}]" + state_str[len(config) :]
         return state_str
 
     def __repr__(self):
