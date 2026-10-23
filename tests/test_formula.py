@@ -117,6 +117,22 @@ class FormulaTest(unittest.TestCase):
         )
         self.assertEqual(cf2.charge, 0)
 
+    def test_numeric_locant_prefixes(self):
+        for s in ("trans-2-C4H8", "cis-2-C4H8", "(+)-2-C4H9Cl", "(R)-2-C4H9Cl"):
+            with self.subTest(s):
+                self.assertEqual(Formula(s).charge, 0)
+        self.assertEqual(Formula("trans-2-C4H8").slug, "trans_2__C4H8")
+        # Consecutive numeric prefixes are invalid: locants are comma-separated.
+        for s in ("1-1-C2H4Cl2", "1,1-2-C2H3Cl3", "cis-1-2-CHFCHF"):
+            with self.subTest(s):
+                self.assertRaises(FormulaParseError, Formula, s)
+
+    def test_second_charge(self):
+        for s in ("Li+2-", "Li-2+", "Li+2+3", "Li+2+0", "H2O+2-", "(H2O+)2+-"):
+            with self.subTest(s):
+                self.assertRaises(FormulaParseError, Formula, s)
+        self.assertEqual(Formula("(H2O)2+").charge, 1)
+
     def test_special_formulas(self):
         # stoichiometric_formula, html, latex, slug, rmm, natoms, charge, atoms
         f = {

@@ -18,6 +18,7 @@ Examples
 
 import re
 from collections import defaultdict
+from itertools import pairwise
 
 import pyparsing as pp
 
@@ -316,9 +317,6 @@ class Formula:
 
         if any(s in formula for s in ("++", "--", "+-", "-+")):
             raise FormulaParseError("Invalid formula syntax: {}".format(formula))
-        # NB whilst NH2+CH3CHO2- is allowed, things like 'Li+2-' are not...
-        if re.search(r"[+-]\d+[+-]", formula):
-            raise FormulaParseError("Invalid formula syntax: {}".format(formula))
 
         # We make a particular exception for various special cases, including
         # photons, electrons, positrons and "M", denoting an unspecified
@@ -348,9 +346,22 @@ class Formula:
 
         # make the prefix html and slug
         if "prefix" in moieties:
+            # Locants are separated by commas, so consecutive numeric prefixes
+            # (1-1-C2H4Cl2) are invalid: they would also make the same slug as
+            # the comma-separated list (1,1-C2H4Cl2).
+            numeric = [token[0].isdigit() for token in moieties["prefix"]]
+            if any(a and b for a, b in pairwise(numeric)):
+                raise FormulaParseError("Invalid formula syntax: {}".format(formula))
             html_chunks.append(self._make_prefix_html(moieties["prefix"]))
             latex_chunks.append(self._make_prefix_latex(moieties["prefix"]))
             slug_chunks.append(self._make_prefix_slug(moieties["prefix"]))
+
+        # A charge after the last moiety is only allowed if that moiety is
+        # bracketed, as in (H2O)2+: an unbracketed moiety takes the charge that
+        # follows it as its own (as in NH2+CH3CHO2-), so a further charge, as in
+        # Li+2-, is invalid.
+        if moieties["charge"] != "0" and "prestoich" not in moieties["formula"][-1]:
+            raise FormulaParseError("Invalid formula syntax: {}".format(formula))
 
         moieties, total_charge = moieties["formula"], int(moieties["charge"])
         nmoieties = len(moieties)
