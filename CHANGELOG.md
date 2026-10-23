@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.10.0 (24 October 2026)
+
+### Deprecated
+
+The following input, which PyValem 3.0 will reject, now gives a
+`PyValemDeprecationWarning`. That is a `FutureWarning`, so it is shown by default.
+
+- Whitespace inside a formula or a state, as in `H2 O`, `Ca (OH)2`, `2 P_1/2`
+  and `J = 2`. Spaces still separate the formula and states of a
+  `StatefulSpecies`, and the terms of a reaction.
+- An unbracketed charge before the end of a formula, as in `NH2+CH3CHO2-`:
+  write `(NH2+)CH3CHO2-`.
+- A bare number as a vibrational state, as in `CO 2`: write `CO v=2`.
+- Leading zeros and zero counts, as in `H02`, `H0`, `Ar+02` and `v=007`, and
+  leading zeros in a reaction coefficient, as in `02H -> H2`.
+
 ## 2.9.0 (24 October 2026)
 
 PyValem now needs Python 3.11 or later and pyparsing 3.1 or later.
