@@ -1,28 +1,66 @@
 [build-system]
-requires = ["setuptools>=43", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyvalem"
+dynamic = ["version"]
+description = "A package for managing simple chemical species and states"
+readme = "README.rst"
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+authors = [{ name = "Christian Hill", email = "ch.hill@iaea.org" }]
+requires-python = ">=3.11"
+dependencies = ["pyparsing>=2.3"]
+keywords = ["chemistry", "formula", "species", "state", "reaction"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+[project.urls]
+Homepage = "https://github.com/xnx/pyvalem"
+Issues = "https://github.com/xnx/pyvalem/issues"
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-cov"]
+docs = ["sphinx"]
+
+[tool.hatch.version]
+path = "src/pyvalem/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+# An explicit allow-list, so that local, untracked files never end up in an sdist.
+include = [
+    "/src/pyvalem",
+    "/tests",
+    "/docs/source",
+    "/docs/Makefile",
+    "/docs/make.bat",
+    "/README.rst",
+    "/LICENSE",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyvalem"]
 
 [tool.pytest.ini_options]
 addopts = "--doctest-modules --doctest-glob='**/*.rst'"
-
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py3{10,9,8,7}-pp_{l,h}, py3{6}-pp_{l,h}-ir_{l,h}
-skip_missing_interpreters = true
-
-[testenv]
-deps =
-    pytest
-    pp_l: pyparsing==2.3.0
-    pp_h: pyparsing
-    ir_l: importlib-resources==1.0
-    ir_h: importlib-resources
-commands = pytest
-"""
+testpaths = ["tests", "src", "docs/source", "README.rst"]
 
 [tool.coverage.run]
-omit = ["tests/*", "src/pyvalem/__init__.py", "docs/*"]
+source = ["pyvalem"]
+branch = true
 
 [tool.coverage.html]
 directory = "htmlcov"

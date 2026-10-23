@@ -36,14 +36,10 @@ The PyValem package can be installed either from PyPI_ using pip
 
     python3 -m pip install pyvalem
 
-or from the source by running (one of the two) from the project source directory.
+or from the source by running the following from the project source directory.
 
 .. code-block:: bash
 
-    # either
-    python setup.py install
-
-    # or
     python3 -m pip install .
 
 
@@ -182,37 +178,21 @@ conservation during instantiation.
 
 For Developers:
 ===============
-It goes without saying that any development should be done in a clean virtual
-environment.
-After cloning or forking the project from its GitHub_ page, ``pyvalem`` might be
-installed into the virtual environment in editable mode with
+After cloning or forking the project from its GitHub_ page, install ``pyvalem`` in
+editable mode into a clean virtual environment, together with its development
+dependencies (this needs pip 25.1 or later):
 
 .. code-block:: bash
 
-    pip install -e .[dev]
+    python3 -m pip install -e . --group dev
 
-or on zsh:
-
-.. code-block:: zsh
-
-   pip install -e .'[dev]'
-
-The ``[dev]`` extra installs (apart from the package dependencies) also several
-development-related packages, such as ``pytest``, ``black``, ``tox`` or ``ipython.``
 The tests can then be executed by running (from the project root directory)
 
 .. code-block:: bash
 
-    # either
     pytest
 
-    # or
-    tox
-
-The project does not have ``requirements.txt`` by design, all the package dependencies
-are rather handled by ``setup.py``.
-The package needs to be installed to run the tests, which grants the testing process
-another layer of usefulness.
+The package metadata and all of its dependencies are declared in ``pyproject.toml``.
 
 Docstrings in the project adhere to the numpydoc_ styling.
 The project code is formatted by ``black``.

@@ -22,14 +22,10 @@ The PyValem package can be installed either from PyPI_ using pip
 
     python3 -m pip install pyvalem
 
-or from the source by running (one of the two) from the project source directory.
+or from the source by running the following from the project source directory.
 
 .. code-block:: bash
 
-    # either
-    python setup.py install
-
-    # or
     python3 -m pip install .
 
 
