@@ -12,15 +12,15 @@ integer = pp.Word(pp.nums)
 
 # noinspection PyTypeChecker
 vibrational_term = pp.Group(
-    pp.Optional(integer.setResultsName("n"), default=1)
+    pp.Optional(integer.set_results_name("n"), default=1)
     + pp.Or(("v", "ν"))
-    + integer.setResultsName("mode")
+    + integer.set_results_name("mode")
 )
 vibrational_config = (
     vibrational_term
     + pp.ZeroOrMore(pp.Suppress("+") + vibrational_term)
     + pp.StringEnd()
-).leaveWhitespace()
+).leave_whitespace()
 
 
 class VibrationalTerm:
@@ -79,7 +79,9 @@ class VibrationalState(State):
         except ValueError:
             self.polyatomic = True
             try:
-                parse_results = vibrational_config.parseString(self.state_str)
+                parse_results = vibrational_config.parse_string(
+                    self.state_str, parse_all=True
+                )
             except pp.ParseException:
                 raise VibrationalStateError(
                     "Invalid vibrational state"

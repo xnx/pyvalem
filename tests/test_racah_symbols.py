@@ -4,6 +4,7 @@ Unit tests for the Racah symbols module of PyValem.
 
 import unittest
 
+from pyvalem.states._base_state import StateParseError
 from pyvalem.states.racah_symbol import RacahSymbol
 
 
@@ -45,6 +46,11 @@ class RacahSymbolTest(unittest.TestCase):
         self.assertEqual(r3.k_den, 2)
         self.assertEqual(r3.j_term, 2)
         self.assertEqual(r3.parity, "o")
+
+    def test_trailing_characters(self):
+        for s in ("5p[3/2]_1xyz", "5p[3/2]_1 extra", "3p'[1/2]o_0!!", "4d[3/2]]"):
+            with self.subTest(s):
+                self.assertRaises(StateParseError, RacahSymbol, s)
 
 
 if __name__ == "__main__":

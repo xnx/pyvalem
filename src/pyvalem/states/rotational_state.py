@@ -8,13 +8,13 @@ import pyparsing as pp
 from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
-integer_string = (integer + pp.StringEnd()).setResultsName("integer")
+integer_string = (integer + pp.StringEnd()).set_results_name("integer")
 frac_string = (
     integer + pp.Suppress("/") + pp.Suppress(pp.Literal("2")) + pp.StringEnd()
-).setResultsName("fraction_half")
+).set_results_name("fraction_half")
 decimal_string = (
     integer + pp.Suppress(".") + pp.Suppress(pp.Literal("5")) + pp.StringEnd()
-).setResultsName("decimal_half")
+).set_results_name("decimal_half")
 
 Jstr = integer_string | frac_string | decimal_string
 
@@ -42,7 +42,7 @@ class RotationalState(State):
         self.J = None
         if state_str not in ("*", "**", "***"):
             try:
-                components = Jstr.parseString(state_str)
+                components = Jstr.parse_string(state_str, parse_all=True)
             except pp.ParseException:
                 raise RotationalStateError(
                     "Invalid rotational state value" " syntax: {0}".format(state_str)

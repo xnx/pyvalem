@@ -9,17 +9,19 @@ import pyparsing as pp
 from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
-atom_principal = integer.setResultsName("principal")
+atom_principal = integer.set_results_name("principal")
 
 orbital_labels = ("s", "s'", "p", "p'", "d", "d'", "f", "f'")
-atom_orbital = pp.oneOf(orbital_labels).setResultsName("orbital")
-parity_label = pp.Literal("o").setResultsName("parity")
+atom_orbital = pp.one_of(orbital_labels).set_results_name("orbital")
+parity_label = pp.Literal("o").set_results_name("parity")
 
 atom_k_term = (
-    integer.setResultsName("k_num") + pp.Suppress("/") + integer.setResultsName("k_den")
+    integer.set_results_name("k_num")
+    + pp.Suppress("/")
+    + integer.set_results_name("k_den")
 )
 
-atom_j_term = integer.setResultsName("jterm")
+atom_j_term = integer.set_results_name("jterm")
 
 racah_symbol_template = (
     atom_principal
@@ -55,7 +57,7 @@ class RacahSymbol(State):
 
     def _parse_state(self, state_str):
         try:
-            components = racah_symbol_template.parseString(state_str)
+            components = racah_symbol_template.parse_string(state_str, parse_all=True)
         except pp.ParseException:
             raise StateParseError("Invalid Racah notation syntax: {}".format(state_str))
         self.principal = int(components.principal)

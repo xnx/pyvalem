@@ -3,7 +3,7 @@ The J1K_LK_Coupling class, representing an atomic term symbol under
 the coupling conditions J1l -> K, J1L2 -> K or L, S1 -> K. These
 are described in Martin et al. (sec. 11.8.4 and 11.8.5). NB there is
 currently no check that the coupling quantum numbers given actually
-make sense: 
+make sense:
 
 W. C. Martin, W. Wiese, A. Kramida, "Atomic Spectroscopy" in "Springer
 Handbook of Atomic, Molecular and Optical Physics", G. W. F. Drake (ed.),
@@ -16,12 +16,12 @@ from pyvalem.states._base_state import State, StateParseError
 from pyvalem._utils import parse_fraction, float_to_fraction
 
 integer = pp.Word(pp.nums)
-Smult = integer.setResultsName("Smult")
+Smult = integer.set_results_name("Smult")
 
 fraction = integer + pp.Optional(pp.Suppress("/") + "2")
-Kstr = fraction.setResultsName("Kstr")
-Jstr = fraction.setResultsName("Jstr")
-parity = pp.Literal("o").setResultsName("parity")
+Kstr = fraction.set_results_name("Kstr")
+Jstr = fraction.set_results_name("Jstr")
+parity = pp.Literal("o").set_results_name("parity")
 
 J1K_LK_term = (
     Smult
@@ -52,7 +52,7 @@ class J1K_LK_Coupling(State):
 
     def _parse_state(self, state_str):
         try:
-            components = J1K_LK_term.parseString(state_str)
+            components = J1K_LK_term.parse_string(state_str, parse_all=True)
         except pp.ParseException:
             raise J1K_LK_CouplingError(
                 f'Invalid J1K / LK term symbol syntax:"{state_str}"'

@@ -3,6 +3,7 @@ The MolecularTermSymbol class, representing a molecular term symbol, with
 methods for parsing a string into quantum numbers and labels, creating
 an HTML representation of the term symbol, etc.
 """
+
 import pyparsing as pp
 
 from pyvalem.states._base_state import State, StateParseError
@@ -160,23 +161,23 @@ latex_terms = {
 }
 
 integer = pp.Word(pp.nums)
-molecule_Smult = integer.setResultsName("Smult")
-molecule_irrep = pp.oneOf(orbital_irrep_labels).setResultsName("irrep")
+molecule_Smult = integer.set_results_name("Smult")
+molecule_irrep = pp.one_of(orbital_irrep_labels).set_results_name("irrep")
 molecule_Omegastr = (
-    pp.Combine(pp.Optional(pp.oneOf(("+", "-"))) + integer)
+    pp.Combine(pp.Optional(pp.one_of(("+", "-"))) + integer)
     + pp.Optional(pp.Suppress("/") + "2")
-).setResultsName("Omegastr")
+).set_results_name("Omegastr")
 molecule_term = (
     molecule_Smult + molecule_irrep + pp.Optional(pp.Suppress("_") + molecule_Omegastr)
 )
 
 # Term Symbol label can be a single letter (perhaps followed by ' or ") ...
 term_label_let = pp.Combine(
-    pp.Word(pp.srange("[A-Za-z]")) + pp.Optional(pp.oneOf(("'", '"')))
-).setResultsName("term_label")
+    pp.Word(pp.srange("[A-Za-z]")) + pp.Optional(pp.one_of(("'", '"')))
+).set_results_name("term_label")
 # ... or a number. The open bracket is required but suppressed to distinguish
 # this type of term label from the spin multiplicity.
-term_label_num = integer.setResultsName("term_label") + pp.Suppress("(")
+term_label_num = integer.set_results_name("term_label") + pp.Suppress("(")
 term_label = term_label_let | term_label_num
 
 molecule_term_with_label = (
@@ -204,7 +205,9 @@ class MolecularTermSymbol(State):
 
     def _parse_state(self, state_str):
         try:
-            components = molecule_term_with_label.parseString(state_str)
+            components = molecule_term_with_label.parse_string(
+                state_str, parse_all=True
+            )
         except pp.ParseException:
             raise MolecularTermSymbolError(
                 "Invalid molecular term symbol syntax: {0}".format(state_str)

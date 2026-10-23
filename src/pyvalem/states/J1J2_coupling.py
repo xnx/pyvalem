@@ -18,10 +18,10 @@ from pyvalem._utils import parse_fraction, float_to_fraction
 from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
-J1str = (integer + pp.Optional(pp.Suppress("/") + "2")).setResultsName("J1str")
-J2str = (integer + pp.Optional(pp.Suppress("/") + "2")).setResultsName("J2str")
-Jstr = (integer + pp.Optional(pp.Suppress("/") + "2")).setResultsName("Jstr")
-parity = pp.Literal("o").setResultsName("parity")
+J1str = (integer + pp.Optional(pp.Suppress("/") + "2")).set_results_name("J1str")
+J2str = (integer + pp.Optional(pp.Suppress("/") + "2")).set_results_name("J2str")
+Jstr = (integer + pp.Optional(pp.Suppress("/") + "2")).set_results_name("Jstr")
+parity = pp.Literal("o").set_results_name("parity")
 J1J2_term = (
     "("
     + J1str
@@ -53,7 +53,7 @@ class J1J2_Coupling(State):
 
     def _parse_state(self, state_str):
         try:
-            components = J1J2_term.parseString(state_str)
+            components = J1J2_term.parse_string(state_str, parse_all=True)
         except pp.ParseException:
             raise J1J2_CouplingError(f"Invalid J1J2 coupling term syntax: {state_str}")
         self.J1 = parse_fraction(components.J1str)

@@ -24,7 +24,7 @@ import pyparsing as pp
 from ._special_cases import special_cases
 from .atom_data import element_symbols, atoms, isotopes
 
-element = pp.oneOf(element_symbols)
+element = pp.one_of(element_symbols)
 # TODO: don't allow leading 0
 integer = pp.Word(pp.nums)
 integer_or_x = integer | pp.Literal("x")
@@ -41,24 +41,24 @@ isotope = (
 
 # some named components of a formula
 # stoich comes before or after a "bare" element symbol, e.g. 3Br2.
-pp_stoich = pp.Optional(integer_or_x, default="1").setResultsName("stoich")
+pp_stoich = pp.Optional(integer_or_x, default="1").set_results_name("stoich")
 # prestoich comes before a bracketed element group, e.g. 2(NH3).
-pp_prestoich = pp.Optional(integer, default="1").setResultsName("prestoich")
+pp_prestoich = pp.Optional(integer, default="1").set_results_name("prestoich")
 # poststoich comes after a bracketed element group, e.g. (H2O)3.
-pp_poststoich = pp.Optional(integer_or_x, default="1").setResultsName("poststoich")
+pp_poststoich = pp.Optional(integer_or_x, default="1").set_results_name("poststoich")
 # the charge is always defined and defaults to '0'.
 pp_charge = pp.Optional(
     pp.Combine(pp.Group(plusminus + pp.Optional(integer, default="1"))), default="0"
-).setResultsName("charge")
+).set_results_name("charge")
 # An elementRef is either an element symbol or an isotope symbol plus a
 # stoichiometry which is 1 if not given.
 # NB check for element symbol first to catch Dy, Ti, etc. before parsing as
 # hydrogen isotopes D or T.
-elementRef = pp.Group((element | isotope).setResultsName("atom_symbol") + pp_stoich)
+elementRef = pp.Group((element | isotope).set_results_name("atom_symbol") + pp_stoich)
 # A chemicalFormula is a series of elementRefs.
-chemicalFormula = pp.Group(pp.OneOrMore(elementRef)).setResultsName("atoms")
+chemicalFormula = pp.Group(pp.OneOrMore(elementRef)).set_results_name("atoms")
 # Radicals must be specified with the unicode character '·' (U+00B7).
-radicalDot = pp.Optional("·").setResultsName("radical")
+radicalDot = pp.Optional("·").set_results_name("radical")
 
 # A chargedChemicalFormula is a chemicalFormula with an optional pre-
 # stoichiometry, radical dot and charge.
@@ -83,7 +83,7 @@ bracketedChemicalFormula = pp.Group(
 chemical_formula_fragment = pp.Optional(pp.Suppress(".")) + (
     chargedChemicalFormula | bracketedChemicalFormula
 )
-chemical_formula_fragments = pp.OneOrMore(chemical_formula_fragment).setResultsName(
+chemical_formula_fragments = pp.OneOrMore(chemical_formula_fragment).set_results_name(
     "formula"
 )
 
@@ -134,14 +134,14 @@ latex_prefix_dict = {
 }
 
 # also allow a comma-separated list of integers, e.g. 1,1,2-
-prefix_parser = pp.delimitedList(pp.OneOrMore(integer), combine=True)
+prefix_parser = pp.DelimitedList(pp.OneOrMore(integer), combine=True)
 keys_list = list(prefix_tokens.keys())
 for pt in keys_list:
     prefix_parser |= pp.Keyword(pt)
 # Any number of prefix tokens may appear, separated by a hyphen
 prefix_list_parser = (
-    pp.delimitedList(prefix_parser, delim="-") + pp.Suppress(pp.Literal("-"))
-).setResultsName("prefix")
+    pp.DelimitedList(prefix_parser, delim="-") + pp.Suppress(pp.Literal("-"))
+).set_results_name("prefix")
 
 # Finally, a complexChemicalFormula is a prefix, followed by one or more
 # chemical_formula_fragments.
@@ -332,7 +332,7 @@ class Formula:
             return
 
         try:
-            moieties = complexChemicalFormula.parseString(formula)
+            moieties = complexChemicalFormula.parse_string(formula, parse_all=True)
         except pp.ParseException:
             raise FormulaParseError("Invalid formula syntax: %s" % formula)
 
@@ -376,9 +376,9 @@ class Formula:
                 atom_symbol, atom_stoich = atom
 
                 if atom_symbol == "D":
-                    atom_symbol = isotope.parseString("(2H)")[0]
+                    atom_symbol = isotope.parse_string("(2H)")[0]
                 if atom_symbol == "T":
-                    atom_symbol = isotope.parseString("(3H)")[0]
+                    atom_symbol = isotope.parse_string("(3H)")[0]
                 if isinstance(atom_symbol, pp.ParseResults):
                     # we got an isotope in the form '(zSy)' with z the mass
                     # number so symbol is the ParseResults ['z', 'Sy']:

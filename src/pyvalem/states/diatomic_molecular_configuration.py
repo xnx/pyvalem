@@ -45,32 +45,32 @@ greek_letters = {
 symbol_latex = {"σ": r"\sigma", "π": r"\pi", "δ": r"\delta"}
 
 molecule_orbital = pp.Group(
-    integer.setResultsName("n")
-    + pp.oneOf(molecular_orbital_symbols).setResultsName("symbol")
-    + pp.Optional(integer.setResultsName("count"), default="1")
+    integer.set_results_name("n")
+    + pp.one_of(molecular_orbital_symbols).set_results_name("symbol")
+    + pp.Optional(integer.set_results_name("count"), default="1")
 )
 
 molecule_config = (
     molecule_orbital
     + pp.ZeroOrMore(pp.Suppress(".") + molecule_orbital)
     + pp.StringEnd()
-).leaveWhitespace()
+).leave_whitespace()
 
-# atomic_orbital = pp.Group(integer.setResultsName('n') +
-#                    pp.oneOf(atomic_orbital_symbols).setResultsName('lletter')
+# atomic_orbital = pp.Group(integer.set_results_name('n') +
+#                    pp.one_of(atomic_orbital_symbols).set_results_name('lletter')
 #                         )
 alt_molecule_orbital = pp.Group(
-    integer.setResultsName("n")
-    + pp.oneOf(atomic_orbital_symbols).setResultsName("lletter")
+    integer.set_results_name("n")
+    + pp.one_of(atomic_orbital_symbols).set_results_name("lletter")
     + pp.Suppress("-")
-    + pp.oneOf(molecular_orbital_symbols).setResultsName("symbol")
-    + pp.Optional(integer.setResultsName("count"), default="1")
+    + pp.one_of(molecular_orbital_symbols).set_results_name("symbol")
+    + pp.Optional(integer.set_results_name("count"), default="1")
 )
 alt_molecule_config = (
     alt_molecule_orbital
     + pp.ZeroOrMore(pp.Suppress(".") + alt_molecule_orbital)
     + pp.StringEnd()
-).leaveWhitespace()
+).leave_whitespace()
 
 
 class DiatomicMolecularOrbitalError(StateParseError):
@@ -195,7 +195,7 @@ class DiatomicMolecularConfiguration(State):
 
     def _parse_regular_config(self, state_str):
         try:
-            parse_results = molecule_config.parseString(state_str)
+            parse_results = molecule_config.parse_string(state_str, parse_all=True)
         except pp.ParseException:
             raise DiatomicMolecularConfigurationError(
                 "Invalid diatomic molecular electronic "
@@ -216,7 +216,7 @@ class DiatomicMolecularConfiguration(State):
 
     def _parse_alt_config(self, state_str):
         try:
-            parse_results = alt_molecule_config.parseString(state_str)
+            parse_results = alt_molecule_config.parse_string(state_str, parse_all=True)
         except pp.ParseException:
             raise DiatomicMolecularConfigurationError(
                 "Invalid diatomic molecular electronic "

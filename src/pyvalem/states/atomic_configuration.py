@@ -9,8 +9,8 @@ import pyparsing as pp
 
 from pyvalem.states._base_state import State, StateParseError
 
-integer = pp.Word(pp.nums).setParseAction(lambda t: int(t[0]))
-nocc_integer = pp.Optional(pp.Word(pp.nums), default="1").setParseAction(
+integer = pp.Word(pp.nums).set_parse_action(lambda t: int(t[0]))
+nocc_integer = pp.Optional(pp.Word(pp.nums), default="1").set_parse_action(
     lambda t: int(t[0])
 )
 
@@ -34,19 +34,19 @@ for i, elm in enumerate(noble_gases[1:], start=1):
 
 noble_gas_nelectrons = {"He": 2, "Ne": 10, "Ar": 18, "Kr": 36, "Xe": 54, "Rn": 86}
 
-noble_gas = pp.oneOf(["[{}]".format(symbol) for symbol in noble_gases])
+noble_gas = pp.one_of(["[{}]".format(symbol) for symbol in noble_gases])
 
 atom_orbital = pp.Group(
-    (integer | "n").setResultsName("n")
-    + pp.oneOf(atomic_orbital_symbols).setResultsName("lletter")
-    + nocc_integer.setResultsName("nocc")
+    (integer | "n").set_results_name("n")
+    + pp.one_of(atomic_orbital_symbols).set_results_name("lletter")
+    + nocc_integer.set_results_name("nocc")
 )
 
 atom_config = (
     (atom_orbital | noble_gas)
-    + pp.ZeroOrMore(pp.Suppress(".") + atom_orbital).leaveWhitespace()
+    + pp.ZeroOrMore(pp.Suppress(".") + atom_orbital).leave_whitespace()
     + pp.StringEnd()
-).leaveWhitespace()
+).leave_whitespace()
 
 
 class AtomicOrbitalError(StateParseError):
@@ -262,7 +262,7 @@ class AtomicConfiguration(State):
             If the `state_str` cannot be parsed into a valid state.
         """
         try:
-            parse_results = atom_config.parseString(state_str)
+            parse_results = atom_config.parse_string(state_str, parse_all=True)
         except pp.ParseException:
             raise AtomicConfigurationError(
                 "Invalid atomic electronic"

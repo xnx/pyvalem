@@ -17,14 +17,14 @@ integer = pp.Word(pp.nums)
 # NBS Circ, No. 488 (1950) and sometimes used to distinguish terms with the same
 # S, L from the same configuration. See e.g. G. Nave et al., Astrophys. J. Suppl. Ser.
 # 94:221-459 (1994).
-moore_label = pp.Char("abcdefghijklmnopqrstuvwxyz").setResultsName("moore_label")
-atom_Smult = integer.setResultsName("Smult")
-atom_Lletter = pp.oneOf(atom_L_symbols).setResultsName("Lletter")
+moore_label = pp.Char("abcdefghijklmnopqrstuvwxyz").set_results_name("moore_label")
+atom_Smult = integer.set_results_name("Smult")
+atom_Lletter = pp.one_of(atom_L_symbols).set_results_name("Lletter")
 atom_Jstr = (
     integer + pp.Optional(pp.Suppress("/") + "2") + pp.StringEnd()
-).setResultsName("Jstr")
-atom_parity = pp.Literal("o").setResultsName("parity")
-seniority = pp.Suppress("{") + integer.setResultsName("seniority") + pp.Suppress("}")
+).set_results_name("Jstr")
+atom_parity = pp.Literal("o").set_results_name("parity")
+seniority = pp.Suppress("{") + integer.set_results_name("seniority") + pp.Suppress("}")
 atom_term = (
     pp.Optional(moore_label)
     + atom_Smult
@@ -55,7 +55,7 @@ class AtomicTermSymbol(State):
 
     def _parse_state(self, state_str):
         try:
-            components = atom_term.parseString(state_str)
+            components = atom_term.parse_string(state_str, parse_all=True)
         except pp.ParseException:
             raise AtomicTermSymbolError(
                 "Invalid atomic term symbol syntax:" " {0}".format(state_str)

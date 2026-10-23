@@ -8,8 +8,8 @@ import pyparsing as pp
 from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
-atom_int = integer.setResultsName("int")
-state_term = (atom_int + "*" + pp.StringEnd()).leaveWhitespace()
+atom_int = integer.set_results_name("int")
+state_term = (atom_int + "*" + pp.StringEnd()).leave_whitespace()
 
 
 class GenericExcitedStateError(StateParseError):
@@ -32,7 +32,7 @@ class GenericExcitedState(State):
                     )
             else:
                 try:
-                    components = state_term.parseString(state_str)
+                    components = state_term.parse_string(state_str, parse_all=True)
                     self.int_n = int(components.int)
                 except pp.ParseException:
                     raise GenericExcitedStateError(
