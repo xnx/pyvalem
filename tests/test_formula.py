@@ -4,6 +4,7 @@ Unit tests for the formula module of PyValem
 
 import unittest
 
+from pyvalem import PyValemDeprecationWarning
 from pyvalem.formula import Formula, FormulaParseError
 
 from .good_formulas import good_formulas
@@ -121,7 +122,9 @@ class FormulaTest(unittest.TestCase):
         self.assertRaises(FormulaParseError, Formula, "H-+")
         self.assertRaises(FormulaParseError, Formula, "Li-2+")
 
-        cf2 = Formula("NH2+CH3CHO2-")
+        # An unbracketed charge before the end of the formula is deprecated.
+        with self.assertWarns(PyValemDeprecationWarning):
+            cf2 = Formula("NH2+CH3CHO2-")
         self.assertEqual(
             cf2.html,
             "NH<sub>2</sub><sup>+</sup>CH<sub>3</sub>CHO<sub>2</sub><sup>-</sup>",

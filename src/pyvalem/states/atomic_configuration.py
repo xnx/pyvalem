@@ -261,6 +261,7 @@ class AtomicConfiguration(State):
         self.noble_gas_config = None
         self.nelectrons = 0
         self._parse_state(self.state_str)
+        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         """Parses the `AtomicConfiguration` instance from the supplied `state_str`.

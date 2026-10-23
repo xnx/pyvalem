@@ -82,6 +82,7 @@ class AtomicTermSymbol(State):
         self.moore_label = ""
         self.seniority = None
         self._parse_state(state_str)
+        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         try:

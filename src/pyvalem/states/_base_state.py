@@ -6,8 +6,10 @@ one of those and don't instantiate State objects directly.
 """
 
 import html
+import re
 from abc import ABC, abstractmethod
 
+from pyvalem._deprecation import warn_deprecated
 from pyvalem.exceptions import PyValemError
 
 
@@ -47,6 +49,18 @@ class State(ABC):
                 )
             )
         return super().__new__(cls)
+
+    @staticmethod
+    def _warn_deprecated_syntax(state_str):
+        """Warn about syntax in state_str that PyValem 3.0 will reject."""
+        if any(c.isspace() for c in state_str):
+            warn_deprecated(
+                "Whitespace in a state, as in {!r}, is deprecated.".format(state_str)
+            )
+        if re.search(r"(?<![0-9])0[0-9]", state_str):
+            warn_deprecated(
+                "Leading zeros, as in {}, are deprecated.".format(state_str)
+            )
 
     @property
     def html(self):

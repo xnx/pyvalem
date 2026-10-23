@@ -4,6 +4,7 @@ Unit tests for the rotational_state module of PyValem
 
 import unittest
 
+from pyvalem import PyValemDeprecationWarning
 from pyvalem.states.rotational_state import RotationalState, RotationalStateError
 
 
@@ -57,7 +58,8 @@ class RotationalStateTest(unittest.TestCase):
 
     def test_rotational_state_repr(self):
         j1 = RotationalState("J=**")
-        j2 = RotationalState("J = **")
+        with self.assertWarns(PyValemDeprecationWarning):
+            j2 = RotationalState("J = **")
         self.assertTrue(repr(j1) == repr(j2) == "J=**")
 
 

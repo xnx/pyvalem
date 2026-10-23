@@ -5,11 +5,18 @@ canonical representation.
 """
 
 import unittest
+import warnings
 
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
-from pyvalem import Formula, PyValemError, Reaction, StatefulSpecies
+from pyvalem import (
+    Formula,
+    PyValemDeprecationWarning,
+    PyValemError,
+    Reaction,
+    StatefulSpecies,
+)
 from pyvalem.states._state_parser import STATES, state_parser
 
 # Mostly characters used in formulas, states and reactions, so that the strings
@@ -26,7 +33,9 @@ settings.load_profile("pyvalem")
 def parse(cls, s, **kwargs):
     """Return cls(s), or None if PyValem rejects s."""
     try:
-        return cls(s, **kwargs)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PyValemDeprecationWarning)
+            return cls(s, **kwargs)
     except PyValemError:
         return None
 
@@ -58,19 +67,19 @@ class RoundTripTest(unittest.TestCase):
         for StateClass in STATES:
             state = parse(StateClass, s)
             if state is not None:
-                self.assertEqual(StateClass(repr(state)), state)
+                self.assertEqual(parse(StateClass, repr(state)), state)
 
     @given(strings)
     def test_stateful_species(self, s):
         species = parse(StatefulSpecies, s)
         if species is not None:
-            self.assertEqual(StatefulSpecies(repr(species)), species)
+            self.assertEqual(parse(StatefulSpecies, repr(species)), species)
 
     @given(strings)
     def test_reaction(self, s):
         reaction = parse(Reaction, s, strict=False)
         if reaction is not None:
-            self.assertEqual(Reaction(str(reaction), strict=False), reaction)
+            self.assertEqual(parse(Reaction, str(reaction), strict=False), reaction)
 
 
 if __name__ == "__main__":

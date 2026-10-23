@@ -4,13 +4,16 @@ Unit tests for the vibrational_state module of PyValem
 
 import unittest
 
+from pyvalem import PyValemDeprecationWarning
 from pyvalem.states.vibrational_state import VibrationalState, VibrationalStateError
 
 
 class VibrationalStateTest(unittest.TestCase):
     def test_vibrational_state(self):
         # Test basic usage
-        v0 = VibrationalState("0")
+        # A bare number is deprecated: write v=0.
+        with self.assertWarns(PyValemDeprecationWarning):
+            v0 = VibrationalState("0")
         self.assertEqual(v0.html, "v=0")
         self.assertEqual(v0.latex, "v=0")
         self.assertEqual(str(v0), "v=0")
@@ -90,7 +93,8 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertTrue(repr(v1) == repr(v2) == "3ν1+ν3")
 
         v3 = VibrationalState("v=**")
-        v4 = VibrationalState("v = **")
+        with self.assertWarns(PyValemDeprecationWarning):
+            v4 = VibrationalState("v = **")
         self.assertTrue(repr(v3) == repr(v4) == "v=**")
 
     def test_zero_polyatomic_vibrational_states(self):

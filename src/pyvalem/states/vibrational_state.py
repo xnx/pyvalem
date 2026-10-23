@@ -6,6 +6,7 @@ an HTML representation of it, etc.
 
 import pyparsing as pp
 
+from pyvalem._deprecation import warn_deprecated
 from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
@@ -54,6 +55,7 @@ class VibrationalState(State):
         self.polyatomic = None
         self.terms = None
         self._parse_state(state_str)
+        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         if " + " in state_str:
@@ -79,6 +81,11 @@ class VibrationalState(State):
             else:
                 self.v = get_v(self.state_str)
                 self.state_str = "v={}".format(state_str)
+                if self.v not in ("*", "**", "***"):
+                    warn_deprecated(
+                        "A bare number as a vibrational state, {}, is deprecated:"
+                        " write v={}.".format(state_str, self.v)
+                    )
         except ValueError:
             self.polyatomic = True
             try:

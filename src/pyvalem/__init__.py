@@ -7,7 +7,7 @@ reactions of atoms, ions and small molecules.
 1
 """
 
-from .exceptions import PyValemError
+from .exceptions import PyValemDeprecationWarning, PyValemError
 from .formula import Formula, FormulaError, FormulaParseError
 from .reaction import (
     Reaction,
@@ -17,12 +17,13 @@ from .reaction import (
 )
 from .stateful_species import StatefulSpecies, StatefulSpeciesError
 
-__version__ = "2.9.0"
+__version__ = "2.10.0.dev0"
 
 __all__ = [
     "Formula",
     "FormulaError",
     "FormulaParseError",
+    "PyValemDeprecationWarning",
     "PyValemError",
     "Reaction",
     "ReactionChargeError",

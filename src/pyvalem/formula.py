@@ -23,6 +23,7 @@ from itertools import pairwise
 
 import pyparsing as pp
 
+from ._deprecation import warn_deprecated
 from ._special_cases import special_cases
 from .atom_data import atoms, element_symbols, isotopes
 from .exceptions import PyValemError
@@ -267,6 +268,16 @@ class Formula:
         self.slug = ""
         self.mass = 0.0
         self._parse_formula(formula)
+        if any(c.isspace() for c in formula):
+            warn_deprecated(
+                "Whitespace in a formula, as in {!r}, is deprecated.".format(formula)
+            )
+        if re.search(r"(?<![0-9])0", formula):
+            warn_deprecated(
+                "Leading zeros and zero counts, as in {}, are deprecated.".format(
+                    formula
+                )
+            )
 
     @staticmethod
     def _make_prefix_html(prefix_list):
@@ -379,6 +390,16 @@ class Formula:
         # Li+2-, is invalid.
         if moieties["charge"] != "0" and "prestoich" not in moieties["formula"][-1]:
             raise FormulaParseError("Invalid formula syntax: {}".format(formula))
+        # Only the last moiety may have an unbracketed charge: NH2+CH3CHO2- is
+        # deprecated in favour of (NH2+)CH3CHO2-.
+        if any(
+            "prestoich" not in moiety and moiety["charge"] != "0"
+            for moiety in moieties["formula"][:-1]
+        ):
+            warn_deprecated(
+                "An unbracketed charge before the end of a formula, as in {}, is"
+                " deprecated: put the charged moiety in brackets.".format(formula)
+            )
 
         moieties, total_charge = moieties["formula"], int(moieties["charge"])
         nmoieties = len(moieties)
