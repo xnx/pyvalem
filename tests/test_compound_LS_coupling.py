@@ -6,7 +6,10 @@ import unittest
 
 from pyvalem.states.atomic_configuration import AtomicConfiguration
 from pyvalem.states.atomic_term_symbol import AtomicTermSymbol
-from pyvalem.states.compound_LS_coupling import CompoundLSCoupling
+from pyvalem.states.compound_LS_coupling import (
+    CompoundLSCoupling,
+    CompoundLSCouplingError,
+)
 
 
 class CompoundLSCouplingTest(unittest.TestCase):
@@ -57,3 +60,15 @@ class CompoundLSCouplingTest(unittest.TestCase):
 
         s4 = CompoundLSCoupling("4d9(2D_5/2)5s")
         self.assertEqual(s4.html, """4d<sup>9</sup>(<sup>2</sup>D<sub>5/2</sub>)5s""")
+
+    def test_term_symbols(self):
+        s = CompoundLSCoupling("4f(2Fo)5d")
+        self.assertEqual(s.terms, [AtomicTermSymbol("2Fo")])
+        self.assertEqual(s.term_symbols, s.terms)
+
+    def test_error_messages(self):
+        for s in ("4f(2Fo)5d(2G", "4f(2Fo_9/2)5d", "(2P)4f", "4f5d"):
+            with self.subTest(s):
+                with self.assertRaises(CompoundLSCouplingError) as cm:
+                    CompoundLSCoupling(s)
+                self.assertIn(s, str(cm.exception))

@@ -32,21 +32,27 @@ class CompoundLSCoupling(State):
     def __init__(self, state_str):
         self.state_str = state_str
         self.atomic_configurations = []
-        self.term_symbols = []
+        self.terms = []
         self._parse_state(self.state_str)
 
+    @property
+    def term_symbols(self):
+        """The intermediate terms: an alias for `terms`."""
+        return self.terms
+
     def _parse_state(self, state_str):
+        invalid_syntax = "Invalid compound LS coupling syntax: {}".format(state_str)
         terms = re.findall(term_patt, state_str)
         configs = state_str.split("(")
 
         if len(configs) == 0 or len(terms) == 0:
-            raise CompoundLSCouplingError
+            raise CompoundLSCouplingError(invalid_syntax)
 
         try:
             for i in range(1, len(configs)):
                 configs[i] = configs[i][len(terms[i - 1]) + 1 :]
         except IndexError as err:
-            raise CompoundLSCouplingError from err
+            raise CompoundLSCouplingError(invalid_syntax) from err
 
         if not configs[-1]:
             configs = configs[:-1]
@@ -57,7 +63,9 @@ class CompoundLSCoupling(State):
                 AtomicConfiguration(config) for config in configs
             ]
         except (AtomicTermSymbolError, AtomicConfigurationError) as err:
-            raise CompoundLSCouplingError from err
+            raise CompoundLSCouplingError(
+                "Invalid compound LS coupling state {}: {}".format(state_str, err)
+            ) from err
 
     def __repr__(self):
         return self.state_str
