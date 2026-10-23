@@ -150,7 +150,7 @@ class FormulaTest(unittest.TestCase):
                 5.48579909e-04,
                 None,
                 -1,
-                {},
+                set(),
             ),
             "e+": (
                 "e+",
@@ -160,9 +160,9 @@ class FormulaTest(unittest.TestCase):
                 5.48579909e-04,
                 None,
                 1,
-                {},
+                set(),
             ),
-            "hv": ("hν", "hν", r"h\nu", "hv", 0, None, 0, {}),
+            "hv": ("hν", "hν", r"h\nu", "hv", 0, None, 0, set()),
         }
         f["e"] = f["e-"]
         f["hν"] = f["hv"]
@@ -178,6 +178,14 @@ class FormulaTest(unittest.TestCase):
             self.assertEqual(formula.natoms, natoms)
             self.assertEqual(formula.charge, charge)
             self.assertEqual(formula.atoms, atoms)
+
+    def test_special_formulas_are_independent(self):
+        f1 = Formula("e-")
+        f1.atom_stoich["X"] = 1
+        f1.atoms.add("X")
+        f2 = Formula("e-")
+        self.assertEqual(f2.atom_stoich, {})
+        self.assertEqual(f2.atoms, set())
 
     def test_parse_fail(self):
         self.assertRaises(FormulaParseError, Formula, "Mq")

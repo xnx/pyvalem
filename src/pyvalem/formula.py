@@ -16,6 +16,7 @@ Examples
 {'C': 1, 'H': 4}
 """
 
+import copy
 import re
 from collections import defaultdict
 from itertools import pairwise
@@ -340,7 +341,7 @@ class Formula:
 
         if formula in special_cases:
             for attr, val in special_cases[formula].items():
-                setattr(self, attr, val)
+                setattr(self, attr, copy.copy(val))
             return
 
         try:

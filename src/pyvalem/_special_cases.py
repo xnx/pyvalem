@@ -27,7 +27,7 @@ special_cases = {
         "rmm": 0,
         "charge": 0,
         "natoms": None,
-        "atoms": {},
+        "atoms": set(),
         "name": "photon",
     },
     "e-": {
@@ -39,7 +39,7 @@ special_cases = {
         "rmm": 5.48579909e-04,  # m_e / u
         "charge": -1,
         "natoms": None,
-        "atoms": {},
+        "atoms": set(),
         "name": "electron",
     },
     "e+": {
@@ -51,7 +51,7 @@ special_cases = {
         "rmm": 5.48579909e-04,  # m_(e+) / u
         "charge": 1,
         "natoms": None,
-        "atoms": {},
+        "atoms": set(),
         "name": "positron",
     },
 }
