@@ -31,6 +31,7 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/xnx/pyvalem"
 Issues = "https://github.com/xnx/pyvalem/issues"
+Changelog = "https://github.com/xnx/pyvalem/blob/master/CHANGELOG.md"
 
 [dependency-groups]
 dev = ["hypothesis", "pytest>=8", "pytest-cov", "ruff==0.17.2"]
@@ -48,6 +49,7 @@ include = [
     "/docs/Makefile",
     "/docs/make.bat",
     "/README.rst",
+    "/CHANGELOG.md",
     "/LICENSE",
 ]
 
