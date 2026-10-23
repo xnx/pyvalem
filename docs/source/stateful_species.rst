@@ -72,3 +72,20 @@ This is checked for:
     Traceback (most recent call last):
       ...
     pyvalem.stateful_species.StatefulSpeciesError: Multiple states of type AtomicConfiguration specified for Li 1s2.2p;1s2.2s
+
+A state written as ``J=...``, ``v=...`` or ``ν=...`` is always a rotational or
+vibrational state, and any other ``key=value`` state that isn't of another type is a
+``KeyValuePair``. If a state has the syntax of a particular type but describes a state
+that can't exist, the reason is reported:
+
+.. code-block:: pycon
+
+    >>> StatefulSpecies('Ne+ 2P_5/2')
+    Traceback (most recent call last):
+      ...
+    pyvalem.states.atomic_term_symbol.AtomicTermSymbolValidationError: Invalid atomic term symbol: 2P_5/2 |L-S| <= J <= L+S must be satisfied.
+
+    >>> StatefulSpecies('HCl J=-1')
+    Traceback (most recent call last):
+      ...
+    pyvalem.states.rotational_state.RotationalStateError: Invalid rotational state value syntax: -1

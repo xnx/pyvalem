@@ -274,7 +274,7 @@ For example:
 
 Molecular vibrational states of diatomic and polyatomic molecules are represented by
 the ``VibrationalState`` class. For diatomic molecules, this class is instantiated
-with a string of the form ``v=n`` for ``n=0,1,2,...``. Polyatomic vibrational states
+with a string of the form ``v=n`` (or ``ν=n``) for ``n=0,1,2,...``. Polyatomic vibrational states
 are initialised with a string giving the number of quanta in each labelled normal mode.
 Unspecified vibrational excitation is denoted ``v=*``. For example:
 

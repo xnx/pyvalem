@@ -175,6 +175,21 @@ conservation during instantiation.
     pyvalem.reaction.ReactionChargeError: Charge not preserved for reaction: e- + Ar -> Ar+ + e-
 
 
+Errors
+------
+Every exception that PyValem raises for an invalid formula, state, species or
+reaction derives from ``PyValemError``, which is itself a ``ValueError``:
+
+.. code-block:: pycon
+
+    >>> from pyvalem import PyValemError
+    >>> try:
+    ...     Reaction('H2 v=1.5 + O -> OH + H')
+    ... except PyValemError as err:
+    ...     print(type(err).__name__)
+    VibrationalStateError
+
+
 
 For Developers:
 ===============
