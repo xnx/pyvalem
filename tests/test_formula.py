@@ -92,6 +92,11 @@ class FormulaTest(unittest.TestCase):
             if "latex" in good_formulas[formula]:
                 self.assertEqual(cf.latex, good_formulas[formula]["latex"])
 
+    def test_elements_without_atomic_weight_and_their_isotopes(self):
+        f = Formula("Tc(98Tc)")
+        self.assertEqual(f.stoichiometric_formula(), "Tc(98Tc)")
+        self.assertIsNone(f.rmm)
+
     def test_Tc_Pm(self):
         for f in ("Tc", "Pm", "TcH", "Cl2Pm"):
             cf = Formula(f)

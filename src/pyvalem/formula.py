@@ -161,6 +161,15 @@ def _count(s):
     return None if s == "x" else int(s)
 
 
+def _atom_order(atom):
+    """Sort atoms and isotopes by atomic number, then mass.
+
+    An element without a standard atomic weight (e.g. Tc) comes before its
+    isotopes.
+    """
+    return atom.Z, atom.mass is not None, atom.mass or 0
+
+
 class FormulaError(Exception):
     pass
 
@@ -554,7 +563,7 @@ class Formula:
         """
 
         atom_strs = []
-        for atom in sorted(self.atoms, key=lambda e: (e.Z, e.mass)):
+        for atom in sorted(self.atoms, key=_atom_order):
             if atom.is_isotope:
                 symbol = "({})".format(atom.symbol)
             else:
@@ -584,7 +593,7 @@ class Formula:
         c_h_strs = []
         atom_strs = []
         contains_c = False
-        for atom in sorted(self.atoms, key=lambda e: (e.Z, e.mass)):
+        for atom in sorted(self.atoms, key=_atom_order):
             if atom.is_isotope:
                 symbol = "({})".format(atom.symbol)
             else:
