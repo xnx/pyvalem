@@ -166,6 +166,11 @@ class Reaction:
             if r_str.rstrip().endswith(sep):
                 r_str = r_str + " "
                 break
+        # Similarly, if it has no reactants, add a space before the separator.
+        for sep in Reaction.RP_SEPARATORS:
+            if r_str.lstrip().startswith(sep):
+                r_str = " " + r_str
+                break
 
         for sep in Reaction.SPACED_RP_SEPARATORS:
             fragments = r_str.split(sep)
@@ -204,6 +209,10 @@ class Reaction:
                 "StatefulSpecies was incorrectly formed. "
                 "The error reported was: {}".format(r_str, err)
             ) from err
+        if not self.reactants and not self.products:
+            raise ReactionParseError(
+                "Invalid reaction string - no reactants or products: {}".format(r_str)
+            )
 
         # validate charge and stoichiometry conservation:
         if strict and not self.stoichiometry_conserved():
@@ -244,7 +253,8 @@ class Reaction:
             strict=True,
         ):
             for side_fragment in side_str.split(" + "):
-                if side_fragment.strip():
+                side_fragment = side_fragment.strip()
+                if side_fragment:
                     # A leading number is the coefficient, unless it is a locant
                     # prefix of the formula itself, as in 1,2-C2H4Cl2.
                     n, ss_str = re.fullmatch(

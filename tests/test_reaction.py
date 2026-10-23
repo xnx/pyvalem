@@ -112,6 +112,21 @@ class ReactionParseTest(unittest.TestCase):
         r3 = Reaction("Kr+ + He+ -> Kr+2", strict=False)
         self.assertEqual(str(r3), "Kr+ + He+ → Kr+2")
 
+    def test_no_reactants(self):
+        r = Reaction("-> Ar + He", strict=False)
+        self.assertEqual(r.reactants, [])
+        self.assertEqual(str(r), "→ Ar + He")
+        self.assertEqual(Reaction(str(r), strict=False), r)
+        self.assertRaises(ReactionStoichiometryError, Reaction, "-> Ar")
+        for s in ("->", " -> ", "→"):
+            with self.subTest(s):
+                self.assertRaises(ReactionParseError, Reaction, s, strict=False)
+
+    def test_whitespace_around_terms(self):
+        r = Reaction(" 2P   -> ", strict=False)
+        self.assertEqual(r.reactants[0][0], 2)
+        self.assertEqual(r, Reaction("2P ->", strict=False))
+
     def test_species_aggregation(self):
         r = Reaction("2H + He + He -> H + H + 2He")
         reactants, products = r.reactants, r.products
