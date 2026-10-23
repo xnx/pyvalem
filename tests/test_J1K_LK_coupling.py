@@ -6,7 +6,6 @@ import unittest
 
 from pyvalem.states.J1K_LK_coupling import (
     J1K_LK_Coupling,
-    J1K_LK_CouplingError,
     J1K_LK_CouplingValidationError,
 )
 

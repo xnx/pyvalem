@@ -34,15 +34,16 @@ class GenericExcitedState(State):
                 try:
                     components = state_term.parse_string(state_str, parse_all=True)
                     self.int_n = int(components.int)
-                except pp.ParseException:
+                except pp.ParseException as err:
                     raise GenericExcitedStateError(
                         "Invalid excited state value syntax: {0} has to be of form"
                         " n* with n = integer".format(state_str)
-                    )
+                    ) from err
         else:
             raise GenericExcitedStateError(
-                "Invalid excited state value"
-                " syntax: {0} Must have a * term.".format(state_str)
+                "Invalid excited state value syntax: {0} Must have a * term.".format(
+                    state_str
+                )
             )
 
     def __repr__(self):

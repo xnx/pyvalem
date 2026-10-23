@@ -5,8 +5,8 @@ This is an abstract base class and specific types of state derive from it: use
 one of those and don't instantiate State objects directly.
 """
 
-from abc import ABC, abstractmethod
 import html
+from abc import ABC, abstractmethod
 
 
 class StateError(Exception):
@@ -57,9 +57,7 @@ class State(ABC):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
-        if self.__repr__() == other.__repr__():
-            return True
-        return False
+        return repr(self) == repr(other)
 
     def __ne__(self, other):
         return not self.__eq__(other)

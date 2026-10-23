@@ -5,13 +5,15 @@ molecule), optionally with with one or more State objects associated with it.
 The Formula of the StatefulSpecies is separated from its States by whitespace;
 States are separated from each other by semicolons (;) or whitespace.
 """
+
+from pyvalem.states._state_parser import STATES, state_parser
 from pyvalem.states.atomic_configuration import AtomicConfiguration
 from pyvalem.states.diatomic_molecular_configuration import (
     DiatomicMolecularConfiguration,
 )
-from .formula import Formula
 from pyvalem.states.key_value_pair import KeyValuePair
-from pyvalem.states._state_parser import state_parser, STATES
+
+from .formula import Formula
 
 
 class StatefulSpeciesError(Exception):
@@ -71,8 +73,9 @@ class StatefulSpecies:
         for state_class in state_class_counts:
             if not state_class.multiple_allowed and state_class_counts[state_class] > 1:
                 raise StatefulSpeciesError(
-                    "Multiple states of type {}"
-                    " specified for {}".format(state_class.__name__, self)
+                    "Multiple states of type {} specified for {}".format(
+                        state_class.__name__, self
+                    )
                 )
         return True
 
@@ -83,7 +86,7 @@ class StatefulSpecies:
         atomic_configurations = self.get_states_of_type(AtomicConfiguration)
         if len(atomic_configurations) != 1:
             raise StatefulSpeciesError(
-                "Multiple AtomicConfigurations" " specified for {}".format(self)
+                "Multiple AtomicConfigurations specified for {}".format(self)
             )
         if not atomic_configurations:
             return True
@@ -113,7 +116,7 @@ class StatefulSpecies:
             return True
         if len(diatomic_configurations) != 1:
             raise StatefulSpeciesError(
-                "Multiple DiatomicConfigurations" " specified for {}".format(self)
+                "Multiple DiatomicConfigurations specified for {}".format(self)
             )
         diatomic_configuration = diatomic_configurations[0]
         has_parity_label = all(
@@ -132,8 +135,9 @@ class StatefulSpecies:
         keys = [key_value_pair.key for key_value_pair in key_value_pairs]
         if len(set(keys)) != len(keys):
             raise StatefulSpeciesError(
-                "Multiple key-value pairs with the same"
-                " key specified for {}".format(self)
+                "Multiple key-value pairs with the same key specified for {}".format(
+                    self
+                )
             )
 
     @property

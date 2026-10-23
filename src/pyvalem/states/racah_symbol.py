@@ -58,8 +58,10 @@ class RacahSymbol(State):
     def _parse_state(self, state_str):
         try:
             components = racah_symbol_template.parse_string(state_str, parse_all=True)
-        except pp.ParseException:
-            raise StateParseError("Invalid Racah notation syntax: {}".format(state_str))
+        except pp.ParseException as err:
+            raise StateParseError(
+                "Invalid Racah notation syntax: {}".format(state_str)
+            ) from err
         self.principal = int(components.principal)
         self.orbital = components.orbital
         if "'" in self.orbital:

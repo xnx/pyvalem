@@ -6,7 +6,6 @@ import unittest
 
 from pyvalem.states.J1J2_coupling import (
     J1J2_Coupling,
-    J1J2_CouplingError,
     J1J2_CouplingValidationError,
 )
 

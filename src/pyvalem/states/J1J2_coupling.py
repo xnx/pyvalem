@@ -14,7 +14,7 @@ creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
-from pyvalem._utils import parse_fraction, float_to_fraction
+from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import State, StateParseError
 
 integer = pp.Word(pp.nums)
@@ -54,8 +54,10 @@ class J1J2_Coupling(State):
     def _parse_state(self, state_str):
         try:
             components = J1J2_term.parse_string(state_str, parse_all=True)
-        except pp.ParseException:
-            raise J1J2_CouplingError(f"Invalid J1J2 coupling term syntax: {state_str}")
+        except pp.ParseException as err:
+            raise J1J2_CouplingError(
+                f"Invalid J1J2 coupling term syntax: {state_str}"
+            ) from err
         self.J1 = parse_fraction(components.J1str)
         self.J2 = parse_fraction(components.J2str)
         self.J = parse_fraction(components.get("Jstr"))

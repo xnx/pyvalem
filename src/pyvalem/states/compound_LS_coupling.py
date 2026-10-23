@@ -17,8 +17,9 @@ creating an HTML representation of the term symbol, etc.
 import re
 
 from pyvalem.states._base_state import State, StateParseError
-from .atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
+
 from .atomic_configuration import AtomicConfiguration, AtomicConfigurationError
+from .atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
 
 term_patt = r"\((.*?)\)"
 
@@ -42,10 +43,10 @@ class CompoundLSCoupling(State):
             raise CompoundLSCouplingError
 
         try:
-            for i, config in enumerate(configs[1:], start=1):
+            for i in range(1, len(configs)):
                 configs[i] = configs[i][len(terms[i - 1]) + 1 :]
-        except IndexError:
-            raise CompoundLSCouplingError
+        except IndexError as err:
+            raise CompoundLSCouplingError from err
 
         if not configs[-1]:
             configs = configs[:-1]
@@ -55,8 +56,8 @@ class CompoundLSCoupling(State):
             self.atomic_configurations = [
                 AtomicConfiguration(config) for config in configs
             ]
-        except (AtomicTermSymbolError, AtomicConfigurationError):
-            raise CompoundLSCouplingError
+        except (AtomicTermSymbolError, AtomicConfigurationError) as err:
+            raise CompoundLSCouplingError from err
 
     def __repr__(self):
         return self.state_str
@@ -64,7 +65,7 @@ class CompoundLSCoupling(State):
     @property
     def html(self):
         html_chunks = []
-        for config, term in zip(self.atomic_configurations, self.terms):
+        for config, term in zip(self.atomic_configurations, self.terms, strict=False):
             html_chunks.append(config.html)
             html_chunks.append(f"({term.html})")
         if len(self.atomic_configurations) > len(self.terms):
@@ -74,7 +75,7 @@ class CompoundLSCoupling(State):
     @property
     def latex(self):
         latex_chunks = []
-        for config, term in zip(self.atomic_configurations, self.terms):
+        for config, term in zip(self.atomic_configurations, self.terms, strict=False):
             latex_chunks.append(config.latex)
             latex_chunks.append(f"({term.latex})")
         if len(self.atomic_configurations) > len(self.terms):

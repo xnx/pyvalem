@@ -35,7 +35,9 @@ class RotationalState(State):
             if k.strip() != "J":
                 raise ValueError
         except ValueError:
-            raise RotationalStateError("Rotational states must start with" ' "J="')
+            raise RotationalStateError(
+                'Rotational states must start with "J="'
+            ) from None
 
         state_str = v.strip()
 
@@ -43,10 +45,10 @@ class RotationalState(State):
         if state_str not in ("*", "**", "***"):
             try:
                 components = Jstr.parse_string(state_str, parse_all=True)
-            except pp.ParseException:
+            except pp.ParseException as err:
                 raise RotationalStateError(
-                    "Invalid rotational state value" " syntax: {0}".format(state_str)
-                )
+                    "Invalid rotational state value syntax: {0}".format(state_str)
+                ) from err
 
             if "integer" in components:
                 self.J = int(components["integer"][0])
@@ -57,7 +59,7 @@ class RotationalState(State):
                 state_str = "{}/2".format(int(2 * self.J))
             else:
                 raise RotationalStateError(
-                    "Invalid rotational state value" " syntax: {0}".format(state_str)
+                    "Invalid rotational state value syntax: {0}".format(state_str)
                 )
 
             if self.J is not None:
@@ -68,8 +70,9 @@ class RotationalState(State):
     def _validate_j(self):
         if self.J % 0.5 != 0:
             raise RotationalStateError(
-                "Invalid rotational state value: {}."
-                "Must be a multiple of 1/2.".format(self.state_str)
+                "Invalid rotational state value: {}.Must be a multiple of 1/2.".format(
+                    self.state_str
+                )
             )
 
     def __repr__(self):

@@ -87,7 +87,7 @@ class Atom:
         return hash(self.symbol)
 
     def __eq__(self, other):
-        if type(self) == type(other):
+        if type(self) is type(other):
             return self.symbol == other.symbol
         return self.symbol == other
 
@@ -179,7 +179,7 @@ def read_atom_data(fi, atoms):
         if row == header:
             continue  # skip the header
         atom_dtypes = [str, str, int, float_or_none, float_or_none]
-        atom_args = [dtype(val) for dtype, val in zip(atom_dtypes, row)]
+        atom_args = [dtype(val) for dtype, val in zip(atom_dtypes, row, strict=True)]
         element_symbol = atom_args[0]
         element_symbols.append(element_symbol)
         atoms[element_symbol] = Atom(*atom_args)
@@ -219,7 +219,8 @@ def read_isotope_data(fi, isotopes):
             continue
         iso_dtypes = [int, int, str, float, float, str]
         iso_kwargs = {
-            attr: dtype(val) for attr, dtype, val in zip(iso_attribs, iso_dtypes, row)
+            attr: dtype(val)
+            for attr, dtype, val in zip(iso_attribs, iso_dtypes, row, strict=True)
         }
         iso_name = "{}-{}".format(
             atoms[iso_kwargs["symbol"]].name, iso_kwargs["mass_number"]

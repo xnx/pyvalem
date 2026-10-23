@@ -22,7 +22,7 @@ from collections import defaultdict
 import pyparsing as pp
 
 from ._special_cases import special_cases
-from .atom_data import element_symbols, atoms, isotopes
+from .atom_data import atoms, element_symbols, isotopes
 
 element = pp.one_of(element_symbols)
 # TODO: don't allow leading 0
@@ -281,10 +281,10 @@ class Formula:
                 # select the slug version of this prefix from prefix_tokens
                 try:
                     slug_prefix_token = prefix_tokens[prefix_token]
-                except KeyError:
+                except KeyError as err:
                     raise FormulaParseError(
-                        "Unrecognised formula prefix" " token: {}".format(prefix_token)
-                    )
+                        "Unrecognised formula prefix token: {}".format(prefix_token)
+                    ) from err
             slug_prefix_tokens.append(slug_prefix_token)
         slug_prefix = "_".join(slug_prefix_tokens)
         return "{}__".format(slug_prefix)
@@ -333,8 +333,8 @@ class Formula:
 
         try:
             moieties = complexChemicalFormula.parse_string(formula, parse_all=True)
-        except pp.ParseException:
-            raise FormulaParseError("Invalid formula syntax: %s" % formula)
+        except pp.ParseException as err:
+            raise FormulaParseError("Invalid formula syntax: %s" % formula) from err
 
         html_chunks = []
         latex_chunks = []
@@ -342,7 +342,7 @@ class Formula:
         # calculate relative molecular mass as the sum of the atomic weights
 
         # make the prefix html and slug
-        if "prefix" in moieties.keys():
+        if "prefix" in moieties:
             html_chunks.append(self._make_prefix_html(moieties["prefix"]))
             latex_chunks.append(self._make_prefix_latex(moieties["prefix"]))
             slug_chunks.append(self._make_prefix_slug(moieties["prefix"]))
@@ -351,7 +351,7 @@ class Formula:
         nmoieties = len(moieties)
         for i, moiety in enumerate(moieties):
             poststoich = 0
-            if "prestoich" in moiety.keys():
+            if "prestoich" in moiety:
                 # bracketed fragment, e.g. (OH)2, 3(HO2+), ...
                 prestoich = int(moiety["prestoich"])
                 if prestoich > 1:
@@ -399,20 +399,22 @@ class Formula:
                     # We have an isotope, specified as '(zSy)'.
                     try:
                         atom = isotopes[atom_symbol]
-                    except KeyError:
+                    except KeyError as err:
                         raise FormulaParseError(
-                            "Unknown isotope symbol"
-                            " {} in formula {}".format(atom_symbol, formula)
-                        )
+                            "Unknown isotope symbol {} in formula {}".format(
+                                atom_symbol, formula
+                            )
+                        ) from err
                 else:
                     # A regular element symbol for an atom.
                     try:
                         atom = atoms[atom_symbol]
-                    except KeyError:
+                    except KeyError as err:
                         raise FormulaParseError(
-                            "Unknown element symbol"
-                            " {} in formula {}".format(atom_symbol, formula)
-                        )
+                            "Unknown element symbol {} in formula {}".format(
+                                atom_symbol, formula
+                            )
+                        ) from err
 
                 self.atoms.add(atom)
 
@@ -456,7 +458,7 @@ class Formula:
             # if i < nmoieties-1 and nmoieties != 1:
             #    slug_chunks.append('_d_')
 
-            if "poststoich" in moiety.keys():
+            if "poststoich" in moiety:
                 html_chunks.append(")")
                 latex_chunks.append(")")
                 slug_chunks.append("_r_")
@@ -467,7 +469,7 @@ class Formula:
                     latex_chunks.append("_{{{0:d}}}".format(poststoich))
                     slug_chunks.append("{:d}".format(poststoich))
 
-            if "radical" in moiety.keys():
+            if "radical" in moiety:
                 html_chunks.append("&#183;")
                 latex_chunks.append(r"\cdot")
                 slug_chunks.append("_dot")

@@ -6,9 +6,9 @@ import unittest
 
 from pyvalem.reaction import (
     Reaction,
+    ReactionChargeError,
     ReactionParseError,
     ReactionStoichiometryError,
-    ReactionChargeError,
 )
 
 
@@ -158,17 +158,17 @@ class ReactionParseTest(unittest.TestCase):
         self.assertEqual(repr(r), "H + H + M → H2 + M")
 
     def test_reaction_html(self):
-        for r_str, r_html in zip(self.r_strings, self.expected_html):
+        for r_str, r_html in zip(self.r_strings, self.expected_html, strict=True):
             with self.subTest(r_str):
                 self.assertEqual(Reaction(r_str).html, r_html)
 
     def test_reaction_latex(self):
-        for r_str, r_html in zip(self.r_strings, self.expected_latex):
+        for r_str, r_html in zip(self.r_strings, self.expected_latex, strict=True):
             with self.subTest(r_str):
                 self.assertEqual(Reaction(r_str).latex, r_html)
 
     def test_reaction_repr(self):
-        for r_str, r_html in zip(self.r_strings, self.expected_repr):
+        for r_str, r_html in zip(self.r_strings, self.expected_repr, strict=True):
             with self.subTest(r_str):
                 self.assertEqual(repr(Reaction(r_str)), r_html)
         self.assertEqual(repr(Reaction("hv + C2 -> C + C")), "hν + C2 → C + C")

@@ -64,7 +64,7 @@ good_formulas = {
     },
     "Co(NH2+)(NH3)5": {
         "stoichiometric_formula": "H17N6Co+",
-        "html": "Co(NH<sub>2</sub><sup>+</sup>)(NH<sub>3</sub>)" "<sub>5</sub>",
+        "html": "Co(NH<sub>2</sub><sup>+</sup>)(NH<sub>3</sub>)<sub>5</sub>",
         "slug": "Co-_l_NH2_p_r_-_l_NH3_r_5",
         "rmm": 160.111194,
         "natoms": 24,
@@ -141,7 +141,7 @@ good_formulas = {
         "stoichiometric_formula": "H6C4FCl4Br",
         "html": '1,1-<span style="font-size: 80%;">D</span>-(+)-'
         "CH<sub>3</sub>CH(Cl)(Br)CH(F)(Cl)CHCl<sub>2</sub>",
-        "slug": "1_1_D_p__CH3CH-_l_Cl_r_-_l_Br_r_-CH-_l_F_r_" "-_l_Cl_r_-CHCl2",
+        "slug": "1_1_D_p__CH3CH-_l_Cl_r_-_l_Br_r_-CH-_l_F_r_-_l_Cl_r_-CHCl2",
         "rmm": 294.794403163,
     },
     "para-C6H5Cl": {

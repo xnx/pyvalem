@@ -6,10 +6,32 @@ an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
+from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import State, StateParseError
-from pyvalem._utils import parse_fraction, float_to_fraction
 
-atom_L_symbols = "S P D F G H I K L M N O Q R T U V W X Y Z".split()
+atom_L_symbols = [
+    "S",
+    "P",
+    "D",
+    "F",
+    "G",
+    "H",
+    "I",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "Q",
+    "R",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+]
 
 integer = pp.Word(pp.nums)
 
@@ -56,10 +78,10 @@ class AtomicTermSymbol(State):
     def _parse_state(self, state_str):
         try:
             components = atom_term.parse_string(state_str, parse_all=True)
-        except pp.ParseException:
+        except pp.ParseException as err:
             raise AtomicTermSymbolError(
-                "Invalid atomic term symbol syntax:" " {0}".format(state_str)
-            )
+                "Invalid atomic term symbol syntax: {0}".format(state_str)
+            ) from err
         self.Smult = int(components.Smult)
         self.S = (self.Smult - 1) / 2.0
         self.Lletter = components.Lletter
@@ -71,7 +93,7 @@ class AtomicTermSymbol(State):
         try:
             self.J = parse_fraction(components.Jstr)
         except ValueError as err:
-            raise AtomicTermSymbolError(err)
+            raise AtomicTermSymbolError(err) from err
         if self.J is not None:
             self._validate_j()
 

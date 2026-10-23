@@ -12,5 +12,5 @@ class StatesImportTest(unittest.TestCase):
 
 class StatesInitFileTest(unittest.TestCase):
     def test___init___imports(self):
-        for StateClass in STATES.keys():
+        for StateClass in STATES:
             self.assertIn(StateClass.__name__, states.__dict__)

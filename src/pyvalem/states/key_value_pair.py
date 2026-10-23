@@ -3,6 +3,7 @@ The KeyValuePair class, representing an arbitrary atomic or molecular state,
 with methods for parsing it from a string and outputting its HTML
 representation, etc.
 """
+
 from pyvalem.states._base_state import State, StateParseError
 
 
@@ -42,8 +43,10 @@ class KeyValuePair(State):
 
         try:
             key, value = state_str.split("=")
-        except ValueError:
-            raise KeyValuePairError("Invalid key-value pair: {}.".format(state_str))
+        except ValueError as err:
+            raise KeyValuePairError(
+                "Invalid key-value pair: {}.".format(state_str)
+            ) from err
         self.key = key.strip()
         self.value = value.strip()
 

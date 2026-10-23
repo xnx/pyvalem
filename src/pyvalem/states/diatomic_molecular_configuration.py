@@ -6,8 +6,9 @@ labels, creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
-from .atomic_configuration import atomic_orbital_symbols
 from pyvalem.states._base_state import State, StateParseError
+
+from .atomic_configuration import atomic_orbital_symbols
 
 integer = pp.Word(pp.nums)
 molecular_orbital_symbols = (
@@ -84,10 +85,7 @@ class DiatomicMolecularConfigurationError(StateParseError):
 class DiatomicMolecularOrbital:
     def __init__(self, n, symbol, count):
         self.n = int(n)
-        if symbol in greek_letters.keys():
-            self.symbol = greek_letters[symbol]
-        else:
-            self.symbol = symbol
+        self.symbol = greek_letters.get(symbol, symbol)
         self.count = int(count)
         self.validate_molecular_orbital()
 
@@ -108,8 +106,9 @@ class DiatomicMolecularOrbital:
         if self.symbol == "σ":
             if self.count > 2:
                 raise DiatomicMolecularOrbitalError(
-                    "Only two electrons"
-                    " allowed in σ orbital, but received {:d}".format(self.count)
+                    "Only two electrons allowed in σ orbital, but received {:d}".format(
+                        self.count
+                    )
                 )
         else:
             if self.count > 4:
@@ -196,13 +195,13 @@ class DiatomicMolecularConfiguration(State):
     def _parse_regular_config(self, state_str):
         try:
             parse_results = molecule_config.parse_string(state_str, parse_all=True)
-        except pp.ParseException:
+        except pp.ParseException as err:
             raise DiatomicMolecularConfigurationError(
                 "Invalid diatomic molecular electronic "
                 "configuration syntax: {0}".format(state_str)
-            )
+            ) from err
 
-        for i, parsed_orbital in enumerate(parse_results):
+        for parsed_orbital in parse_results:
             try:
                 temp_orbital = DiatomicMolecularOrbital(
                     n=parsed_orbital["n"],
@@ -210,21 +209,21 @@ class DiatomicMolecularConfiguration(State):
                     count=parsed_orbital["count"],
                 )
             except DiatomicMolecularOrbitalError as err:
-                raise DiatomicMolecularConfigurationError(err)
+                raise DiatomicMolecularConfigurationError(err) from err
             self.orbitals.append(temp_orbital)
         self._validate_configuration()
 
     def _parse_alt_config(self, state_str):
         try:
             parse_results = alt_molecule_config.parse_string(state_str, parse_all=True)
-        except pp.ParseException:
+        except pp.ParseException as err:
             raise DiatomicMolecularConfigurationError(
                 "Invalid diatomic molecular electronic "
                 "configuration syntax: {0}".format(state_str)
-            )
+            ) from err
 
         self.orbitals = []
-        for i, parsed_orbital in enumerate(parse_results):
+        for parsed_orbital in parse_results:
             try:
                 temp_orbital = AltDiatomicMolecularOrbital(
                     n=parsed_orbital["n"],
@@ -233,7 +232,7 @@ class DiatomicMolecularConfiguration(State):
                     count=parsed_orbital["count"],
                 )
             except DiatomicMolecularOrbitalError as err:
-                raise DiatomicMolecularConfigurationError(err)
+                raise DiatomicMolecularConfigurationError(err) from err
             self.orbitals.append(temp_orbital)
         self._validate_alt_configuration()
 
@@ -241,14 +240,14 @@ class DiatomicMolecularConfiguration(State):
         orbitals = [(o.n, o.symbol) for o in self.orbitals]
         if len(orbitals) != len(set(orbitals)):
             raise DiatomicMolecularConfigurationError(
-                "Repeated orbitals " "in {0}".format(self.state_str)
+                "Repeated orbitals in {0}".format(self.state_str)
             )
 
     def _validate_alt_configuration(self):
         orbitals = [(o.n, o.lletter, o.symbol) for o in self.orbitals]
         if len(orbitals) != len(set(orbitals)):
             raise DiatomicMolecularConfigurationError(
-                "Repeated orbitals " "in {0}".format(self.state_str)
+                "Repeated orbitals in {0}".format(self.state_str)
             )
 
     def __repr__(self):

@@ -173,8 +173,9 @@ class Reaction:
             break
         else:
             raise ReactionParseError(
-                "Invalid reaction string - no reactant-product separator: "
-                "{}".format(r_str)
+                "Invalid reaction string - no reactant-product separator: {}".format(
+                    r_str
+                )
             )
 
         # canonicalised side separator:
@@ -195,16 +196,16 @@ class Reaction:
                 'Failed to parse Reaction string "{}" because one of the '
                 "StatefulSpecies was incorrectly formed. "
                 "The error reported was: {}".format(r_str, err)
-            )
+            ) from err
 
         # validate charge and stoichiometry conservation:
         if strict and not self.stoichiometry_conserved():
             raise ReactionStoichiometryError(
-                "Stoichiometry not preserved for " "reaction: {}".format(r_str)
+                "Stoichiometry not preserved for reaction: {}".format(r_str)
             )
         if strict and not self.charge_conserved():
             raise ReactionChargeError(
-                "Charge not preserved for " "reaction: {}".format(r_str)
+                "Charge not preserved for reaction: {}".format(r_str)
             )
 
     def _parse_species(self, lhs_str, rhs_str):
@@ -233,6 +234,7 @@ class Reaction:
             [lhs_str, rhs_str],
             [self.reactants, self.products],
             [self.reactants_text_count_map, self.products_text_count_map],
+            strict=True,
         ):
             for side_fragment in side_str.split(" + "):
                 if side_fragment.strip():
@@ -243,10 +245,10 @@ class Reaction:
                     else:
                         try:
                             n = int(n)
-                        except ValueError:
+                        except ValueError as err:
                             raise ReactionParseError(
                                 "Failed to parse {}".format(side_fragment)
-                            )
+                            ) from err
                     ss = StatefulSpecies(ss_str)
                     species.append((n, ss))
                     ss_str = str(ss)
@@ -271,12 +273,10 @@ class Reaction:
         list of tuple[int, StatefulSpecies]
         """
         sort_keys = {sp: (-1, sp) for sp in Reaction.light_species}
-        return list(
-            sorted(
-                terms,
-                key=lambda e: sort_keys.get(e[1].formula.formula, (0, "")),
-                reverse=side != "lhs",
-            )
+        return sorted(
+            terms,
+            key=lambda e: sort_keys.get(e[1].formula.formula, (0, "")),
+            reverse=side != "lhs",
         )
 
     def _aggregate_terms(self, terms):

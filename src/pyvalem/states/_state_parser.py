@@ -2,21 +2,22 @@
 A module for parsing strings or sequences of strings into appropriate
 State-like objects or sequences of such objects.
 """
+
 from collections import OrderedDict
 
 from ._base_state import StateParseError
 from .atomic_configuration import AtomicConfiguration
 from .atomic_term_symbol import AtomicTermSymbol
+from .compound_LS_coupling import CompoundLSCoupling
 from .diatomic_molecular_configuration import DiatomicMolecularConfiguration
 from .generic_excited_state import GenericExcitedState
+from .J1J2_coupling import J1J2_Coupling
+from .J1K_LK_coupling import J1K_LK_Coupling
 from .key_value_pair import KeyValuePair
 from .molecular_term_symbol import MolecularTermSymbol
 from .racah_symbol import RacahSymbol
 from .rotational_state import RotationalState
 from .vibrational_state import VibrationalState
-from .compound_LS_coupling import CompoundLSCoupling
-from .J1K_LK_coupling import J1K_LK_Coupling
-from .J1J2_coupling import J1J2_Coupling
 
 # the following has two purposes: keys determine the order in which the
 # states are parsed, and the values determine the sorting order of states

@@ -6,8 +6,8 @@ an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
+from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import State, StateParseError
-from pyvalem._utils import parse_fraction, float_to_fraction
 
 orbital_irrep_labels = (
     "Σ-",
@@ -208,14 +208,14 @@ class MolecularTermSymbol(State):
             components = molecule_term_with_label.parse_string(
                 state_str, parse_all=True
             )
-        except pp.ParseException:
+        except pp.ParseException as err:
             raise MolecularTermSymbolError(
                 "Invalid molecular term symbol syntax: {0}".format(state_str)
-            )
+            ) from err
         self.Smult = int(components.Smult)
         self.S = (self.Smult - 1) / 2
         irrep = components.irrep
-        if irrep in greek_letters.keys():
+        if irrep in greek_letters:
             self.state_str = self.state_str.replace(irrep, greek_letters[irrep])
             irrep = greek_letters[irrep]
 

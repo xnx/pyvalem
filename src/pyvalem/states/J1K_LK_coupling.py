@@ -12,8 +12,8 @@ https://doi.org/10.1007/978-3-030-73893-8_11
 
 import pyparsing as pp
 
+from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import State, StateParseError
-from pyvalem._utils import parse_fraction, float_to_fraction
 
 integer = pp.Word(pp.nums)
 Smult = integer.set_results_name("Smult")
@@ -53,21 +53,21 @@ class J1K_LK_Coupling(State):
     def _parse_state(self, state_str):
         try:
             components = J1K_LK_term.parse_string(state_str, parse_all=True)
-        except pp.ParseException:
+        except pp.ParseException as err:
             raise J1K_LK_CouplingError(
                 f'Invalid J1K / LK term symbol syntax:"{state_str}"'
-            )
+            ) from err
         self.Smult = int(components.Smult)
         self.S = (self.Smult - 1) / 2.0
         self.parity = components.get("parity")
         try:
             self.K = parse_fraction(components.Kstr)
         except ValueError as err:
-            raise J1K_LK_CouplingError(err)
+            raise J1K_LK_CouplingError(err) from err
         try:
             self.J = parse_fraction(components.Jstr)
         except ValueError as err:
-            raise J1K_LK_CouplingError(err)
+            raise J1K_LK_CouplingError(err) from err
         if self.J is not None:
             self._validate_J()
 

@@ -82,11 +82,12 @@ class VibrationalState(State):
                 parse_results = vibrational_config.parse_string(
                     self.state_str, parse_all=True
                 )
-            except pp.ParseException:
+            except pp.ParseException as err:
                 raise VibrationalStateError(
-                    "Invalid vibrational state"
-                    " configuration syntax: {0}".format(self.state_str)
-                )
+                    "Invalid vibrational state configuration syntax: {0}".format(
+                        self.state_str
+                    )
+                ) from err
 
             self.terms = [
                 VibrationalTerm(parsed_term["n"], parsed_term["mode"])

@@ -97,22 +97,23 @@ class AtomicOrbital:
             self.lletter = lletter
             try:
                 self.l = atomic_orbital_symbols.index(lletter)
-            except IndexError:
+            except IndexError as err:
                 raise AtomicOrbitalError(
-                    "Invalid azimuthal quantum"
-                    ' number label, lletter="{}"'.format(lletter)
-                )
+                    'Invalid azimuthal quantum number label, lletter="{}"'.format(
+                        lletter
+                    )
+                ) from err
         else:
             self.l = l
             try:
                 self.lletter = atomic_orbital_symbols[l]
-            except IndexError:
+            except IndexError as err:
                 raise AtomicOrbitalError(
                     "Invalid azimuthal quantum"
                     " number, l={}. Must be in range 0 < l < {}".format(
                         l, len(atomic_orbital_symbols)
                     )
-                )
+                ) from err
             if lletter and lletter != self.lletter:
                 raise AtomicOrbitalError(
                     "Inconsistent azimuthal quantum"
@@ -175,14 +176,15 @@ class AtomicOrbital:
                 raise AtomicOrbitalError("l >= n in atomic orbital {}".format(self))
             if self.nocc < 0:
                 raise AtomicOrbitalError(
-                    "Negative nocc = {} not allowed in"
-                    " orbital: {}".format(self.nocc, self.nocc)
+                    "Negative nocc = {} not allowed in orbital: {}".format(
+                        self.nocc, self.nocc
+                    )
                 )
         # Even if the orbital is incompletely specified, we can still check
         # the number of electrons against the quantum number l.
         if self.nocc > 2 * (2 * self.l + 1):
             raise AtomicOrbitalError(
-                "Too many electrons in atomic" " orbital: {}".format(self)
+                "Too many electrons in atomic orbital: {}".format(self)
             )
 
 
@@ -263,11 +265,10 @@ class AtomicConfiguration(State):
         """
         try:
             parse_results = atom_config.parse_string(state_str, parse_all=True)
-        except pp.ParseException:
+        except pp.ParseException as err:
             raise AtomicConfigurationError(
-                "Invalid atomic electronic"
-                " configuration syntax: {0}".format(state_str)
-            )
+                "Invalid atomic electronic configuration syntax: {0}".format(state_str)
+            ) from err
 
         # Expand out noble gas notation, if used, and check that the
         # subshells 1s, 2s, 2p, ... are unique.
@@ -275,7 +276,7 @@ class AtomicConfiguration(State):
         subshells = [subshell[:2] for subshell in subshells.split(".")]
 
         for i, parsed_orbital in enumerate(parse_results):
-            if not i and type(parsed_orbital) == str:
+            if not i and isinstance(parsed_orbital, str):
                 # Noble-gas notation for first atomic orbital
                 self.noble_gas_config = parsed_orbital
                 # NB strip '[' and ']' from parsed_orbital of the form '[Ar]'.
@@ -290,7 +291,7 @@ class AtomicConfiguration(State):
                 )
                 self.nelectrons += orbital.nocc
             except AtomicOrbitalError as err:
-                raise AtomicConfigurationError(err)
+                raise AtomicConfigurationError(err) from err
             self.orbitals.append(orbital)
 
         # Check that the subshells specified are unique

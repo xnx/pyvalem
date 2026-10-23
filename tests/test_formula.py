@@ -5,6 +5,7 @@ Unit tests for the formula module of PyValem
 import unittest
 
 from pyvalem.formula import Formula, FormulaParseError
+
 from .good_formulas import good_formulas
 
 
@@ -64,7 +65,7 @@ class FormulaTest(unittest.TestCase):
     def test_moieties(self):
         cf = Formula("H2NC(CH3)2CO2H")
         self.assertEqual(
-            cf.html, "H<sub>2</sub>NC(CH<sub>3</sub>)" "<sub>2</sub>CO<sub>2</sub>H"
+            cf.html, "H<sub>2</sub>NC(CH<sub>3</sub>)<sub>2</sub>CO<sub>2</sub>H"
         )
         self.assertEqual(cf.slug, "H2NC-_l_CH3_r_2-CO2H")
         atom_symbols = {atom.symbol for atom in cf.atoms}
@@ -86,9 +87,9 @@ class FormulaTest(unittest.TestCase):
             self.assertEqual(cf.html, good_formulas[formula]["html"])
             self.assertEqual(cf.slug, good_formulas[formula]["slug"])
             self.assertAlmostEqual(cf.rmm, good_formulas[formula]["rmm"])
-            if "natoms" in good_formulas[formula].keys():
+            if "natoms" in good_formulas[formula]:
                 self.assertEqual(cf.natoms, good_formulas[formula]["natoms"])
-            if "latex" in good_formulas[formula].keys():
+            if "latex" in good_formulas[formula]:
                 self.assertEqual(cf.latex, good_formulas[formula]["latex"])
 
     def test_Tc_Pm(self):
@@ -167,7 +168,7 @@ class FormulaTest(unittest.TestCase):
         f1 = Formula("hv")
         f2 = Formula("Ar")
         test_dict = {f1: 0, f2: "a"}
-        test_set = set((f1, f1, f2))
+        test_set = {f1, f1, f2}
 
         f3 = Formula("hν")
         self.assertEqual(hash(f1), hash(f3))

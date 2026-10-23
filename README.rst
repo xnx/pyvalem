@@ -8,8 +8,8 @@
    :target: https://pypi.python.org/pypi/pyvalem/
 .. |PyPI pyversions| image:: https://img.shields.io/pypi/pyversions/pyvalem.svg
    :target: https://pypi.python.org/pypi/pyvalem/
-.. |Code style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/psf/black
+.. |Code style| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+   :target: https://github.com/astral-sh/ruff
 
 ***********************
 Introduction to PyValem
@@ -195,11 +195,16 @@ The tests can then be executed by running (from the project root directory)
 The package metadata and all of its dependencies are declared in ``pyproject.toml``.
 
 Docstrings in the project adhere to the numpydoc_ styling.
-The project code is formatted by ``black``.
-Always make sure to format your code before submitting a pull request, by running
-``black`` on all your python files.
+The project code is linted and formatted by ruff_ (installed with the ``dev``
+group). Before submitting a pull request, run
+
+.. code-block:: bash
+
+    ruff check
+    ruff format
 
 
 .. _GitHub: https://github.com/xnx/pyvalem
 .. _PyPI: https://pypi.org/project/pyvalem/
 .. _numpydoc: https://numpydoc.readthedocs.io/en/latest/format.html
+.. _ruff: https://docs.astral.sh/ruff/

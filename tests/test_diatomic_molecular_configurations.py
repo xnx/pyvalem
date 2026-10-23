@@ -4,11 +4,11 @@ Unit tests for the diatomic molecular configuration module of PyValem
 
 import unittest
 
+from pyvalem.states._base_state import StateParseError
 from pyvalem.states.diatomic_molecular_configuration import (
     DiatomicMolecularConfiguration,
     DiatomicMolecularConfigurationError,
 )
-from pyvalem.states._base_state import StateParseError
 
 
 class DiatomicMolecularConfigurationTest(unittest.TestCase):
@@ -41,7 +41,7 @@ class DiatomicMolecularConfigurationTest(unittest.TestCase):
 
         c7 = DiatomicMolecularConfiguration("1sigmau2.2sigmag1")
         self.assertEqual(
-            c7.html, "1σ<sub>u</sub><sup>2</sup>.2σ<sub>g</sub>" "<sup>1</sup>"
+            c7.html, "1σ<sub>u</sub><sup>2</sup>.2σ<sub>g</sub><sup>1</sup>"
         )
         self.assertEqual(c7.latex, r"1\sigma_u^{2}2\sigma_g^{1}")
 
