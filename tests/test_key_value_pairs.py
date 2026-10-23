@@ -34,6 +34,11 @@ class KeyValuePairTest(unittest.TestCase):
         self.assertEqual(repr(kv1), 'S="5<n<9"')
         self.assertEqual(kv1.html, "S=&quot;5&lt;n&lt;9&quot;")
 
+    def test_empty_key_or_value(self):
+        for s in ("=", "=1", "a="):
+            with self.subTest(s):
+                self.assertRaises(KeyValuePairError, KeyValuePair, s)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -91,6 +91,10 @@ class AtomicTermSymbol(State):
                 "Invalid atomic term symbol syntax: {0}".format(state_str)
             ) from err
         self.Smult = int(components.Smult)
+        if self.Smult < 1:
+            raise AtomicTermSymbolValidationError(
+                "Invalid spin multiplicity in {}".format(state_str)
+            )
         self.S = (self.Smult - 1) / 2.0
         self.Lletter = components.Lletter
         self.L = atom_L_symbols.index(components.Lletter)

@@ -7,7 +7,11 @@ an HTML representation of the term symbol, etc.
 import pyparsing as pp
 
 from pyvalem._utils import float_to_fraction, parse_fraction
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 orbital_irrep_labels = (
     "Σ-",
@@ -178,18 +182,25 @@ term_label_let = pp.Combine(
 # ... or a number. The open bracket is required but suppressed to distinguish
 # this type of term label from the spin multiplicity.
 term_label_num = integer.set_results_name("term_label") + pp.Suppress("(")
-term_label = term_label_let | term_label_num
 
+# The term symbol may be enclosed in parentheses, which must be balanced, and
+# which a numeric term label requires.
 molecule_term_with_label = (
-    pp.Optional(term_label)
-    + pp.Suppress(pp.Optional("("))
-    + molecule_term
-    + pp.Suppress(pp.Optional(")"))
-    + pp.StringEnd()
-)
+    (term_label_num + molecule_term + pp.Suppress(")"))
+    | (
+        pp.Optional(term_label_let)
+        + (pp.Suppress("(") + molecule_term + pp.Suppress(")") | molecule_term)
+    )
+) + pp.StringEnd()
 
 
 class MolecularTermSymbolError(StateParseError):
+    pass
+
+
+class MolecularTermSymbolValidationError(
+    MolecularTermSymbolError, StateValidationError
+):
     pass
 
 
@@ -213,6 +224,10 @@ class MolecularTermSymbol(State):
                 "Invalid molecular term symbol syntax: {0}".format(state_str)
             ) from err
         self.Smult = int(components.Smult)
+        if self.Smult < 1:
+            raise MolecularTermSymbolValidationError(
+                "Invalid spin multiplicity in {}".format(state_str)
+            )
         self.S = (self.Smult - 1) / 2
         irrep = components.irrep
         if irrep in greek_letters:

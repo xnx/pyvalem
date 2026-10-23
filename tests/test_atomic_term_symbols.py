@@ -4,7 +4,11 @@ Unit tests for the atomic term symbols module of PyValem
 
 import unittest
 
-from pyvalem.states.atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
+from pyvalem.states.atomic_term_symbol import (
+    AtomicTermSymbol,
+    AtomicTermSymbolError,
+    AtomicTermSymbolValidationError,
+)
 
 
 class AtomicTermSymbolTest(unittest.TestCase):
@@ -79,6 +83,11 @@ class AtomicTermSymbolTest(unittest.TestCase):
         self.assertEqual(a1.latex, r"{}^{2}\mathrm{D}2_{3/2}")
         self.assertEqual(a2.html, "<sup>4</sup>I3")
         self.assertEqual(a2.latex, r"{}^{4}\mathrm{I}3")
+
+    def test_spin_multiplicity(self):
+        for s in ("0S", "0P_1"):
+            with self.subTest(s):
+                self.assertRaises(AtomicTermSymbolValidationError, AtomicTermSymbol, s)
 
 
 if __name__ == "__main__":

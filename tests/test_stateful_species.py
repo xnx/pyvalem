@@ -123,6 +123,8 @@ class StatefulSpeciesTest(unittest.TestCase):
         self.assertEqual(ss1.states[0].S, 1)
 
         self.assertRaises(StateParseError, StatefulSpecies, "Ti +2 A5D")
+        # A mistyped charge is not a vibrational quantum number.
+        self.assertRaises(StateParseError, StatefulSpecies, "Ti +2")
 
     def test_compoundLScoupling_species(self):
         ss1 = StatefulSpecies("N 2s2.2p2(3P)6d 4F")

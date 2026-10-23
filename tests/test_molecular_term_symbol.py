@@ -7,6 +7,7 @@ import unittest
 from pyvalem.states.molecular_term_symbol import (
     MolecularTermSymbol,
     MolecularTermSymbolError,
+    MolecularTermSymbolValidationError,
 )
 
 
@@ -127,6 +128,16 @@ class MolecularTermSymbolTest(unittest.TestCase):
         self.assertEqual(m1.term_label, "1")
         self.assertRaises(MolecularTermSymbolError, MolecularTermSymbol, "1'(A\")")
         self.assertRaises(MolecularTermSymbolError, MolecularTermSymbol, '-2(A")')
+
+    def test_unbalanced_parentheses(self):
+        for s in ("A(1Σ+", "A1Σ+)", "(1Σ+", "1Σ+)", "1(2B1"):
+            with self.subTest(s):
+                self.assertRaises(MolecularTermSymbolError, MolecularTermSymbol, s)
+
+    def test_spin_multiplicity(self):
+        self.assertRaises(
+            MolecularTermSymbolValidationError, MolecularTermSymbol, "0Σ+"
+        )
 
 
 if __name__ == "__main__":

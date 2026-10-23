@@ -5,7 +5,7 @@ Unit tests for the Racah symbols module of PyValem.
 import unittest
 
 from pyvalem.states._base_state import StateParseError
-from pyvalem.states.racah_symbol import RacahSymbol
+from pyvalem.states.racah_symbol import RacahSymbol, RacahSymbolValidationError
 
 
 class RacahSymbolTest(unittest.TestCase):
@@ -51,6 +51,21 @@ class RacahSymbolTest(unittest.TestCase):
         for s in ("5p[3/2]_1xyz", "5p[3/2]_1 extra", "3p'[1/2]o_0!!", "4d[3/2]]"):
             with self.subTest(s):
                 self.assertRaises(StateParseError, RacahSymbol, s)
+
+    def test_quantum_numbers(self):
+        # K must couple the core's j (3/2, or 1/2 if primed) with l, and J must
+        # be K + 1/2 or K - 1/2.
+        for s in (
+            "5p[3/4]_9",
+            "5p[2/2]",
+            "5s[1/2]",
+            "5s'[3/2]",
+            "3p[7/2]",
+            "3p[3/2]_3",
+            "5s'[1/2]_2",
+        ):
+            with self.subTest(s):
+                self.assertRaises(RacahSymbolValidationError, RacahSymbol, s)
 
 
 if __name__ == "__main__":

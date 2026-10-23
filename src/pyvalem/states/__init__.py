@@ -32,8 +32,12 @@ from .J1K_LK_coupling import (
     J1K_LK_CouplingValidationError,
 )
 from .key_value_pair import KeyValuePair, KeyValuePairError
-from .molecular_term_symbol import MolecularTermSymbol, MolecularTermSymbolError
-from .racah_symbol import RacahSymbol, RacahSymbolError
+from .molecular_term_symbol import (
+    MolecularTermSymbol,
+    MolecularTermSymbolError,
+    MolecularTermSymbolValidationError,
+)
+from .racah_symbol import RacahSymbol, RacahSymbolError, RacahSymbolValidationError
 from .rotational_state import RotationalState, RotationalStateError
 from .vibrational_state import VibrationalState, VibrationalStateError
 
@@ -62,8 +66,10 @@ __all__ = [
     "KeyValuePairError",
     "MolecularTermSymbol",
     "MolecularTermSymbolError",
+    "MolecularTermSymbolValidationError",
     "RacahSymbol",
     "RacahSymbolError",
+    "RacahSymbolValidationError",
     "RotationalState",
     "RotationalStateError",
     "State",

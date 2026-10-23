@@ -101,6 +101,12 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertEqual(v1.html, "0ν<sub>1</sub> + 0ν<sub>2</sub> + 0ν<sub>3</sub>")
         self.assertEqual(v1.latex, r"0\nu_{1} + 0\nu_{2} + 0\nu_{3}")
 
+    def test_quantum_number_digits(self):
+        # Only the digits 0-9: no signs, underscores or other scripts' digits.
+        for s in ("-1", "+2", "v=-1", "v=+3", "v=1_0", "٣", "v=٣"):
+            with self.subTest(s):
+                self.assertRaises(VibrationalStateError, VibrationalState, s)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -62,6 +62,10 @@ class J1K_LK_Coupling(State):
                 f'Invalid J1K / LK term symbol syntax:"{state_str}"'
             ) from err
         self.Smult = int(components.Smult)
+        if self.Smult < 1:
+            raise J1K_LK_CouplingValidationError(
+                f"Invalid spin multiplicity in {state_str}"
+            )
         self.S = (self.Smult - 1) / 2.0
         self.parity = components.get("parity")
         try:

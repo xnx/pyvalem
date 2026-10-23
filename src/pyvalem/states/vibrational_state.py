@@ -68,6 +68,9 @@ class VibrationalState(State):
             if s_v in ("*", "**", "***"):
                 self.polyatomic = None
                 return s_v
+            # NB int() would also accept a sign, underscores and other digits.
+            if not (s_v.isascii() and s_v.isdigit()):
+                raise ValueError(s_v)
             return int(s_v)
 
         try:

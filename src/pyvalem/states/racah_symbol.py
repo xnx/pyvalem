@@ -6,7 +6,11 @@ labels, creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 integer = pp.Word(pp.nums)
 atom_principal = integer.set_results_name("principal")
@@ -35,6 +39,10 @@ racah_symbol_template = (
 
 
 class RacahSymbolError(StateParseError):
+    pass
+
+
+class RacahSymbolValidationError(RacahSymbolError, StateValidationError):
     pass
 
 
@@ -77,6 +85,30 @@ class RacahSymbol(State):
         self.parity = "o" if components.parity else ""
         if components.jterm != "":
             self.j_term = int(components.jterm)
+        self._validate()
+
+    def _validate(self):
+        """Check that K couples the core's angular momentum, parent_rot, with the
+        outer electron's orbital angular momentum, l, and that J = K ± 1/2."""
+
+        if self.k_den != 2 or self.k_num % 2 != 1:
+            raise RacahSymbolValidationError(
+                "K must be a half-integer in {}".format(self.state_str)
+            )
+        K = self.k_num / self.k_den
+        l = "spdf".index(self.orbital[0])
+        if not abs(self.parent_rot - l) <= K <= self.parent_rot + l:
+            raise RacahSymbolValidationError(
+                "Invalid Racah symbol: {} |j - l| <= K <= j + l must be"
+                " satisfied, where j = {} is the angular momentum of the"
+                " core.".format(self.state_str, self.parent_rot)
+            )
+        if self.j_term is not None and self.j_term not in (K - 0.5, K + 0.5):
+            raise RacahSymbolValidationError(
+                "Invalid Racah symbol: {} J = K ± 1/2 must be satisfied.".format(
+                    self.state_str
+                )
+            )
 
     def __repr__(self):
         parent = f"{self.principal}{self.orbital}"

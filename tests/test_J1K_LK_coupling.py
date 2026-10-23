@@ -31,3 +31,7 @@ class J1K_LK_CouplingTest(unittest.TestCase):
             J1K_LK_Coupling("3[9/2]o_5")
         with self.assertRaises(J1K_LK_CouplingValidationError):
             J1K_LK_Coupling("2[9/2]o_3")
+
+    def test_spin_multiplicity(self):
+        with self.assertRaises(J1K_LK_CouplingValidationError):
+            J1K_LK_Coupling("0[1/2]")

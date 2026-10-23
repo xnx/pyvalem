@@ -49,6 +49,8 @@ class KeyValuePair(State):
             ) from err
         self.key = key.strip()
         self.value = value.strip()
+        if not self.key or not self.value:
+            raise KeyValuePairError("Invalid key-value pair: {}.".format(state_str))
 
         self.state_str = "{}={}".format(self.key, self.value)
 
