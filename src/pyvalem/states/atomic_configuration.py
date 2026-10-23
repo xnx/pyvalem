@@ -9,7 +9,11 @@ import re
 
 import pyparsing as pp
 
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 integer = pp.Word(pp.nums).set_parse_action(lambda t: int(t[0]))
 nocc_integer = pp.Optional(pp.Word(pp.nums), default="1").set_parse_action(
@@ -51,11 +55,17 @@ atom_config = (
 ).leave_whitespace()
 
 
-class AtomicOrbitalError(StateParseError):
+class AtomicOrbitalError(StateValidationError):
     pass
 
 
 class AtomicConfigurationError(StateParseError):
+    pass
+
+
+class AtomicConfigurationValidationError(
+    AtomicConfigurationError, StateValidationError
+):
     pass
 
 
@@ -295,12 +305,14 @@ class AtomicConfiguration(State):
                 )
                 self.nelectrons += orbital.nocc
             except AtomicOrbitalError as err:
-                raise AtomicConfigurationError(err) from err
+                raise AtomicConfigurationValidationError(err) from err
             self.orbitals.append(orbital)
 
         # Check that the subshells specified are unique
         if len(subshells) != len(set(subshells)):
-            raise AtomicConfigurationError("Repeated subshell in {0}".format(state_str))
+            raise AtomicConfigurationValidationError(
+                "Repeated subshell in {0}".format(state_str)
+            )
 
     @property
     def html(self):

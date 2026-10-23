@@ -23,6 +23,18 @@ class StateParseError(StateError):
     pass
 
 
+class StateValidationError(StateParseError):
+    """A base class for exceptions raised for a state string with valid syntax
+    that describes a state that can't exist, such as a term symbol whose J
+    doesn't satisfy the triangle rule.
+
+    It derives from StateParseError for compatibility with code that catches
+    that.
+    """
+
+    pass
+
+
 # noinspection PyUnresolvedReferences
 class State(ABC):
     multiple_allowed = False

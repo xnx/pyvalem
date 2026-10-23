@@ -75,12 +75,12 @@ an ``AtomicConfigurationError`` is raised:
     >>> c3 = AtomicConfiguration('[Ar].3s2')
     Traceback (most recent call last):
       ...
-    pyvalem.states.atomic_configuration.AtomicConfigurationError: Repeated subshell in [Ar].3s2
+    pyvalem.states.atomic_configuration.AtomicConfigurationValidationError: Repeated subshell in [Ar].3s2
 
     >>> c3 = AtomicConfiguration('1s2.2s2.2p7')
     Traceback (most recent call last):
       ...
-    pyvalem.states.atomic_configuration.AtomicConfigurationError: Too many electrons in atomic orbital: 2p7
+    pyvalem.states.atomic_configuration.AtomicConfigurationValidationError: Too many electrons in atomic orbital: 2p7
 
 
 ``AtomicTermSymbol``
@@ -138,7 +138,7 @@ J must satisfy the "triangle rule" (\|L-S\| ≤ J ≤ L+S); if this test fails, 
     >>> a3 = AtomicTermSymbol('3P_3')
     Traceback (most recent call last):
       ...
-    pyvalem.states.atomic_term_symbol.AtomicTermSymbolError: Invalid atomic term symbol: 3P_3 |L-S| <= J <= L+S must be satisfied.
+    pyvalem.states.atomic_term_symbol.AtomicTermSymbolValidationError: Invalid atomic term symbol: 3P_3 |L-S| <= J <= L+S must be satisfied.
 
 A single, lowercase letter label may be used to distinguish term symbols with the same ``S``, ``L`` that arise from the same atomic configuration; the convention assumed to be followed is that of C. E. Moore, NBS Circ, No. 488 (1950). See e.g. G. Nave et al., Astrophys. J. Suppl. Ser. 94:221-459 (1994). Terms with the same ``S`` and ``L`` of even parity are labelled in order of increasing energy as ``a``, ``b``, etc.; terms with odd parity are labelled in order of increasing energy as ``z``, ``y``, ``x``, etc.
 
@@ -203,12 +203,12 @@ An attempt to fill an orbital with too many electrons raises a
     >>> c5 = DiatomicMolecularConfiguration('1σ2.2σ2.3σ3')
     Traceback (most recent call last):
       ...
-    pyvalem.states.diatomic_molecular_configuration.DiatomicMolecularConfigurationError: Only two electrons allowed in σ orbital, but received 3
+    pyvalem.states.diatomic_molecular_configuration.DiatomicMolecularConfigurationValidationError: Only two electrons allowed in σ orbital, but received 3
 
     >>> c6 = DiatomicMolecularConfiguration('1σ2.2σ2.2σ1')
     Traceback (most recent call last):
       ...
-    pyvalem.states.diatomic_molecular_configuration.DiatomicMolecularConfigurationError: Repeated orbitals in 1σ2.2σ2.2σ1
+    pyvalem.states.diatomic_molecular_configuration.DiatomicMolecularConfigurationValidationError: Repeated orbitals in 1σ2.2σ2.2σ1
 
 
 ``MolecularTermSymbol``

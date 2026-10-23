@@ -1,11 +1,24 @@
 # import all the State classes and exceptions into the states namespace:
-from ._base_state import State, StateError, StateParseError
-from .atomic_configuration import AtomicConfiguration, AtomicConfigurationError
-from .atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
-from .compound_LS_coupling import CompoundLSCoupling, CompoundLSCouplingError
+from ._base_state import State, StateError, StateParseError, StateValidationError
+from .atomic_configuration import (
+    AtomicConfiguration,
+    AtomicConfigurationError,
+    AtomicConfigurationValidationError,
+)
+from .atomic_term_symbol import (
+    AtomicTermSymbol,
+    AtomicTermSymbolError,
+    AtomicTermSymbolValidationError,
+)
+from .compound_LS_coupling import (
+    CompoundLSCoupling,
+    CompoundLSCouplingError,
+    CompoundLSCouplingValidationError,
+)
 from .diatomic_molecular_configuration import (
     DiatomicMolecularConfiguration,
     DiatomicMolecularConfigurationError,
+    DiatomicMolecularConfigurationValidationError,
 )
 from .generic_excited_state import GenericExcitedState, GenericExcitedStateError
 from .J1J2_coupling import (
@@ -27,12 +40,16 @@ from .vibrational_state import VibrationalState, VibrationalStateError
 __all__ = [
     "AtomicConfiguration",
     "AtomicConfigurationError",
+    "AtomicConfigurationValidationError",
     "AtomicTermSymbol",
     "AtomicTermSymbolError",
+    "AtomicTermSymbolValidationError",
     "CompoundLSCoupling",
     "CompoundLSCouplingError",
+    "CompoundLSCouplingValidationError",
     "DiatomicMolecularConfiguration",
     "DiatomicMolecularConfigurationError",
+    "DiatomicMolecularConfigurationValidationError",
     "GenericExcitedState",
     "GenericExcitedStateError",
     "J1J2_Coupling",
@@ -52,6 +69,7 @@ __all__ = [
     "State",
     "StateError",
     "StateParseError",
+    "StateValidationError",
     "VibrationalState",
     "VibrationalStateError",
 ]

@@ -16,7 +16,11 @@ creating an HTML representation of the term symbol, etc.
 
 import re
 
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 from .atomic_configuration import AtomicConfiguration, AtomicConfigurationError
 from .atomic_term_symbol import AtomicTermSymbol, AtomicTermSymbolError
@@ -25,6 +29,10 @@ term_patt = r"\((.*?)\)"
 
 
 class CompoundLSCouplingError(StateParseError):
+    pass
+
+
+class CompoundLSCouplingValidationError(CompoundLSCouplingError, StateValidationError):
     pass
 
 
@@ -63,7 +71,11 @@ class CompoundLSCoupling(State):
                 AtomicConfiguration(config) for config in configs
             ]
         except (AtomicTermSymbolError, AtomicConfigurationError) as err:
-            raise CompoundLSCouplingError(
+            if isinstance(err, StateValidationError):
+                error_class = CompoundLSCouplingValidationError
+            else:
+                error_class = CompoundLSCouplingError
+            raise error_class(
                 "Invalid compound LS coupling state {}: {}".format(state_str, err)
             ) from err
 

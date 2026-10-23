@@ -7,7 +7,11 @@ an HTML representation of the term symbol, etc.
 import pyparsing as pp
 
 from pyvalem._utils import float_to_fraction, parse_fraction
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 atom_L_symbols = [
     "S",
@@ -62,6 +66,10 @@ class AtomicTermSymbolError(StateParseError):
     pass
 
 
+class AtomicTermSymbolValidationError(AtomicTermSymbolError, StateValidationError):
+    pass
+
+
 class AtomicTermSymbol(State):
     def __init__(self, state_str):
         self.state_str = state_str
@@ -101,11 +109,11 @@ class AtomicTermSymbol(State):
         s_is_half_integer = int(2 * self.S) % 2
         j_is_half_integer = int(2 * self.J) % 2
         if s_is_half_integer != j_is_half_integer:
-            raise AtomicTermSymbolError(
+            raise AtomicTermSymbolValidationError(
                 "J={} is invalid for S={}.".format(self.J, self.S)
             )
         if not abs(self.L - self.S) <= self.J <= self.L + self.S:
-            raise AtomicTermSymbolError(
+            raise AtomicTermSymbolValidationError(
                 "Invalid atomic term symbol: {0:s}"
                 " |L-S| <= J <= L+S must be satisfied.".format(self.state_str)
             )

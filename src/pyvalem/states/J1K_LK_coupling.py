@@ -13,8 +13,11 @@ https://doi.org/10.1007/978-3-030-73893-8_11
 import pyparsing as pp
 
 from pyvalem._utils import float_to_fraction, parse_fraction
-from pyvalem.exceptions import PyValemError
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 integer = pp.Word(pp.nums)
 Smult = integer.set_results_name("Smult")
@@ -39,7 +42,7 @@ class J1K_LK_CouplingError(StateParseError):
     pass
 
 
-class J1K_LK_CouplingValidationError(PyValemError):
+class J1K_LK_CouplingValidationError(J1K_LK_CouplingError, StateValidationError):
     pass
 
 

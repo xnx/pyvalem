@@ -71,7 +71,7 @@ class VibrationalState(State):
             return int(s_v)
 
         try:
-            if self.state_str.startswith("v="):
+            if self.state_str.startswith(("v=", "ν=")):
                 self.v = get_v(self.state_str[2:])
             else:
                 self.v = get_v(self.state_str)

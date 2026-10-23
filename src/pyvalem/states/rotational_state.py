@@ -15,8 +15,11 @@ frac_string = (
 decimal_string = (
     integer + pp.Suppress(".") + pp.Suppress(pp.Literal("5")) + pp.StringEnd()
 ).set_results_name("decimal_half")
+decimal_integer_string = (
+    integer + pp.Suppress(".") + pp.Suppress(pp.Literal("0")) + pp.StringEnd()
+).set_results_name("decimal_integer")
 
-Jstr = integer_string | frac_string | decimal_string
+Jstr = integer_string | frac_string | decimal_string | decimal_integer_string
 
 
 class RotationalStateError(StateParseError):
@@ -57,6 +60,9 @@ class RotationalState(State):
             elif "decimal_half" in components:
                 self.J = float(components["decimal_half"][0]) + 0.5
                 state_str = "{}/2".format(int(2 * self.J))
+            elif "decimal_integer" in components:
+                self.J = int(components["decimal_integer"][0])
+                state_str = str(self.J)
             else:
                 raise RotationalStateError(
                     "Invalid rotational state value syntax: {0}".format(state_str)

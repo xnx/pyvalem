@@ -6,7 +6,11 @@ labels, creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 from .atomic_configuration import atomic_orbital_symbols
 
@@ -74,11 +78,17 @@ alt_molecule_config = (
 ).leave_whitespace()
 
 
-class DiatomicMolecularOrbitalError(StateParseError):
+class DiatomicMolecularOrbitalError(StateValidationError):
     pass
 
 
 class DiatomicMolecularConfigurationError(StateParseError):
+    pass
+
+
+class DiatomicMolecularConfigurationValidationError(
+    DiatomicMolecularConfigurationError, StateValidationError
+):
     pass
 
 
@@ -202,7 +212,7 @@ class DiatomicMolecularConfiguration(State):
                     count=parsed_orbital["count"],
                 )
             except DiatomicMolecularOrbitalError as err:
-                raise DiatomicMolecularConfigurationError(err) from err
+                raise DiatomicMolecularConfigurationValidationError(err) from err
             self.orbitals.append(temp_orbital)
         self._validate_configuration()
 
@@ -225,21 +235,21 @@ class DiatomicMolecularConfiguration(State):
                     count=parsed_orbital["count"],
                 )
             except DiatomicMolecularOrbitalError as err:
-                raise DiatomicMolecularConfigurationError(err) from err
+                raise DiatomicMolecularConfigurationValidationError(err) from err
             self.orbitals.append(temp_orbital)
         self._validate_alt_configuration()
 
     def _validate_configuration(self):
         orbitals = [(o.n, o.symbol) for o in self.orbitals]
         if len(orbitals) != len(set(orbitals)):
-            raise DiatomicMolecularConfigurationError(
+            raise DiatomicMolecularConfigurationValidationError(
                 "Repeated orbitals in {0}".format(self.state_str)
             )
 
     def _validate_alt_configuration(self):
         orbitals = [(o.n, o.lletter, o.symbol) for o in self.orbitals]
         if len(orbitals) != len(set(orbitals)):
-            raise DiatomicMolecularConfigurationError(
+            raise DiatomicMolecularConfigurationValidationError(
                 "Repeated orbitals in {0}".format(self.state_str)
             )
 
