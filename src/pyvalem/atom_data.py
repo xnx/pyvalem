@@ -116,7 +116,7 @@ class Isotope(Atom):
     mass, mass_unc : float
     estimated_flag : str
     N : int
-        A + Z
+        The neutron number, A - Z.
 
     Examples
     --------

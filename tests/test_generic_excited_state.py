@@ -45,10 +45,14 @@ class GenericExcitedStateTest(unittest.TestCase):
         x3b = GenericExcitedState("3*")
         x4a = GenericExcitedState("****")
         x4b = GenericExcitedState("4*")
-        self.assertEqual(repr(x1a), repr(x1b), "*")
-        self.assertEqual(repr(x2a), repr(x2b), "**")
-        self.assertEqual(repr(x3a), repr(x3b), "3*")
-        self.assertEqual(repr(x4a), repr(x4b), "4*")
+        for (xa, xb), expected in zip(
+            ((x1a, x1b), (x2a, x2b), (x3a, x3b), (x4a, x4b)),
+            ("*", "**", "3*", "4*"),
+            strict=True,
+        ):
+            with self.subTest(expected):
+                self.assertEqual(repr(xa), expected)
+                self.assertEqual(repr(xb), expected)
 
 
 if __name__ == "__main__":
