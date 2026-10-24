@@ -283,6 +283,14 @@
       "latex": "\\mathrm{e}^- \\; ^{*}"
     },
     {
+      "input": "H2O ;",
+      "canonical": "H2O",
+      "formula": "H2O",
+      "states": [],
+      "html": "H<sub>2</sub>O",
+      "latex": "\\mathrm{H}_{2}\\mathrm{O}"
+    },
+    {
       "input": "HCl v=0;v=1",
       "error": "validation"
     },

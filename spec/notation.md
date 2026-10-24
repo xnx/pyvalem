@@ -513,8 +513,9 @@ Canonical form: as written.
 A stateful species is a formula, optionally followed by whitespace and a list
 of states, as in `HCl v=2;J=0` or `Ar+ [Ne].3s2.3p5 2P_3/2`. The states are
 separated by semicolons, by a comma followed by a space, or by whitespace, and
-any number of these may separate two states. Each state is classified as in
-section 5.1.
+any number of these may separate two states. Separators before the first state
+or after the last are ignored, so `H2O ;` has no states. Each state is
+classified as in section 5.1.
 
 A species has at most one state of each type, except key-value pairs, of which
 it may have several. They SHOULD have different keys.
