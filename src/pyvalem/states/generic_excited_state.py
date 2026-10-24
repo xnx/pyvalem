@@ -5,9 +5,10 @@ an atom, ion or molecule as '*', '**', '***', '****', '5*', etc.
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem.states._base_state import State, StateParseError
 
-integer = pp.Word(pp.nums)
+integer = uint
 atom_int = integer.set_results_name("int")
 state_term = (atom_int + "*" + pp.StringEnd()).leave_whitespace()
 
@@ -21,7 +22,6 @@ class GenericExcitedState(State):
         self.state_str = state_str
         self.int_n = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         if "*" in state_str:

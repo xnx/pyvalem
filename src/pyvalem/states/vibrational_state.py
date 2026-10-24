@@ -6,10 +6,10 @@ an HTML representation of it, etc.
 
 import pyparsing as pp
 
-from pyvalem._deprecation import warn_deprecated
+from pyvalem._grammar import uint
 from pyvalem.states._base_state import State, StateParseError
 
-integer = pp.Word(pp.nums)
+integer = uint
 
 # noinspection PyTypeChecker
 vibrational_term = pp.Group(
@@ -50,20 +50,13 @@ class VibrationalStateError(StateParseError):
 
 class VibrationalState(State):
     def __init__(self, state_str):
-        self.state_str = state_str.replace(" ", "")
+        self.state_str = state_str
         self.v = None
         self.polyatomic = None
         self.terms = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
-        if " + " in state_str:
-            raise VibrationalStateError(
-                'Spaces around "+" not allowed for'
-                " polyatomic vibrational states: {}".format(state_str)
-            )
-
         self.polyatomic = False
 
         def get_v(s_v):
@@ -71,7 +64,7 @@ class VibrationalState(State):
                 self.polyatomic = None
                 return s_v
             # NB int() would also accept a sign, underscores and other digits.
-            if not (s_v.isascii() and s_v.isdigit()):
+            if not (s_v.isascii() and s_v.isdigit()) or s_v[:1] == "0" != s_v:
                 raise ValueError(s_v)
             return int(s_v)
 
@@ -82,9 +75,10 @@ class VibrationalState(State):
                 self.v = get_v(self.state_str)
                 self.state_str = "v={}".format(state_str)
                 if self.v not in ("*", "**", "***"):
-                    warn_deprecated(
-                        "A bare number as a vibrational state, {}, is deprecated:"
-                        " write v={}.".format(state_str, self.v)
+                    raise VibrationalStateError(
+                        "A vibrational state must be written v={}, not {}".format(
+                            self.v, state_str
+                        )
                     )
         except ValueError:
             self.polyatomic = True

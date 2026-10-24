@@ -12,6 +12,7 @@ https://doi.org/10.1007/978-3-030-73893-8_11
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import (
     State,
@@ -19,7 +20,7 @@ from pyvalem.states._base_state import (
     StateValidationError,
 )
 
-integer = pp.Word(pp.nums)
+integer = uint
 Smult = integer.set_results_name("Smult")
 
 fraction = integer + pp.Optional(pp.Suppress("/") + "2")
@@ -35,7 +36,7 @@ J1K_LK_term = (
     + pp.Optional(parity)
     + pp.Optional(pp.Suppress("_") + Jstr)
     + pp.StringEnd()
-)
+).leave_whitespace()
 
 
 class J1K_LK_CouplingError(StateParseError):
@@ -53,7 +54,6 @@ class J1K_LK_Coupling(State):
         self.K = None
         self.J = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         try:

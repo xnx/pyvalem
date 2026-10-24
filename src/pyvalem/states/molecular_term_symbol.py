@@ -6,6 +6,7 @@ an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import (
     State,
@@ -164,7 +165,7 @@ latex_terms = {
     "Γ": r"\Gamma",
 }
 
-integer = pp.Word(pp.nums)
+integer = uint
 molecule_Smult = integer.set_results_name("Smult")
 molecule_irrep = pp.one_of(orbital_irrep_labels).set_results_name("irrep")
 molecule_Omegastr = (
@@ -186,12 +187,13 @@ term_label_num = integer.set_results_name("term_label") + pp.Suppress("(")
 # The term symbol may be enclosed in parentheses, which must be balanced, and
 # which a numeric term label requires.
 molecule_term_with_label = (
-    (term_label_num + molecule_term + pp.Suppress(")"))
+    (term_label_num + molecule_term + pp.Suppress(")") + pp.StringEnd())
     | (
         pp.Optional(term_label_let)
         + (pp.Suppress("(") + molecule_term + pp.Suppress(")") | molecule_term)
     )
-) + pp.StringEnd()
+    + pp.StringEnd()
+).leave_whitespace()
 
 
 class MolecularTermSymbolError(StateParseError):
@@ -213,7 +215,6 @@ class MolecularTermSymbol(State):
         self.term_label = None
         self.Omega = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         try:

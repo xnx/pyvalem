@@ -11,9 +11,8 @@ and a whitespace-delimited sequence of strings that can be parsed by one of the
 ``State`` classes described previously. For clarity, a semi-colon or comma can also be
 used as a delimiter between states.
 The state type is deduced from the format of the string.
-A state itself contains no whitespace, and a vibrational quantum number is written
-``v=2`` rather than just ``2`` (which is deprecated, and will be an error in
-PyValem 3.0).
+A state contains no whitespace or numbers with leading zeros, and a vibrational
+quantum number is written ``v=2``, not just ``2``.
 
 Examples:
 

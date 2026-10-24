@@ -30,7 +30,6 @@ hν + HCl → H+ + Cl + e-
 
 import re
 
-from ._deprecation import warn_deprecated
 from .exceptions import PyValemError
 from .formula import FormulaParseError
 from .stateful_species import StatefulSpecies
@@ -263,16 +262,12 @@ class Reaction:
                     ).groups()
                     if ss_str[:1] in (",", "-"):
                         n, ss_str = "", side_fragment
-                    if n[:1] == "0" and int(n):
-                        warn_deprecated(
-                            "Leading zeros in a coefficient, as in {}, are"
-                            " deprecated.".format(side_fragment)
+                    if n[:1] == "0":
+                        raise ReactionParseError(
+                            "Invalid coefficient in {}: it must be a positive"
+                            " integer without leading zeros".format(side_fragment)
                         )
                     n = int(n) if n else 1
-                    if n == 0:
-                        raise ReactionParseError(
-                            "Invalid coefficient 0 in {}".format(side_fragment)
-                        )
                     ss = StatefulSpecies(ss_str)
                     species.append((n, ss))
                     ss_str = str(ss)

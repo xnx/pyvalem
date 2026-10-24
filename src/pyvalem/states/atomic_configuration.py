@@ -9,16 +9,15 @@ import re
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem.states._base_state import (
     State,
     StateParseError,
     StateValidationError,
 )
 
-integer = pp.Word(pp.nums).set_parse_action(lambda t: int(t[0]))
-nocc_integer = pp.Optional(pp.Word(pp.nums), default="1").set_parse_action(
-    lambda t: int(t[0])
-)
+integer = uint.copy().set_parse_action(lambda t: int(t[0]))
+nocc_integer = pp.Optional(uint, default="1").set_parse_action(lambda t: int(t[0]))
 
 # NB no "j" orbital.
 atomic_orbital_symbols = tuple("spdfghiklmnoqrtuvwxyz")
@@ -261,7 +260,6 @@ class AtomicConfiguration(State):
         self.noble_gas_config = None
         self.nelectrons = 0
         self._parse_state(self.state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         """Parses the `AtomicConfiguration` instance from the supplied `state_str`.

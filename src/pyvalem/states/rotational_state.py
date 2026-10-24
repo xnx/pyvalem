@@ -5,9 +5,10 @@ methods for parsing a string into a value and an HTML representation, etc.
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem.states._base_state import State, StateParseError
 
-integer = pp.Word(pp.nums)
+integer = uint
 integer_string = (integer + pp.StringEnd()).set_results_name("integer")
 frac_string = (
     integer + pp.Suppress("/") + pp.Suppress(pp.Literal("2")) + pp.StringEnd()
@@ -19,7 +20,9 @@ decimal_integer_string = (
     integer + pp.Suppress(".") + pp.Suppress(pp.Literal("0")) + pp.StringEnd()
 ).set_results_name("decimal_integer")
 
-Jstr = integer_string | frac_string | decimal_string | decimal_integer_string
+Jstr = (
+    integer_string | frac_string | decimal_string | decimal_integer_string
+).leave_whitespace()
 
 
 class RotationalStateError(StateParseError):
@@ -31,19 +34,18 @@ class RotationalState(State):
         self.state_str = None
         self.J = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         try:
             k, v = state_str.split("=")
-            if k.strip() != "J":
+            if k != "J":
                 raise ValueError
         except ValueError:
             raise RotationalStateError(
                 'Rotational states must start with "J="'
             ) from None
 
-        state_str = v.strip()
+        state_str = v
 
         self.J = None
         if state_str not in ("*", "**", "***"):

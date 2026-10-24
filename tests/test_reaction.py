@@ -172,8 +172,12 @@ class ReactionParseTest(unittest.TestCase):
         self.assertTrue(r.latex.startswith(r"2\,1,2-\mathrm{C}_{2}"))
 
     def test_zero_coefficient(self):
-        with self.assertRaisesRegex(ReactionParseError, "coefficient"):
-            Reaction("0H2 + O2 -> O2")
+        for s in ("0H2 + O2 -> O2", "02H -> H2"):
+            with (
+                self.subTest(s),
+                self.assertRaisesRegex(ReactionParseError, "coefficient"),
+            ):
+                Reaction(s)
 
     def test_whole_term_is_parsed(self):
         self.assertRaises(ReactionParseError, Reaction, "H2\nXyz + O2 -> H2O2")

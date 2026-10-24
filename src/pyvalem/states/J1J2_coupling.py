@@ -14,6 +14,7 @@ creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import (
     State,
@@ -21,7 +22,7 @@ from pyvalem.states._base_state import (
     StateValidationError,
 )
 
-integer = pp.Word(pp.nums)
+integer = uint
 J1str = (integer + pp.Optional(pp.Suppress("/") + "2")).set_results_name("J1str")
 J2str = (integer + pp.Optional(pp.Suppress("/") + "2")).set_results_name("J2str")
 Jstr = (integer + pp.Optional(pp.Suppress("/") + "2")).set_results_name("Jstr")
@@ -35,7 +36,7 @@ J1J2_term = (
     + pp.Optional(parity)
     + pp.Optional(pp.Suppress("_") + Jstr)
     + pp.StringEnd()
-)
+).leave_whitespace()
 
 
 class J1J2_CouplingError(StateParseError):
@@ -54,7 +55,6 @@ class J1J2_Coupling(State):
         self.parity = None
         self.J = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         try:

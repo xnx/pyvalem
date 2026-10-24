@@ -6,6 +6,7 @@ an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem._utils import float_to_fraction, parse_fraction
 from pyvalem.states._base_state import (
     State,
@@ -37,7 +38,7 @@ atom_L_symbols = [
     "Z",
 ]
 
-integer = pp.Word(pp.nums)
+integer = uint
 
 # The single, lowercase letter label given in the Multiplet Table of C. E. Moore
 # NBS Circ, No. 488 (1950) and sometimes used to distinguish terms with the same
@@ -59,7 +60,7 @@ atom_term = (
     + pp.Optional(seniority)
     + pp.Optional(pp.Suppress("_") + atom_Jstr)
     + pp.StringEnd()
-)
+).leave_whitespace()
 
 
 class AtomicTermSymbolError(StateParseError):
@@ -82,7 +83,6 @@ class AtomicTermSymbol(State):
         self.moore_label = ""
         self.seniority = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         try:

@@ -6,6 +6,7 @@ labels, creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem.states._base_state import (
     State,
     StateParseError,
@@ -14,7 +15,7 @@ from pyvalem.states._base_state import (
 
 from .atomic_configuration import atomic_orbital_symbols
 
-integer = pp.Word(pp.nums)
+integer = uint
 molecular_orbital_symbols = (
     "σ",
     "π",
@@ -188,7 +189,6 @@ class DiatomicMolecularConfiguration(State):
         self.state_str = state_str
         self.orbitals = []
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         if "-" in state_str:

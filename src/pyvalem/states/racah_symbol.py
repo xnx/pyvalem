@@ -6,13 +6,14 @@ labels, creating an HTML representation of the term symbol, etc.
 
 import pyparsing as pp
 
+from pyvalem._grammar import uint
 from pyvalem.states._base_state import (
     State,
     StateParseError,
     StateValidationError,
 )
 
-integer = pp.Word(pp.nums)
+integer = uint
 atom_principal = integer.set_results_name("principal")
 
 orbital_labels = ("s", "s'", "p", "p'", "d", "d'", "f", "f'")
@@ -35,7 +36,7 @@ racah_symbol_template = (
     + pp.Suppress("]")
     + pp.Optional(parity_label)
     + pp.Optional("_" + atom_j_term)
-)
+).leave_whitespace()
 
 
 class RacahSymbolError(StateParseError):
@@ -66,7 +67,6 @@ class RacahSymbol(State):
         self.j_term = None
         self.parity = None
         self._parse_state(state_str)
-        self._warn_deprecated_syntax(state_str)
 
     def _parse_state(self, state_str):
         try:

@@ -9,6 +9,9 @@
   the start or end are errors. A charge after a bracketed moiety at the end is
   the charge of the whole formula, so a moiety may no longer also have its own
   (`(H2O+)2+` was +1).
+- States are parsed strictly: whitespace, leading zeros, and a bare number for
+  a vibrational state (`2` for `v=2`) are errors, and so are leading zeros in a
+  reaction coefficient.
 - The canonical form of a formula (`repr()` and the `formula` attribute) omits
   counts of 1 and writes charges of 1 as `+` and `-`, so `H+1` equals `H+`.
 - An unknown isotope, and a charged moiety with an unspecified count, raise the
@@ -22,6 +25,8 @@
 
 - The HTML and LaTeX of a radical put the dot where it is written, after the
   atoms and before any charge: `(OH·)2` was rendered as `(OH)₂·`.
+- Deuterium after a formula prefix, as in `trans-D`, was taken to be the `D`
+  prefix, so the formula was rejected.
 
 ## 2.10.0 (24 October 2026)
 

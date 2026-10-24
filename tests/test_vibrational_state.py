@@ -4,16 +4,13 @@ Unit tests for the vibrational_state module of PyValem
 
 import unittest
 
-from pyvalem import PyValemDeprecationWarning
 from pyvalem.states.vibrational_state import VibrationalState, VibrationalStateError
 
 
 class VibrationalStateTest(unittest.TestCase):
     def test_vibrational_state(self):
         # Test basic usage
-        # A bare number is deprecated: write v=0.
-        with self.assertWarns(PyValemDeprecationWarning):
-            v0 = VibrationalState("0")
+        v0 = VibrationalState("v=0")
         self.assertEqual(v0.html, "v=0")
         self.assertEqual(v0.latex, "v=0")
         self.assertEqual(str(v0), "v=0")
@@ -57,6 +54,10 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertRaises(VibrationalStateError, VibrationalState, "1v1+")
         self.assertRaises(VibrationalStateError, VibrationalState, "v=0x")
         self.assertRaises(VibrationalStateError, VibrationalState, "2ν1+3ν4x")
+        # A bare number, whitespace and leading zeros are invalid.
+        for s in ("0", "2", "v = 2", "v=2 ", "2ν1 +ν2", "v=007", "02ν1"):
+            with self.subTest(s):
+                self.assertRaises(VibrationalStateError, VibrationalState, s)
 
     def test_generic_excited_vibrational_state(self):
         # Generic vibrational states are *, **, ***.
@@ -93,9 +94,7 @@ class VibrationalStateTest(unittest.TestCase):
         self.assertTrue(repr(v1) == repr(v2) == "3ν1+ν3")
 
         v3 = VibrationalState("v=**")
-        with self.assertWarns(PyValemDeprecationWarning):
-            v4 = VibrationalState("v = **")
-        self.assertTrue(repr(v3) == repr(v4) == "v=**")
+        self.assertEqual(repr(v3), "v=**")
 
     def test_zero_polyatomic_vibrational_states(self):
         v1 = VibrationalState("0v1+0v2+0v3")
