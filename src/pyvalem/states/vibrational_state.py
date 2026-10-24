@@ -7,7 +7,11 @@ an HTML representation of it, etc.
 import pyparsing as pp
 
 from pyvalem._grammar import uint
-from pyvalem.states._base_state import State, StateParseError
+from pyvalem.states._base_state import (
+    State,
+    StateParseError,
+    StateValidationError,
+)
 
 integer = uint
 
@@ -48,6 +52,10 @@ class VibrationalStateError(StateParseError):
     pass
 
 
+class VibrationalStateValidationError(VibrationalStateError, StateValidationError):
+    pass
+
+
 class VibrationalState(State):
     def __init__(self, state_str):
         self.state_str = state_str
@@ -60,44 +68,53 @@ class VibrationalState(State):
         self.polyatomic = False
 
         def get_v(s_v):
+            """Return the vibrational quantum number s_v, or None if it isn't one."""
             if s_v in ("*", "**", "***"):
                 self.polyatomic = None
                 return s_v
             # NB int() would also accept a sign, underscores and other digits.
-            if not (s_v.isascii() and s_v.isdigit()) or s_v[:1] == "0" != s_v:
-                raise ValueError(s_v)
-            return int(s_v)
+            if s_v.isascii() and s_v.isdigit() and (s_v == "0" or s_v[0] != "0"):
+                return int(s_v)
+            return None
 
-        try:
-            if self.state_str.startswith(("v=", "ν=")):
-                self.v = get_v(self.state_str[2:])
-            else:
-                self.v = get_v(self.state_str)
-                self.state_str = "v={}".format(state_str)
-                if self.v not in ("*", "**", "***"):
-                    raise VibrationalStateError(
-                        "A vibrational state must be written v={}, not {}".format(
-                            self.v, state_str
-                        )
-                    )
-        except ValueError:
-            self.polyatomic = True
-            try:
-                parse_results = vibrational_config.parse_string(
-                    self.state_str, parse_all=True
-                )
-            except pp.ParseException as err:
+        if state_str.startswith(("v=", "ν=")):
+            self.v = get_v(state_str[2:])
+            if self.v is None:
                 raise VibrationalStateError(
-                    "Invalid vibrational state configuration syntax: {0}".format(
-                        self.state_str
-                    )
-                ) from err
+                    "Invalid vibrational state syntax: {}".format(state_str)
+                )
+            return
 
-            self.terms = [
-                VibrationalTerm(parsed_term["n"], parsed_term["mode"])
-                for parsed_term in parse_results
-            ]
-            self.terms.sort()
+        self.v = get_v(state_str)
+        if isinstance(self.v, int):
+            raise VibrationalStateError(
+                "A vibrational state must be written v={}, not {}".format(
+                    self.v, state_str
+                )
+            )
+        if self.v is not None:
+            # An unspecified excitation: *, ** or ***.
+            self.state_str = "v={}".format(state_str)
+            return
+
+        self.polyatomic = True
+        try:
+            parse_results = vibrational_config.parse_string(state_str, parse_all=True)
+        except pp.ParseException as err:
+            raise VibrationalStateError(
+                "Invalid vibrational state configuration syntax: {0}".format(state_str)
+            ) from err
+
+        self.terms = [
+            VibrationalTerm(parsed_term["n"], parsed_term["mode"])
+            for parsed_term in parse_results
+        ]
+        self.terms.sort()
+        modes = [term.mode for term in self.terms]
+        if len(modes) != len(set(modes)):
+            raise VibrationalStateValidationError(
+                "Repeated vibrational mode in {}".format(state_str)
+            )
 
     def __repr__(self):
         if self.v is not None:

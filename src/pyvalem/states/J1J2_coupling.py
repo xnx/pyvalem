@@ -106,4 +106,12 @@ class J1J2_Coupling(State):
         return "".join(latex_chunks)
 
     def __repr__(self):
-        return self.state_str
+        """The canonical form, with the angular momenta written as integers or
+        fractions with odd numerators."""
+        s_J = "_" + float_to_fraction(self.J) if self.J is not None else ""
+        return "({},{}){}{}".format(
+            float_to_fraction(self.J1),
+            float_to_fraction(self.J2),
+            self.parity or "",
+            s_J,
+        )

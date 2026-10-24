@@ -27,3 +27,7 @@ class J1J2_CouplingTest(unittest.TestCase):
             J1J2_Coupling("(1,1/2)_2")
         with self.assertRaises(J1J2_CouplingValidationError):
             J1J2_Coupling("(5/2,1/2)_1")
+
+    def test_canonical_form(self):
+        self.assertEqual(repr(J1J2_Coupling("(6/2,1/2)o_5/2")), "(3,1/2)o_5/2")
+        self.assertEqual(J1J2_Coupling("(6/2,1/2)o_5/2"), J1J2_Coupling("(3,1/2)o_5/2"))

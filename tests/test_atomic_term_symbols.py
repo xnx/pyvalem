@@ -48,6 +48,11 @@ class AtomicTermSymbolTest(unittest.TestCase):
 
         self.assertRaises(AtomicTermSymbolError, AtomicTermSymbol, "3P_3/2")
 
+    def test_canonical_form(self):
+        self.assertEqual(repr(AtomicTermSymbol("3P_2/2")), "3P_1")
+        self.assertEqual(AtomicTermSymbol("3P_2/2"), AtomicTermSymbol("3P_1"))
+        self.assertEqual(repr(AtomicTermSymbol("a5D{2}_4")), "a5D{2}_4")
+
     def test_atomic_term_symbol_equality(self):
         a0 = AtomicTermSymbol("2P_1/2")
         a1 = AtomicTermSymbol("2P_1/2")

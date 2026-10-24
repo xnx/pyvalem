@@ -65,22 +65,43 @@ class CompoundLSCoupling(State):
         if not configs[-1]:
             configs = configs[:-1]
 
-        try:
-            self.terms = [AtomicTermSymbol(term) for term in terms]
-            self.atomic_configurations = [
-                AtomicConfiguration(config) for config in configs
+        # Parse every part, so that the state is only reported as invalid, rather
+        # than as not a compound LS coupling state at all, if all their syntax is
+        # valid.
+        errors = []
+        for cls, parts, parsed in (
+            (AtomicConfiguration, configs, self.atomic_configurations),
+            (AtomicTermSymbol, terms, self.terms),
+        ):
+            for part in parts:
+                try:
+                    parsed.append(cls(part))
+                except (AtomicTermSymbolError, AtomicConfigurationError) as err:
+                    errors.append(err)
+        if errors:
+            syntax_errors = [
+                err for err in errors if not isinstance(err, StateValidationError)
             ]
-        except (AtomicTermSymbolError, AtomicConfigurationError) as err:
-            if isinstance(err, StateValidationError):
-                error_class = CompoundLSCouplingValidationError
+            if syntax_errors:
+                error_class, err = CompoundLSCouplingError, syntax_errors[0]
             else:
-                error_class = CompoundLSCouplingError
+                error_class, err = CompoundLSCouplingValidationError, errors[0]
             raise error_class(
                 "Invalid compound LS coupling state {}: {}".format(state_str, err)
             ) from err
 
     def __repr__(self):
-        return self.state_str
+        """The canonical form, with each configuration and term in its own
+        canonical form."""
+        chunks = [
+            "{!r}({!r})".format(config, term)
+            for config, term in zip(
+                self.atomic_configurations, self.terms, strict=False
+            )
+        ]
+        if len(self.atomic_configurations) > len(self.terms):
+            chunks.append(repr(self.atomic_configurations[-1]))
+        return "".join(chunks)
 
     @property
     def html(self):

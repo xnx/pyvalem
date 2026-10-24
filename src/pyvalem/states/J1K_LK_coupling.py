@@ -127,4 +127,9 @@ class J1K_LK_Coupling(State):
         return "".join(latex_chunks)
 
     def __repr__(self):
-        return self.state_str
+        """The canonical form, with K and J written as integers or fractions with
+        odd numerators."""
+        s_J = "_" + float_to_fraction(self.J) if self.J is not None else ""
+        return "{}[{}]{}{}".format(
+            self.Smult, float_to_fraction(self.K), self.parity or "", s_J
+        )

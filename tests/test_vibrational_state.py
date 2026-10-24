@@ -4,7 +4,11 @@ Unit tests for the vibrational_state module of PyValem
 
 import unittest
 
-from pyvalem.states.vibrational_state import VibrationalState, VibrationalStateError
+from pyvalem.states.vibrational_state import (
+    VibrationalState,
+    VibrationalStateError,
+    VibrationalStateValidationError,
+)
 
 
 class VibrationalStateTest(unittest.TestCase):
@@ -95,6 +99,11 @@ class VibrationalStateTest(unittest.TestCase):
 
         v3 = VibrationalState("v=**")
         self.assertEqual(repr(v3), "v=**")
+
+    def test_repeated_modes(self):
+        for s in ("v1+v1", "ν1+2ν1", "v3+v1+3v3"):
+            with self.subTest(s):
+                self.assertRaises(VibrationalStateValidationError, VibrationalState, s)
 
     def test_zero_polyatomic_vibrational_states(self):
         v1 = VibrationalState("0v1+0v2+0v3")

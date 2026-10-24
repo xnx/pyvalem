@@ -54,6 +54,8 @@ class RotationalStateTest(unittest.TestCase):
         j1 = RotationalState("J=0.5")
         j2 = RotationalState("J=1/2")
         self.assertEqual(j1, j2)
+        self.assertEqual(RotationalState("J=4/2"), RotationalState("J=2"))
+        self.assertEqual(repr(RotationalState("J=4/2")), "J=2")
 
     def test_rotational_state_repr(self):
         j1 = RotationalState("J=**")

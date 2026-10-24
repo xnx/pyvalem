@@ -93,8 +93,25 @@ class AtomicConfigurationTest(unittest.TestCase):
     def test_atomic_configuration_repr(self):
         c1 = AtomicConfiguration("1s2.2s2.2p6.3s2.3p6.4s2.3d")
         c2 = AtomicConfiguration("[Ar].4s2.3d1")
-        self.assertEqual(repr(c1), "1s2.2s2.2p6.3s2.3p6.4s2.3d")
-        self.assertEqual(repr(c2), "1s2.2s2.2p6.3s2.3p6.4s2.3d")
+        # The canonical form lists the orbitals in order of n, then l.
+        self.assertEqual(repr(c1), "1s2.2s2.2p6.3s2.3p6.3d.4s2")
+        self.assertEqual(repr(c2), "1s2.2s2.2p6.3s2.3p6.3d.4s2")
+        # HTML and LaTeX keep the order as written.
+        self.assertEqual(c2.html, "[Ar]4s<sup>2</sup>3d")
+
+    def test_orbital_order(self):
+        self.assertEqual(
+            AtomicConfiguration("[Ar].4s2.3d10"), AtomicConfiguration("[Ar].3d10.4s2")
+        )
+        self.assertEqual(
+            AtomicConfiguration("[Kr]"),
+            AtomicConfiguration("1s2.2s2.2p6.3s2.3p6.4s2.3d10.4p6"),
+        )
+        self.assertTrue(
+            repr(AtomicConfiguration("[Rn]")).endswith("4f14.5s2.5p6.5d10.6s2.6p6")
+        )
+        # An orbital with an unspecified n comes last.
+        self.assertEqual(repr(AtomicConfiguration("np.1s2")), "1s2.np")
 
     def test_atomic_configuration_default_nocc(self):
         c1 = AtomicConfiguration("1s")

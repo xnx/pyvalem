@@ -156,4 +156,13 @@ class AtomicTermSymbol(State):
         return "".join(latex_chunks)
 
     def __repr__(self):
-        return self.state_str
+        """The canonical form of the term symbol, with J written as an integer or
+        a fraction with an odd numerator."""
+        chunks = [self.moore_label, str(self.Smult), self.Lletter]
+        if self.parity:
+            chunks.append(self.parity)
+        if self.seniority is not None:
+            chunks.append("{{{}}}".format(self.seniority))
+        if self.J is not None:
+            chunks.append("_" + float_to_fraction(self.J))
+        return "".join(chunks)

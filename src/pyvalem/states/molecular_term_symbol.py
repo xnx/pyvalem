@@ -312,4 +312,14 @@ class MolecularTermSymbol(State):
         return "".join(latex_chunks)
 
     def __repr__(self):
-        return self.state_str
+        """The canonical form of the term symbol: a label is followed by the term
+        in parentheses, Greek letters are used for the irreducible representations
+        of linear molecules, and Ω is written as an integer or a fraction with an
+        odd numerator."""
+        term = "{}{}".format(self.Smult, self.irrep)
+        if self.Omega is not None:
+            term += "_" + float_to_fraction(self.Omega)
+        # NB without parentheses, a G, H or T term would be an atomic term symbol.
+        if self.term_label is not None or self.irrep in ("G", "H", "T"):
+            return "{}({})".format(self.term_label or "", term)
+        return term

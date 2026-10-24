@@ -39,7 +39,11 @@ from .molecular_term_symbol import (
 )
 from .racah_symbol import RacahSymbol, RacahSymbolError, RacahSymbolValidationError
 from .rotational_state import RotationalState, RotationalStateError
-from .vibrational_state import VibrationalState, VibrationalStateError
+from .vibrational_state import (
+    VibrationalState,
+    VibrationalStateError,
+    VibrationalStateValidationError,
+)
 
 __all__ = [
     "AtomicConfiguration",
@@ -78,4 +82,5 @@ __all__ = [
     "StateValidationError",
     "VibrationalState",
     "VibrationalStateError",
+    "VibrationalStateValidationError",
 ]

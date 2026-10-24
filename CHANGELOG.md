@@ -16,6 +16,17 @@
   counts of 1 and writes charges of 1 as `+` and `-`, so `H+1` equals `H+`.
 - An unknown isotope, and a charged moiety with an unspecified count, raise the
   new `FormulaValidationError`, a `FormulaParseError`.
+- Every type of state has a canonical form (`repr()`), so that equivalent
+  states compare equal. Angular momenta are written as integers or fractions
+  with odd numerators (`3P_2/2` is `3P_1`, `J=4/2` is `J=2`). A molecular term
+  symbol's label is followed by the term in parentheses (`X1Σ+` is `X(1Σ+)`),
+  except that a bare G, H or T term keeps its parentheses (`(1G)`), without
+  which it would be atomic. J1J2 states are written without a space. An atomic
+  configuration lists all its orbitals, including any noble-gas core, by n and
+  then l, so `[Ar].4s2.3d10` equals `[Ar].3d10.4s2`; its HTML and LaTeX keep
+  the order as written.
+- A vibrational state that lists a mode more than once (`ν1+ν1`) raises the new
+  `VibrationalStateValidationError`.
 - In stoichiometric formulas, isotopes are listed with their element, after the
   element itself. In alphabetical order every isotope used to come first (so
   DCl gave `(2H)Cl`, now `Cl(2H)`), and Hill order now treats isotopes of

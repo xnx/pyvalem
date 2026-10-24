@@ -5,6 +5,7 @@ Methods are implemented for parsing a string into quantum numbers and
 labels, creating an HTML representation of the term symbol, etc.
 """
 
+import functools
 import re
 
 import pyparsing as pp
@@ -198,6 +199,16 @@ class AtomicOrbital:
             )
 
 
+@functools.cache
+def _noble_gas_orbitals(noble_gas):
+    """Return the orbitals of a noble gas's closed-shell configuration."""
+    parse_results = atom_config.parse_string(noble_gas_configs[noble_gas])
+    return tuple(
+        AtomicOrbital(n=orbital["n"], lletter=orbital["lletter"], nocc=orbital["nocc"])
+        for orbital in parse_results
+    )
+
+
 class AtomicConfiguration(State):
     # noinspection PyUnresolvedReferences
     """A class representing an atomic configuration.
@@ -364,11 +375,10 @@ class AtomicConfiguration(State):
         return state_str
 
     def __repr__(self):
-        """See the `State` base class."""
+        """See the `State` base class: all the orbitals, including those of any
+        noble gas core, in order of n and then l, with an unspecified n last."""
+        orbitals = list(self.orbitals)
         if self.noble_gas_config:
-            state_repr = noble_gas_configs[self.noble_gas_config[1:3]]
-            if self.orbitals:
-                state_repr += "." + ".".join(repr(orbital) for orbital in self.orbitals)
-            return state_repr
-        else:
-            return ".".join(repr(orbital) for orbital in self.orbitals)
+            orbitals += _noble_gas_orbitals(self.noble_gas_config[1:-1])
+        orbitals.sort(key=lambda o: (o.n == "n", 0 if o.n == "n" else o.n, o.l))
+        return ".".join(repr(orbital) for orbital in orbitals)

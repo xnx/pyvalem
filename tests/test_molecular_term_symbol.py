@@ -4,6 +4,7 @@ Unit tests for the molecular_term_symbol module of PyValem
 
 import unittest
 
+from pyvalem.states._state_parser import state_parser
 from pyvalem.states.molecular_term_symbol import (
     MolecularTermSymbol,
     MolecularTermSymbolError,
@@ -112,6 +113,26 @@ class MolecularTermSymbolTest(unittest.TestCase):
         self.assertEqual(c2.S, 1.5)
         self.assertEqual(c2.irrep, "Πu")
         self.assertEqual(c2.Omega, -1.5)
+
+    def test_canonical_form(self):
+        canonical = {
+            "X1Σ+": "X(1Σ+)",
+            "X(1SIGMA+)": "X(1Σ+)",
+            "(1Σ+)": "1Σ+",
+            "b(4Π_+3/2)": "b(4Π_3/2)",
+            "b(4Π_-6/2)": "b(4Π_-3)",
+            # A G, H or T term keeps its parentheses, without which it would be
+            # an atomic term symbol.
+            "(1G)": "(1G)",
+            "(2H_1/2)": "(2H_1/2)",
+            "1Gg": "1Gg",
+        }
+        for s, expected in canonical.items():
+            with self.subTest(s):
+                term = MolecularTermSymbol(s)
+                self.assertEqual(repr(term), expected)
+                self.assertEqual(MolecularTermSymbol(expected), term)
+                self.assertIsInstance(state_parser(expected), MolecularTermSymbol)
 
     def test_molecular_term_symbol_repr(self):
         m1 = MolecularTermSymbol("1Σ+u")

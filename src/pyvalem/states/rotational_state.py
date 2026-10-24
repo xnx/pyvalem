@@ -6,6 +6,7 @@ methods for parsing a string into a value and an HTML representation, etc.
 import pyparsing as pp
 
 from pyvalem._grammar import uint
+from pyvalem._utils import float_to_fraction
 from pyvalem.states._base_state import State, StateParseError
 
 integer = uint
@@ -60,6 +61,7 @@ class RotationalState(State):
                 self.J = int(components["integer"][0])
             elif "fraction_half" in components:
                 self.J = int(components["fraction_half"][0]) / 2
+                state_str = float_to_fraction(self.J)
             elif "decimal_half" in components:
                 self.J = float(components["decimal_half"][0]) + 0.5
                 state_str = "{}/2".format(int(2 * self.J))

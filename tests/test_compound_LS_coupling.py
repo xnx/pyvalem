@@ -72,3 +72,10 @@ class CompoundLSCouplingTest(unittest.TestCase):
                 with self.assertRaises(CompoundLSCouplingError) as cm:
                     CompoundLSCoupling(s)
                 self.assertIn(s, str(cm.exception))
+
+    def test_canonical_form(self):
+        self.assertEqual(repr(CompoundLSCoupling("6p.6s(1Po)")), "6s.6p(1Po)")
+        self.assertEqual(
+            CompoundLSCoupling("6p.6s(1Po)"), CompoundLSCoupling("6s.6p(1Po)")
+        )
+        self.assertEqual(repr(CompoundLSCoupling("4f(2Fo_7/2)5d")), "4f(2Fo_7/2)5d")
