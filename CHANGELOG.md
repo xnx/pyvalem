@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.1 (unreleased)
+
+### Fixed
+
+- The period of a formula such as `CuSO4.5H2O` is a centred dot in its HTML
+  (`&#183;`) and LaTeX (`\cdot`). It was missing, as it had been before 3.0,
+  and the specification and its test vectors are corrected to match.
+- The specification said that a formula can always be recovered from its slug,
+  but a period next to a bracket or after a radical isn't recorded:
+  `Co.(H2O)6` and `Co(H2O)6` have the same slug.
+
 ## 3.0.0 (24 October 2026)
 
 PyValem 3.0 implements the notation as it is now specified. Input that 2.10

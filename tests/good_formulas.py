@@ -50,14 +50,15 @@ good_formulas = {
     },
     "SiO2.2H2O": {
         "stoichiometric_formula": "H4O4Si",
-        "html": "SiO<sub>2</sub>2H<sub>2</sub>O",
+        "html": "SiO<sub>2</sub>&#183;2H<sub>2</sub>O",
+        "latex": r"\mathrm{Si}\mathrm{O}_{2}\cdot 2\mathrm{H}_{2}\mathrm{O}",
         "slug": "SiO2-2H2O",
         "rmm": 96.113,
         "natoms": 9,
     },
     "SiO2.2(H2O)": {
         "stoichiometric_formula": "H4O4Si",
-        "html": "SiO<sub>2</sub>2(H<sub>2</sub>O)",
+        "html": "SiO<sub>2</sub>&#183;2(H<sub>2</sub>O)",
         "slug": "SiO2-2_l_H2O_r_",
         "rmm": 96.113,
         "natoms": 9,

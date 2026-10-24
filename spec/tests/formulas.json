@@ -893,8 +893,8 @@
         "alphabetical": "H4O4Si",
         "hill": "H4O4Si"
       },
-      "html": "SiO<sub>2</sub>2H<sub>2</sub>O",
-      "latex": "\\mathrm{Si}\\mathrm{O}_{2}2\\mathrm{H}_{2}\\mathrm{O}",
+      "html": "SiO<sub>2</sub>&#183;2H<sub>2</sub>O",
+      "latex": "\\mathrm{Si}\\mathrm{O}_{2}\\cdot 2\\mathrm{H}_{2}\\mathrm{O}",
       "slug": "SiO2-2H2O"
     },
     {
@@ -913,8 +913,8 @@
         "alphabetical": "H4O4Si",
         "hill": "H4O4Si"
       },
-      "html": "SiO<sub>2</sub>2(H<sub>2</sub>O)",
-      "latex": "\\mathrm{Si}\\mathrm{O}_{2}2(\\mathrm{H}_{2}\\mathrm{O})",
+      "html": "SiO<sub>2</sub>&#183;2(H<sub>2</sub>O)",
+      "latex": "\\mathrm{Si}\\mathrm{O}_{2}\\cdot 2(\\mathrm{H}_{2}\\mathrm{O})",
       "slug": "SiO2-2_l_H2O_r_"
     },
     {
@@ -953,9 +953,50 @@
         "alphabetical": "CuH10O9S",
         "hill": "CuH10O9S"
       },
-      "html": "CuSO<sub>4</sub>5H<sub>2</sub>O",
-      "latex": "\\mathrm{Cu}\\mathrm{S}\\mathrm{O}_{4}5\\mathrm{H}_{2}\\mathrm{O}",
+      "html": "CuSO<sub>4</sub>&#183;5H<sub>2</sub>O",
+      "latex": "\\mathrm{Cu}\\mathrm{S}\\mathrm{O}_{4}\\cdot 5\\mathrm{H}_{2}\\mathrm{O}",
       "slug": "CuSO4-5H2O"
+    },
+    {
+      "input": "CaSO4.H2O",
+      "canonical": "CaSO4.H2O",
+      "charge": 0,
+      "natoms": 9,
+      "atoms": {
+        "Ca": 1,
+        "S": 1,
+        "O": 5,
+        "H": 2
+      },
+      "mass": 154.149,
+      "stoichiometric": {
+        "atomic number": "H2O5SCa",
+        "alphabetical": "CaH2O5S",
+        "hill": "CaH2O5S"
+      },
+      "html": "CaSO<sub>4</sub>&#183;H<sub>2</sub>O",
+      "latex": "\\mathrm{Ca}\\mathrm{S}\\mathrm{O}_{4}\\cdot \\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "CaSO4-H2O"
+    },
+    {
+      "input": "Co.(H2O)6",
+      "canonical": "Co.(H2O)6",
+      "charge": 0,
+      "natoms": 19,
+      "atoms": {
+        "Co": 1,
+        "H": 12,
+        "O": 6
+      },
+      "mass": 167.023194,
+      "stoichiometric": {
+        "atomic number": "H12O6Co",
+        "alphabetical": "CoH12O6",
+        "hill": "CoH12O6"
+      },
+      "html": "Co&#183;(H<sub>2</sub>O)<sub>6</sub>",
+      "latex": "\\mathrm{Co}\\cdot (\\mathrm{H}_{2}\\mathrm{O})_{6}",
+      "slug": "Co-_l_H2O_r_6"
     },
     {
       "input": "H1",
@@ -1106,8 +1147,8 @@
         "alphabetical": "CuHxOxS",
         "hill": "CuHxOxS"
       },
-      "html": "CuSO<sub>4</sub>xH<sub>2</sub>O",
-      "latex": "\\mathrm{Cu}\\mathrm{S}\\mathrm{O}_{4}x\\mathrm{H}_{2}\\mathrm{O}",
+      "html": "CuSO<sub>4</sub>&#183;xH<sub>2</sub>O",
+      "latex": "\\mathrm{Cu}\\mathrm{S}\\mathrm{O}_{4}\\cdot x\\mathrm{H}_{2}\\mathrm{O}",
       "slug": "CuSO4-xH2O"
     },
     {

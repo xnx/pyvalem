@@ -420,6 +420,10 @@ class Formula:
         nmoieties = len(moieties)
         for i, (moiety, separated) in enumerate(moieties):
             if separated:
+                # A period, as in CuSO4.5H2O, is a centred dot. In LaTeX it is
+                # followed by a space, so that \cdot x isn't read as \cdotx.
+                html_chunks.append("&#183;")
+                latex_chunks.append(r"\cdot ")
                 canonical_chunks.append(".")
             poststoich = 0
             if "prestoich" in moiety:

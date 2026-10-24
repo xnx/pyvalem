@@ -313,7 +313,11 @@ class FormulaTest(unittest.TestCase):
         f = Formula("CuSO4.xH2O")
         self.assertIsNone(f.rmm)
         self.assertEqual(dict(f.atom_stoich), {"Cu": 1, "S": 1, "O": None, "H": None})
-        self.assertEqual(f.html, "CuSO<sub>4</sub>xH<sub>2</sub>O")
+        self.assertEqual(f.html, "CuSO<sub>4</sub>&#183;xH<sub>2</sub>O")
+        self.assertEqual(
+            f.latex,
+            r"\mathrm{Cu}\mathrm{S}\mathrm{O}_{4}\cdot x\mathrm{H}_{2}\mathrm{O}",
+        )
 
         # The charge of a charged moiety with an unspecified count is undefined.
         self.assertRaises(FormulaParseError, Formula, "(NH4+)x")

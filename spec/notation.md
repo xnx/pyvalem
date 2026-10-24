@@ -244,15 +244,19 @@ which other implementations SHOULD match if they produce them.
 - **HTML**: counts are subscripts, mass numbers are superscripts before the
   symbol, and charges are superscripts with the number before the sign:
   `Co(H<sub>2</sub>O)<sub>6</sub><sup>2+</sup>`. A radical is `&#183;` after
-  the atoms. A multiplier is written before its moiety, and periods are
-  omitted. The `D` and `L` prefixes are in small capitals, written
+  the atoms, and a period is also `&#183;`:
+  `CuSO<sub>4</sub>&#183;5H<sub>2</sub>O`. A multiplier is written before its
+  moiety. The `D` and `L` prefixes are in small capitals, written
   `<span style="font-size: 80%;">D</span>`.
 - **LaTeX** (for math mode): each symbol is `\mathrm{X}`, an isotope is
   `{}^{13}\mathrm{C}`, counts are `_{2}`, charges `^{2+}`, a radical is
-  `\cdot`, and the prefixes `(±)`, `Δ`, `Λ`, `α`, `β` and `γ` are `(\pm)`,
+  `\cdot`, a period is `\cdot` and a space (so that `\cdot x` isn't read as
+  `\cdotx`), and the prefixes `(±)`, `Δ`, `Λ`, `α`, `β` and `γ` are `(\pm)`,
   `\Delta`, `\Lambda`, `\alpha`, `\beta` and `\gamma`.
 - **Slug**: a URL-safe string from which the formula can be recovered, such as
-  `Co-_l_H2O_r_6_p2` for `Co(H2O)6+2`.
+  `Co-_l_H2O_r_6_p2` for `Co(H2O)6+2`, except for a period where one is
+  optional, next to a bracket or after a radical: `Co.(H2O)6` and `Co(H2O)6`
+  have the same slug.
 
 
 ## 5. States
