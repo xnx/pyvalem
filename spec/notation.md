@@ -163,8 +163,8 @@ Some consequences of the grammar:
   elements, and `DsD` is darmstadtium deuteride.
 - A prefix must be followed by a moiety, so `D-` is the deuteride ion and
   `D-H` is hydrogen with the `D` prefix.
-- Digits after an atom are its count, so `SiO22H2O` has 22 oxygen atoms in a
-  row; `SiO2.2H2O` uses a period to start a moiety with a multiplier.
+- Digits after an atom are its count, so `SiO22H2O` is Si, O22, H2 and O. A
+  period starts a moiety that has a multiplier: `SiO2.2H2O`.
 
 ### 4.2 Validation
 
@@ -631,7 +631,7 @@ masses are in
 **Table 3. Angular momentum letters.** The orbital letters, for l = 0, 1,
 2, …, are `s p d f g h i k l m n o q r t u v w x y z`, and the letters of L in
 term symbols are the same in upper case: `S P D F G H I K L M N O Q R T U V W X
-Y Z`. Neither includes `j`, `J`, or a letter already used.
+Y Z`. They skip `j`, and `p` and `s` after their first use.
 
 **Table 4. Irreducible representations** in molecular term symbols:
 
