@@ -93,6 +93,16 @@ class DiatomicMolecularConfigurationTest(unittest.TestCase):
         c5 = DiatomicMolecularConfiguration("1σg2.1σu2.2σg2.2σu2.1πu4.3σg1")
         self.assertEqual(c4, c5)
 
+    def test_electrons_in_sigma_orbitals(self):
+        for s in ("1σg3", "1σu4", "1sigmag3", "1s-σg3"):
+            with self.subTest(s):
+                self.assertRaises(
+                    DiatomicMolecularConfigurationError,
+                    DiatomicMolecularConfiguration,
+                    s,
+                )
+        DiatomicMolecularConfiguration("1σg2.1πu4")
+
     def test_alt_diatomic_molecular_configuration_equality(self):
         c1 = DiatomicMolecularConfiguration("1s-σg2")
         self.assertEqual(c1, DiatomicMolecularConfiguration("1s-sigmag2"))

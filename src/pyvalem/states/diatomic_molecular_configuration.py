@@ -115,7 +115,7 @@ class DiatomicMolecularOrbital:
         return type(self) is type(other) and self._key() == other._key()
 
     def validate_molecular_orbital(self):
-        if self.symbol == "σ":
+        if self.symbol[0] == "σ":
             if self.count > 2:
                 raise DiatomicMolecularOrbitalError(
                     "Only two electrons allowed in σ orbital, but received {:d}".format(

@@ -40,6 +40,8 @@
 
 - The HTML and LaTeX of a radical put the dot where it is written, after the
   atoms and before any charge: `(OH·)2` was rendered as `(OH)₂·`.
+- A σg or σu orbital was allowed four electrons, like a π or δ orbital:
+  `1σg3` was accepted.
 - Deuterium after a formula prefix, as in `trans-D`, was taken to be the `D`
   prefix, so the formula was rejected.
 
