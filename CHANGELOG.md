@@ -25,6 +25,10 @@
   configuration lists all its orbitals, including any noble-gas core, by n and
   then l, so `[Ar].4s2.3d10` equals `[Ar].3d10.4s2`; its HTML and LaTeX keep
   the order as written.
+- A molecular term symbol's label may have a tilde or a macron on its letters,
+  as in `X̃(2A1)` and `HH̄(1Σ+g)`; a precomposed letter such as `Ã` is written
+  as the letter and a combining character in the canonical form. In LaTeX they
+  are `\tilde{X}` and `\bar{H}`.
 - A vibrational state that lists a mode more than once (`ν1+ν1`) raises the new
   `VibrationalStateValidationError`.
 - In stoichiometric formulas, isotopes are listed with their element, after the

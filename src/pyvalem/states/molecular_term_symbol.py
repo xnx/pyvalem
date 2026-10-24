@@ -4,6 +4,8 @@ methods for parsing a string into quantum numbers and labels, creating
 an HTML representation of the term symbol, etc.
 """
 
+import unicodedata
+
 import pyparsing as pp
 
 from pyvalem._grammar import uint
@@ -176,9 +178,13 @@ molecule_term = (
     molecule_Smult + molecule_irrep + pp.Optional(pp.Suppress("_") + molecule_Omegastr)
 )
 
-# Term Symbol label can be a single letter (perhaps followed by ' or ") ...
-term_label_let = pp.Combine(
-    pp.Word(pp.srange("[A-Za-z]")) + pp.Optional(pp.one_of(("'", '"')))
+# The combining diacritics allowed on the letters of a term label: a tilde, as
+# for the states of polyatomic molecules (X̃, Ã), and a macron (HH̄).
+label_diacritics = {"\u0303": "tilde", "\u0304": "bar"}
+# Term Symbol label can be one or more letters, each perhaps with a diacritic,
+# (perhaps followed by ' or "), such as X, A', EF and X̃ ...
+term_label_let = pp.Regex(
+    r"(?:[A-Za-z][{}]?)+['\"]?".format("".join(label_diacritics))
 ).set_results_name("term_label")
 # ... or a number. The open bracket is required but suppressed to distinguish
 # this type of term label from the spin multiplicity.
@@ -217,6 +223,9 @@ class MolecularTermSymbol(State):
         self._parse_state(state_str)
 
     def _parse_state(self, state_str):
+        # NB decompose letters with diacritics, such as Ã, into a letter and a
+        # combining character.
+        state_str = unicodedata.normalize("NFD", state_str)
         try:
             components = molecule_term_with_label.parse_string(
                 state_str, parse_all=True
@@ -277,6 +286,17 @@ class MolecularTermSymbol(State):
             irrep_chunks.append("_{{{:s}}}".format(irrep[next_idx:]))
         return "".join(irrep_chunks)
 
+    @staticmethod
+    def _label_latex(label):
+        """Return the LaTeX of a term label: X̃ is \\tilde{X}, H̄ is \\bar{H}."""
+        chunks = []
+        for c in label:
+            if c in label_diacritics:
+                chunks[-1] = "\\{}{{{}}}".format(label_diacritics[c], chunks[-1])
+            else:
+                chunks.append(c)
+        return "".join(chunks)
+
     @property
     def html(self):
         """Return an HTML representation of the MolecularTermSymbol."""
@@ -300,7 +320,7 @@ class MolecularTermSymbol(State):
 
         latex_chunks = []
         if self.term_label is not None:
-            latex_chunks.append(self.term_label)
+            latex_chunks.append(self._label_latex(self.term_label))
         latex_chunks.append(
             "{{}}^{{{:d}}}{:s}".format(self.Smult, self._irrep_latex(self.irrep))
         )

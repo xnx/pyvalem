@@ -134,6 +134,24 @@ class MolecularTermSymbolTest(unittest.TestCase):
                 self.assertEqual(MolecularTermSymbol(expected), term)
                 self.assertIsInstance(state_parser(expected), MolecularTermSymbol)
 
+    def test_term_labels(self):
+        # Double-minimum states have labels of more than one letter.
+        for s in ("EF(1Σ+g)", "GK(1Σ+g)", "HH̄(1Σ+g)"):
+            with self.subTest(s):
+                self.assertEqual(repr(MolecularTermSymbol(s)), s)
+                self.assertIsInstance(state_parser(s), MolecularTermSymbol)
+        # A tilde labels the states of polyatomic molecules; a precomposed letter
+        # is equivalent to the letter and a combining tilde.
+        decomposed = MolecularTermSymbol("A\u0303(1B2)")
+        precomposed = MolecularTermSymbol("\u00c3(1B2)")
+        self.assertEqual(precomposed, decomposed)
+        self.assertEqual(repr(precomposed), "A\u0303(1B2)")
+        self.assertEqual(decomposed.latex, r"\tilde{A}{}^{1}B_{2}")
+        self.assertTrue(MolecularTermSymbol("HH̄(1Σ+g)").latex.startswith(r"H\bar{H}{}"))
+        for s in ("\u00c1(1B2)", "X\u0303\u0303(2A1)", "\u0303X(2A1)"):
+            with self.subTest(s):
+                self.assertRaises(MolecularTermSymbolError, MolecularTermSymbol, s)
+
     def test_molecular_term_symbol_repr(self):
         m1 = MolecularTermSymbol("1Σ+u")
         m2 = MolecularTermSymbol("1SIGMA+u")
