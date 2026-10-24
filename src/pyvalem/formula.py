@@ -23,13 +23,12 @@ from itertools import pairwise
 
 import pyparsing as pp
 
+from ._grammar import count
 from ._special_cases import special_cases
 from .atom_data import atoms, element_symbols, isotopes
 from .exceptions import PyValemError
 
 element = pp.one_of(element_symbols)
-# A count is a positive integer, without leading zeros.
-count = pp.Regex(r"[1-9][0-9]*")
 count_or_x = count | pp.Literal("x")
 plusminus = pp.Literal("+") | pp.Literal("-")
 
@@ -141,9 +140,12 @@ prefix_parser = pp.DelimitedList(count, combine=True)
 keys_list = list(prefix_tokens.keys())
 for pt in keys_list:
     prefix_parser |= pp.Keyword(pt)
-# Any number of prefix tokens may appear, separated by a hyphen
+# Any number of prefix tokens may appear, each followed by a hyphen, and then a
+# moiety: so D- is the deuteride ion, not the D- prefix, and trans-D is
+# trans-deuterium.
 prefix_list_parser = (
-    pp.DelimitedList(prefix_parser, delim="-") + pp.Suppress(pp.Literal("-"))
+    pp.OneOrMore(prefix_parser + pp.Suppress(pp.Literal("-")))
+    + pp.FollowedBy(chemical_formula_fragment)
 ).set_results_name("prefix")
 
 # Finally, a complexChemicalFormula is a prefix, followed by one or more
@@ -339,12 +341,6 @@ class Formula:
         ------
         FormulaParseError
         """
-        if formula == "D-":
-            # This is a not-ideal way to deal with the fact that D- breaks
-            # the parser due to a clash with the D- prefix.
-            self._parse_formula("D-1")
-            return
-
         if any(s in formula for s in ("++", "--", "+-", "-+")):
             raise FormulaParseError("Invalid formula syntax: {}".format(formula))
 

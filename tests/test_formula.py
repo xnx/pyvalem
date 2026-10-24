@@ -78,6 +78,15 @@ class FormulaTest(unittest.TestCase):
             self.assertEqual(cf.latex, latex)
             self.assertEqual(cf.slug, slug)
 
+    def test_prefixes_and_deuterium(self):
+        # D is both a prefix and deuterium: a prefix must be followed by a moiety.
+        self.assertEqual(Formula("D-").charge, -1)
+        self.assertEqual(Formula("D-2").charge, -2)
+        self.assertEqual(Formula("D-H").atom_stoich, {"H": 1})
+        self.assertEqual(Formula("trans-D").atom_stoich, {"2H": 1})
+        self.assertEqual(Formula("trans-D1"), Formula("trans-D"))
+        self.assertEqual(Formula("D-D").atom_stoich, {"2H": 1})
+
     def test_prefix_latex(self):
         self.assertEqual(
             Formula("(±)-CHClBrF").latex,
