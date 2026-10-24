@@ -15,6 +15,7 @@ Welcome to pyvalem's documentation!
    states.rst
    stateful_species.rst
    reaction.rst
+   examples.rst
 
 
 Indices and tables

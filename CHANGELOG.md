@@ -2,6 +2,12 @@
 
 ## 3.0.1 (unreleased)
 
+### Added
+
+- Examples, in `examples/` and in the documentation: checking a list of
+  reactions before it goes into a database, and applying the selection rules
+  for atomic transitions. The tests check what they print.
+
 ### Fixed
 
 - The period of a formula such as `CuSO4.5H2O` is a centred dot in its HTML

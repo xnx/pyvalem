@@ -46,6 +46,7 @@ include = [
     "/src/pyvalem",
     "/tests",
     "/spec",
+    "/examples",
     "/docs/source",
     "/docs/Makefile",
     "/docs/make.bat",

@@ -190,6 +190,15 @@ reaction derives from ``PyValemError``, which is itself a ``ValueError``:
     VibrationalStateError
 
 
+More examples
+-------------
+The `examples`_ directory has short scripts that check a list of reactions before
+it goes into a database, and that apply the selection rules for atomic transitions
+to levels written in PyValem's notation.
+
+.. _examples: https://github.com/xnx/pyvalem/tree/master/examples
+
+
 Specification:
 ==============
 The notation that PyValem implements is specified, independently of Python, in

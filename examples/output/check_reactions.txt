@@ -1,0 +1,7 @@
+line 2: Failed to parse Reaction string "e- + Ar -> e- + Ar*" because one of the StatefulSpecies was incorrectly formed. The error reported was: Invalid formula syntax: Ar*
+line 4: Charge not preserved for reaction: e- + CO2 -> CO + O
+line 5: Stoichiometry not preserved for reaction: e- + H2O -> H- + O
+line 6: Incorrect number of electrons for He+ in atomic configuration 1s2
+line 7: Invalid atomic term symbol: 2P_5/2 |L-S| <= J <= L+S must be satisfied.
+line 8: Incorrect use of inversion parity label (u/g) for heteronuclear diatomic CO
+line 9: the same as line 3: e- + N2 X(1Σ+g);v=0 → N2 X(1Σ+g);v=1 + e-

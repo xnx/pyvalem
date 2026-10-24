@@ -1,0 +1,11 @@
+Na 3s 2S_1/2 – Na 3p 2Po_3/2 (the sodium D2 line, 589.0 nm)
+    allowed
+Hg 6s2 1S_0 – Hg 6s.6p 3Po_1 (the main line of a mercury lamp, 253.7 nm)
+    ΔS = 1
+O 2p4 1D_2 – O 2p4 1S_0 (the green line of the aurora, 557.7 nm)
+    no change of parity; ΔJ = 2; ΔL = 2
+O 2p4 3P_2 – O 2p4 1D_2 (the red line of the aurora, 630.0 nm)
+    no change of parity; ΔS = 1
+He 1s2 1S_0 – He 1s.2s 1S_0 (helium, 60.1 nm)
+    no change of parity; J = 0 to J = 0; L = 0 to L = 0
+O 2p4 3Po_2: the parity of the term isn't that of the configuration
