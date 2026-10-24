@@ -17,7 +17,7 @@ from .reaction import (
 )
 from .stateful_species import StatefulSpecies, StatefulSpeciesError
 
-__version__ = "3.0.0.dev0"
+__version__ = "3.0.0"
 
 __all__ = [
     "Formula",

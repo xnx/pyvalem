@@ -1,6 +1,11 @@
 # Changelog
 
-## 3.0.0 (unreleased)
+## 3.0.0 (24 October 2026)
+
+PyValem 3.0 implements the notation as it is now specified. Input that 2.10
+deprecated is rejected, and the canonical forms (`repr()`) of formulas and
+states have changed, as has the order of isotopes in stoichiometric formulas:
+data keyed on either will need updating. Slugs are unchanged.
 
 ### Added
 
@@ -48,6 +53,8 @@
   atoms and before any charge: `(OH·)2` was rendered as `(OH)₂·`.
 - A species with separators but no states after its formula, such as `H2O ;`,
   raised `TypeError`.
+- A formula and its states may be separated by any whitespace: a tab wasn't
+  accepted.
 - A σg or σu orbital was allowed four electrons, like a π or δ orbital:
   `1σg3` was accepted.
 - Deuterium after a formula prefix, as in `trans-D`, was taken to be the `D`
