@@ -35,8 +35,8 @@ The electronic configuration of atoms, ions and isotopes is represented by the
 ``AtomicConfiguration`` object is a sequence of orbital specifiers, separated by a
 full stop (period, ``.``). An atomic orbital is represented by its principal
 quantum number, ``n``, the azimuthal quantum number, ``l`` written as the
-letter ``s``, ``p``, ``d``, ..., and the an occupancy (number of electrons, ``1`` or
-``2``). For example:
+letter ``s``, ``p``, ``d``, ..., and an occupancy (the number of electrons, which is
+1 if it is omitted). For example:
 
 .. code-block:: pycon
 
@@ -51,6 +51,17 @@ corresponding noble gas element symbol in square brackets:
 .. code-block:: pycon
 
     >>> c2 =  AtomicConfiguration('[Ne].3s2.3d10')
+
+The canonical form of a configuration, given by ``repr()``, lists all of its orbitals,
+including those of a noble-gas core, in order of n and then l, so configurations that
+differ only in the order in which their orbitals are written are equal:
+
+.. code-block:: pycon
+
+    >>> AtomicConfiguration('[Ar].4s2.3d10')
+    1s2.2s2.2p6.3s2.3p6.3d10.4s2
+    >>> AtomicConfiguration('[Ar].4s2.3d10') == AtomicConfiguration('[Ar].3d10.4s2')
+    True
 
 The HTML representation of the atomic configuration is returned by the ``html``
 attribute:
@@ -151,6 +162,85 @@ A single, lowercase letter label may be used to distinguish term symbols with th
     >>> a3 = AtomicTermSymbol('y3Po')
 
 
+``CompoundLSCoupling``
+======================
+
+The ``CompoundLSCoupling`` class represents a state of a complex atom in which groups
+of electrons are coupled, in LS coupling, to intermediate terms. It is written as a
+sequence of atomic configurations, each followed by its term in parentheses, except
+perhaps the last; the final term is given as a separate ``AtomicTermSymbol``:
+
+.. code-block:: pycon
+
+    >>> from pyvalem.states import CompoundLSCoupling
+    >>> s = CompoundLSCoupling('4f(2Fo)5d2(1G)6s')
+    >>> s.atomic_configurations, s.terms
+    ([4f, 5d2, 6s], [2Fo, 1G])
+    >>> print(s.html)
+    4f(<sup>2</sup>F<sup>o</sup>)5d<sup>2</sup>(<sup>1</sup>G)6s
+
+
+``J1K_LK_Coupling``
+===================
+
+The ``J1K_LK_Coupling`` class represents a state in J\ :sub:`1`\ K (or LK) coupling, in
+which an outer electron's orbital angular momentum couples with the angular momentum
+of the core to give K, which then couples with the electron's spin. It is written as
+the multiplicity of the outer electron's spin, K in square brackets, ``o`` for odd
+parity, and optionally J after an underscore:
+
+.. code-block:: pycon
+
+    >>> from pyvalem.states import J1K_LK_Coupling
+    >>> t = J1K_LK_Coupling('2[9/2]o_5')
+    >>> t.K, t.J
+    (4.5, 5.0)
+    >>> print(t.html)
+    <sup>2</sup>[9/2]<sup>o</sup><sub>5</sub>
+
+J must satisfy \|K - S\| ≤ J ≤ K + S.
+
+
+``J1J2_Coupling``
+=================
+
+The ``J1J2_Coupling`` class represents a state with two groups of electrons, each
+coupled to its own angular momentum, J\ :sub:`1` and J\ :sub:`2`, and perhaps to a
+total J. It is written without spaces:
+
+.. code-block:: pycon
+
+    >>> from pyvalem.states import J1J2_Coupling
+    >>> t = J1J2_Coupling('(3/2,1/2)o_2')
+    >>> t.J1, t.J2, t.J
+    (1.5, 0.5, 2.0)
+    >>> print(t.html)
+    (3/2, 1/2)<sup>o</sup><sub>2</sub>
+
+
+``RacahSymbol``
+===============
+
+The excited states of the noble gases, with an electron outside a p\ :sup:`5` core,
+are often written in Racah notation, which the ``RacahSymbol`` class represents: the
+outer electron's principal quantum number and orbital letter, with a prime if the
+core's angular momentum is 1/2 rather than 3/2; K in square brackets; ``o`` for odd
+parity; and optionally J after an underscore. The term symbol of the core is given as
+a separate state.
+
+.. code-block:: pycon
+
+    >>> from pyvalem.states import RacahSymbol
+    >>> r = RacahSymbol("3p'[3/2]_1")
+    >>> r.principal, r.orbital, r.k_num, r.k_den, r.j_term
+    (3, "p'", 3, 2, 1)
+    >>> print(r.html)
+    3p'[3/2]<sub>1</sub>
+
+K must couple the core's angular momentum with the electron's, and J must be K + 1/2
+or K - 1/2.
+
+
 ``DiatomicMolecularConfiguration``
 ==================================
 
@@ -224,11 +314,25 @@ irreducible representation of the electronic orbital wave function. For molecule
 a centre of symmetry, the ``u``/``g`` label comes last, preceded by any ``+``/``-``
 label denoting the reflection symmetry of the wave function. Do not use a caret (``^``)
 or underscore (``_``) character to indicate superscripts or subscripts.
-For linear molecules, the irrep symbols ``Σ``, ``Π``, ``Δ`` and ``Φ`` may be replaced
-with ``SIGMA``, ``PI``, ``DELTA``, and ``PHI``.
+For linear molecules, the irrep symbols ``Σ``, ``Π``, ``Δ``, ``Φ`` and ``Γ`` may be
+replaced with ``SIGMA``, ``PI``, ``DELTA``, ``PHI`` and ``GAMMA``.
 
-If a term symbol has a label, this is given before the term symbol itself, which
-should be enclosed with parentheses.
+A term symbol may have a label before it: one or more letters, each optionally with a
+tilde or a macron, and then optionally ``'`` or ``"`` (such as ``X``, ``A'``, ``EF``,
+``X̃`` and ``HH̄``), or a number. The term symbol itself may be enclosed in
+parentheses, which a numeric label requires. The canonical form, given by
+``repr()``, puts the term symbol in parentheses after a label, and uses Greek
+letters:
+
+.. code-block:: pycon
+
+    >>> from pyvalem.states import MolecularTermSymbol
+    >>> MolecularTermSymbol('X1SIGMA+g')
+    X(1Σ+g)
+
+A term symbol whose irrep is ``G``, ``H`` or ``T`` without a subscript is also an atomic
+term symbol, and as a state of a ``StatefulSpecies`` it is taken to be one. Write it in
+parentheses, as in ``(1G)``, or with a label, for the molecular term symbol.
 
 Examples:
 
@@ -331,7 +435,9 @@ Examples:
 
 The ``KeyValuePair`` class represents an arbitrary quantum number or symmetry provided
 as a (key, value) pair. It is instantiated with a string of the form ``key=value``.
-Whitespace within a key-value pair is illegal.
+Whitespace within a key-value pair is illegal. In a ``StatefulSpecies``, the keys ``J``,
+``v`` and ``ν`` are reserved for rotational and vibrational states, so that ``J=1/3``,
+for example, is an invalid rotational state rather than a key-value pair.
 For example:
 
 .. code-block:: pycon
