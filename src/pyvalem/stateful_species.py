@@ -29,17 +29,17 @@ class StatefulSpecies:
                     type(s).__name__
                 )
             )
-        s = s.strip()
-        if " " not in s:
+        # The formula is separated from the states by whitespace.
+        formula, *states = s.split(maxsplit=1) or [""]
+        self.formula = Formula(formula)
+        if not states:
             # No states, just a Formula
             self.states = []
-            self.formula = Formula(s)
             return
 
-        i = s.index(" ")
-        self.formula = Formula(s[:i])
-        s = s.replace(";", " ").replace(", ", " ")
-        self.states = state_parser(s[i + 1 :].split())
+        # The states are separated by semicolons, commas and whitespace.
+        states = states[0].replace(";", " ").replace(", ", " ")
+        self.states = state_parser(states.split())
 
         self._verify_states()
 

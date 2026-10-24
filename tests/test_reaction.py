@@ -4,6 +4,7 @@
 
 import unittest
 
+from pyvalem import PyValemError
 from pyvalem.reaction import (
     Reaction,
     ReactionChargeError,
@@ -180,7 +181,8 @@ class ReactionParseTest(unittest.TestCase):
                 Reaction(s)
 
     def test_whole_term_is_parsed(self):
-        self.assertRaises(ReactionParseError, Reaction, "H2\nXyz + O2 -> H2O2")
+        # Nothing after a newline in a term is ignored.
+        self.assertRaises(PyValemError, Reaction, "H2\nXyz + O2 -> H2O2")
 
     def test_reaction_hash(self):
         r1, r2 = Reaction("H + H -> H2"), Reaction("2H -> H2")
