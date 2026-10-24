@@ -1,6 +1,10 @@
 # Changelog
 
-## 3.0.1 (unreleased)
+## 3.0.1 (24 October 2026)
+
+The HTML and LaTeX of a formula with a period, such as `CuSO4.5H2O`, have
+changed, and so have those of four of the specification's test vectors.
+Canonical forms and slugs are unchanged.
 
 ### Added
 
