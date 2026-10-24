@@ -1,0 +1,821 @@
+{
+  "description": "States (section 5 of notation.md), classified as in section 5.1. The properties of a valid state are its type, canonical form, HTML and LaTeX.",
+  "tests": [
+    {
+      "input": "*",
+      "type": "GenericExcitedState",
+      "canonical": "*",
+      "html": "<sup>*</sup>",
+      "latex": "^{*}"
+    },
+    {
+      "input": "**",
+      "type": "GenericExcitedState",
+      "canonical": "**",
+      "html": "<sup>**</sup>",
+      "latex": "^{**}"
+    },
+    {
+      "input": "***",
+      "type": "GenericExcitedState",
+      "canonical": "3*",
+      "html": "<sup>3*</sup>",
+      "latex": "^{3*}"
+    },
+    {
+      "input": "****",
+      "type": "GenericExcitedState",
+      "canonical": "4*",
+      "html": "<sup>4*</sup>",
+      "latex": "^{4*}"
+    },
+    {
+      "input": "1*",
+      "type": "GenericExcitedState",
+      "canonical": "*",
+      "html": "<sup>*</sup>",
+      "latex": "^{*}"
+    },
+    {
+      "input": "2*",
+      "type": "GenericExcitedState",
+      "canonical": "**",
+      "html": "<sup>**</sup>",
+      "latex": "^{**}"
+    },
+    {
+      "input": "3*",
+      "type": "GenericExcitedState",
+      "canonical": "3*",
+      "html": "<sup>3*</sup>",
+      "latex": "^{3*}"
+    },
+    {
+      "input": "15*",
+      "type": "GenericExcitedState",
+      "canonical": "15*",
+      "html": "<sup>15*</sup>",
+      "latex": "^{15*}"
+    },
+    {
+      "input": "*****",
+      "error": "syntax"
+    },
+    {
+      "input": "3**",
+      "error": "syntax"
+    },
+    {
+      "input": "01*",
+      "error": "syntax"
+    },
+    {
+      "input": "v=0",
+      "type": "VibrationalState",
+      "canonical": "v=0",
+      "html": "v=0",
+      "latex": "v=0"
+    },
+    {
+      "input": "v=2",
+      "type": "VibrationalState",
+      "canonical": "v=2",
+      "html": "v=2",
+      "latex": "v=2"
+    },
+    {
+      "input": "ν=2",
+      "type": "VibrationalState",
+      "canonical": "v=2",
+      "html": "v=2",
+      "latex": "v=2"
+    },
+    {
+      "input": "v=*",
+      "type": "VibrationalState",
+      "canonical": "v=*",
+      "html": "v=*",
+      "latex": "v=*"
+    },
+    {
+      "input": "v=**",
+      "type": "VibrationalState",
+      "canonical": "v=**",
+      "html": "v=**",
+      "latex": "v=**"
+    },
+    {
+      "input": "2v1+v3",
+      "type": "VibrationalState",
+      "canonical": "2ν1+ν3",
+      "html": "2ν<sub>1</sub> + ν<sub>3</sub>",
+      "latex": "2\\nu_{1} + \\nu_{3}"
+    },
+    {
+      "input": "ν1+ν2",
+      "type": "VibrationalState",
+      "canonical": "ν1+ν2",
+      "html": "ν<sub>1</sub> + ν<sub>2</sub>",
+      "latex": "\\nu_{1} + \\nu_{2}"
+    },
+    {
+      "input": "3ν2",
+      "type": "VibrationalState",
+      "canonical": "3ν2",
+      "html": "3ν<sub>2</sub>",
+      "latex": "3\\nu_{2}"
+    },
+    {
+      "input": "v1+3v4",
+      "type": "VibrationalState",
+      "canonical": "ν1+3ν4",
+      "html": "ν<sub>1</sub> + 3ν<sub>4</sub>",
+      "latex": "\\nu_{1} + 3\\nu_{4}"
+    },
+    {
+      "input": "0v1+0v2+0v3",
+      "type": "VibrationalState",
+      "canonical": "0ν1+0ν2+0ν3",
+      "html": "0ν<sub>1</sub> + 0ν<sub>2</sub> + 0ν<sub>3</sub>",
+      "latex": "0\\nu_{1} + 0\\nu_{2} + 0\\nu_{3}"
+    },
+    {
+      "input": "18v1",
+      "type": "VibrationalState",
+      "canonical": "18ν1",
+      "html": "18ν<sub>1</sub>",
+      "latex": "18\\nu_{1}"
+    },
+    {
+      "input": "v1+v1",
+      "error": "validation"
+    },
+    {
+      "input": "v=1.5",
+      "error": "syntax"
+    },
+    {
+      "input": "v=-1",
+      "error": "syntax"
+    },
+    {
+      "input": "v=007",
+      "error": "syntax"
+    },
+    {
+      "input": "2",
+      "error": "syntax"
+    },
+    {
+      "input": "+2",
+      "error": "syntax"
+    },
+    {
+      "input": "v = 2",
+      "error": "syntax"
+    },
+    {
+      "input": "1s2",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2",
+      "html": "1s<sup>2</sup>",
+      "latex": "1s^{2}"
+    },
+    {
+      "input": "1s2.2s2.2p6",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2.2s2.2p6",
+      "html": "1s<sup>2</sup>2s<sup>2</sup>2p<sup>6</sup>",
+      "latex": "1s^{2}2s^{2}2p^{6}"
+    },
+    {
+      "input": "[Ne].3s",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2.2s2.2p6.3s",
+      "html": "[Ne]3s",
+      "latex": "\\mathrm{[Ne]}3s"
+    },
+    {
+      "input": "[Ar].4s2.3d10",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2.2s2.2p6.3s2.3p6.3d10.4s2",
+      "html": "[Ar]4s<sup>2</sup>3d<sup>10</sup>",
+      "latex": "\\mathrm{[Ar]}4s^{2}3d^{10}"
+    },
+    {
+      "input": "[Ar].3d10.4s2",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2.2s2.2p6.3s2.3p6.3d10.4s2",
+      "html": "[Ar]3d<sup>10</sup>4s<sup>2</sup>",
+      "latex": "\\mathrm{[Ar]}3d^{10}4s^{2}"
+    },
+    {
+      "input": "[Kr]",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2.2s2.2p6.3s2.3p6.3d10.4s2.4p6",
+      "html": "[Kr]",
+      "latex": "\\mathrm{[Kr]}"
+    },
+    {
+      "input": "1s2.2s2.2p6.3s2.3p6.4s2.3d10.4p6",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2.2s2.2p6.3s2.3p6.3d10.4s2.4p6",
+      "html": "[Ar]4s<sup>2</sup>3d<sup>10</sup>4p<sup>6</sup>",
+      "latex": "\\mathrm{[Ar]}4s^{2}3d^{10}4p^{6}"
+    },
+    {
+      "input": "1s2.np",
+      "type": "AtomicConfiguration",
+      "canonical": "1s2.np",
+      "html": "1s<sup>2</sup><em>n</em>p",
+      "latex": "1s^{2}np"
+    },
+    {
+      "input": "10s2.10p1",
+      "type": "AtomicConfiguration",
+      "canonical": "10s2.10p",
+      "html": "10s<sup>2</sup>10p",
+      "latex": "10s^{2}10p"
+    },
+    {
+      "input": "5g1",
+      "type": "AtomicConfiguration",
+      "canonical": "5g",
+      "html": "5g",
+      "latex": "5g"
+    },
+    {
+      "input": "1s",
+      "type": "AtomicConfiguration",
+      "canonical": "1s",
+      "html": "1s",
+      "latex": "1s"
+    },
+    {
+      "input": "1d",
+      "error": "validation"
+    },
+    {
+      "input": "1s3",
+      "error": "validation"
+    },
+    {
+      "input": "2p7",
+      "error": "validation"
+    },
+    {
+      "input": "1s2.1s2",
+      "error": "validation"
+    },
+    {
+      "input": "[Ne].2p1",
+      "error": "validation"
+    },
+    {
+      "input": "01s2",
+      "error": "syntax"
+    },
+    {
+      "input": "1s2 .2s2",
+      "error": "syntax"
+    },
+    {
+      "input": "[He]2s1",
+      "error": "syntax"
+    },
+    {
+      "input": "4f(2Fo)5d",
+      "type": "CompoundLSCoupling",
+      "canonical": "4f(2Fo)5d",
+      "html": "4f(<sup>2</sup>F<sup>o</sup>)5d",
+      "latex": "4f({}^{2}\\mathrm{F}^o)5d"
+    },
+    {
+      "input": "3d10.4f7(8So)4p6.5d(9Do)6s(8Do)7s",
+      "type": "CompoundLSCoupling",
+      "canonical": "3d10.4f7(8So)4p6.5d(9Do)6s(8Do)7s",
+      "html": "3d<sup>10</sup>4f<sup>7</sup>(<sup>8</sup>S<sup>o</sup>)4p<sup>6</sup>5d(<sup>9</sup>D<sup>o</sup>)6s(<sup>8</sup>D<sup>o</sup>)7s",
+      "latex": "3d^{10}4f^{7}({}^{8}\\mathrm{S}^o)4p^{6}5d({}^{9}\\mathrm{D}^o)6s({}^{8}\\mathrm{D}^o)7s"
+    },
+    {
+      "input": "6p.6s(1Po)",
+      "type": "CompoundLSCoupling",
+      "canonical": "6s.6p(1Po)",
+      "html": "6p6s(<sup>1</sup>P<sup>o</sup>)",
+      "latex": "6p6s({}^{1}\\mathrm{P}^o)"
+    },
+    {
+      "input": "4d9(2D_5/2)5s",
+      "type": "CompoundLSCoupling",
+      "canonical": "4d9(2D_5/2)5s",
+      "html": "4d<sup>9</sup>(<sup>2</sup>D<sub>5/2</sub>)5s",
+      "latex": "4d^{9}({}^{2}\\mathrm{D}_{5/2})5s"
+    },
+    {
+      "input": "2s2.2p(2Po_5/2)5g",
+      "error": "validation"
+    },
+    {
+      "input": "4f(2Fo)(1G)",
+      "error": "syntax"
+    },
+    {
+      "input": "2P_1/2",
+      "type": "AtomicTermSymbol",
+      "canonical": "2P_1/2",
+      "html": "<sup>2</sup>P<sub>1/2</sub>",
+      "latex": "{}^{2}\\mathrm{P}_{1/2}"
+    },
+    {
+      "input": "1S_0",
+      "type": "AtomicTermSymbol",
+      "canonical": "1S_0",
+      "html": "<sup>1</sup>S<sub>0</sub>",
+      "latex": "{}^{1}\\mathrm{S}_{0}"
+    },
+    {
+      "input": "4D",
+      "type": "AtomicTermSymbol",
+      "canonical": "4D",
+      "html": "<sup>4</sup>D",
+      "latex": "{}^{4}\\mathrm{D}"
+    },
+    {
+      "input": "2Po_1/2",
+      "type": "AtomicTermSymbol",
+      "canonical": "2Po_1/2",
+      "html": "<sup>2</sup>P<sup>o</sup><sub>1/2</sub>",
+      "latex": "{}^{2}\\mathrm{P}^o_{1/2}"
+    },
+    {
+      "input": "3P_2/2",
+      "type": "AtomicTermSymbol",
+      "canonical": "3P_1",
+      "html": "<sup>3</sup>P<sub>1</sub>",
+      "latex": "{}^{3}\\mathrm{P}_{1}"
+    },
+    {
+      "input": "a5D",
+      "type": "AtomicTermSymbol",
+      "canonical": "a5D",
+      "html": "a<sup>5</sup>D",
+      "latex": "a{}^{5}\\mathrm{D}"
+    },
+    {
+      "input": "z3Po",
+      "type": "AtomicTermSymbol",
+      "canonical": "z3Po",
+      "html": "z<sup>3</sup>P<sup>o</sup>",
+      "latex": "z{}^{3}\\mathrm{P}^o"
+    },
+    {
+      "input": "2D{1}_3/2",
+      "type": "AtomicTermSymbol",
+      "canonical": "2D{1}_3/2",
+      "html": "<sup>2</sup>D1<sub>3/2</sub>",
+      "latex": "{}^{2}\\mathrm{D}1_{3/2}"
+    },
+    {
+      "input": "1G",
+      "type": "AtomicTermSymbol",
+      "canonical": "1G",
+      "html": "<sup>1</sup>G",
+      "latex": "{}^{1}\\mathrm{G}"
+    },
+    {
+      "input": "2H",
+      "type": "AtomicTermSymbol",
+      "canonical": "2H",
+      "html": "<sup>2</sup>H",
+      "latex": "{}^{2}\\mathrm{H}"
+    },
+    {
+      "input": "3T",
+      "type": "AtomicTermSymbol",
+      "canonical": "3T",
+      "html": "<sup>3</sup>T",
+      "latex": "{}^{3}\\mathrm{T}"
+    },
+    {
+      "input": "2P_5/2",
+      "error": "validation"
+    },
+    {
+      "input": "3P_3",
+      "error": "validation"
+    },
+    {
+      "input": "0S",
+      "error": "validation"
+    },
+    {
+      "input": "02P",
+      "error": "syntax"
+    },
+    {
+      "input": "2 P_1/2",
+      "error": "syntax"
+    },
+    {
+      "input": "A5D",
+      "error": "syntax"
+    },
+    {
+      "input": "1σ",
+      "type": "DiatomicMolecularConfiguration",
+      "canonical": "1σ1",
+      "html": "1σ<sup>1</sup>",
+      "latex": "1\\sigma^{1}"
+    },
+    {
+      "input": "1σg2",
+      "type": "DiatomicMolecularConfiguration",
+      "canonical": "1σg2",
+      "html": "1σ<sub>g</sub><sup>2</sup>",
+      "latex": "1\\sigma_g^{2}"
+    },
+    {
+      "input": "1sigmag2.1sigmau1",
+      "type": "DiatomicMolecularConfiguration",
+      "canonical": "1σg2.1σu1",
+      "html": "1σ<sub>g</sub><sup>2</sup>.1σ<sub>u</sub><sup>1</sup>",
+      "latex": "1\\sigma_g^{2}1\\sigma_u^{1}"
+    },
+    {
+      "input": "1σg2.1σu2.2σg2.2σu2.1πu4.3σg2",
+      "type": "DiatomicMolecularConfiguration",
+      "canonical": "1σg2.1σu2.2σg2.2σu2.1πu4.3σg2",
+      "html": "1σ<sub>g</sub><sup>2</sup>.1σ<sub>u</sub><sup>2</sup>.2σ<sub>g</sub><sup>2</sup>.2σ<sub>u</sub><sup>2</sup>.1π<sub>u</sub><sup>4</sup>.3σ<sub>g</sub><sup>2</sup>",
+      "latex": "1\\sigma_g^{2}1\\sigma_u^{2}2\\sigma_g^{2}2\\sigma_u^{2}1\\pi_u^{4}3\\sigma_g^{2}"
+    },
+    {
+      "input": "1s-σg2.1s-σu1",
+      "type": "DiatomicMolecularConfiguration",
+      "canonical": "1s-σg2.1s-σu1",
+      "html": "1sσ<sub>g</sub><sup>2</sup>.1sσ<sub>u</sub><sup>1</sup>",
+      "latex": "1s\\sigma_g^{2}1s\\sigma_u^{1}"
+    },
+    {
+      "input": "1σ3",
+      "error": "validation"
+    },
+    {
+      "input": "1σg3",
+      "error": "validation"
+    },
+    {
+      "input": "1πu5",
+      "error": "validation"
+    },
+    {
+      "input": "1σg2.1σg1",
+      "error": "validation"
+    },
+    {
+      "input": "X(1Σ+g)",
+      "type": "MolecularTermSymbol",
+      "canonical": "X(1Σ+g)",
+      "html": "X<sup>1</sup>Σ<sup>+</sup><sub>g</sub>",
+      "latex": "X{}^{1}\\Sigma^+_{g}"
+    },
+    {
+      "input": "X1SIGMA+g",
+      "type": "MolecularTermSymbol",
+      "canonical": "X(1Σ+g)",
+      "html": "X<sup>1</sup>Σ<sup>+</sup><sub>g</sub>",
+      "latex": "X{}^{1}\\Sigma^+_{g}"
+    },
+    {
+      "input": "(1Σ+)",
+      "type": "MolecularTermSymbol",
+      "canonical": "1Σ+",
+      "html": "<sup>1</sup>Σ<sup>+</sup>",
+      "latex": "{}^{1}\\Sigma^+"
+    },
+    {
+      "input": "1Σ+u",
+      "type": "MolecularTermSymbol",
+      "canonical": "1Σ+u",
+      "html": "<sup>1</sup>Σ<sup>+</sup><sub>u</sub>",
+      "latex": "{}^{1}\\Sigma^+_{u}"
+    },
+    {
+      "input": "b(4Π_-3/2)",
+      "type": "MolecularTermSymbol",
+      "canonical": "b(4Π_-3/2)",
+      "html": "b<sup>4</sup>Π<sub>-3/2</sub>",
+      "latex": "b{}^{4}\\Pi{}_{-3/2}"
+    },
+    {
+      "input": "b(4PI_+3/2)",
+      "type": "MolecularTermSymbol",
+      "canonical": "b(4Π_3/2)",
+      "html": "b<sup>4</sup>Π<sub>3/2</sub>",
+      "latex": "b{}^{4}\\Pi{}_{3/2}"
+    },
+    {
+      "input": "A'(1A1g_0)",
+      "type": "MolecularTermSymbol",
+      "canonical": "A'(1A1g_0)",
+      "html": "A'<sup>1</sup>A<sub>1g</sub><sub>0</sub>",
+      "latex": "A'{}^{1}A_{1g}{}_{0}"
+    },
+    {
+      "input": "A(1A\")",
+      "type": "MolecularTermSymbol",
+      "canonical": "A(1A\")",
+      "html": "A<sup>1</sup>A\"",
+      "latex": "A{}^{1}A''"
+    },
+    {
+      "input": "1(2B1)",
+      "type": "MolecularTermSymbol",
+      "canonical": "1(2B1)",
+      "html": "1<sup>2</sup>B<sub>1</sub>",
+      "latex": "1{}^{2}B_{1}"
+    },
+    {
+      "input": "(1G)",
+      "type": "MolecularTermSymbol",
+      "canonical": "(1G)",
+      "html": "<sup>1</sup>G",
+      "latex": "{}^{1}G"
+    },
+    {
+      "input": "1Gg",
+      "type": "MolecularTermSymbol",
+      "canonical": "1Gg",
+      "html": "<sup>1</sup>G<sub>g</sub>",
+      "latex": "{}^{1}G_{g}"
+    },
+    {
+      "input": "3T1g",
+      "type": "MolecularTermSymbol",
+      "canonical": "3T1g",
+      "html": "<sup>3</sup>T<sub>1g</sub>",
+      "latex": "{}^{3}T_{1g}"
+    },
+    {
+      "input": "EF(1Σ+g)",
+      "type": "MolecularTermSymbol",
+      "canonical": "EF(1Σ+g)",
+      "html": "EF<sup>1</sup>Σ<sup>+</sup><sub>g</sub>",
+      "latex": "EF{}^{1}\\Sigma^+_{g}"
+    },
+    {
+      "input": "HH̄(1Σ+g)",
+      "type": "MolecularTermSymbol",
+      "canonical": "HH̄(1Σ+g)",
+      "html": "HH̄<sup>1</sup>Σ<sup>+</sup><sub>g</sub>",
+      "latex": "H\\bar{H}{}^{1}\\Sigma^+_{g}"
+    },
+    {
+      "input": "X̃(2A1)",
+      "type": "MolecularTermSymbol",
+      "canonical": "X̃(2A1)",
+      "html": "X̃<sup>2</sup>A<sub>1</sub>",
+      "latex": "\\tilde{X}{}^{2}A_{1}"
+    },
+    {
+      "input": "Ã(1B2)",
+      "type": "MolecularTermSymbol",
+      "canonical": "Ã(1B2)",
+      "html": "Ã<sup>1</sup>B<sub>2</sub>",
+      "latex": "\\tilde{A}{}^{1}B_{2}"
+    },
+    {
+      "input": "0Σ+",
+      "error": "validation"
+    },
+    {
+      "input": "A(1Σ+",
+      "error": "syntax"
+    },
+    {
+      "input": "X 1Σ+",
+      "error": "syntax"
+    },
+    {
+      "input": "2[9/2]",
+      "type": "J1K_LK_Coupling",
+      "canonical": "2[9/2]",
+      "html": "<sup>2</sup>[9/2]",
+      "latex": "{}^{2}[9/2]"
+    },
+    {
+      "input": "2[9/2]_5",
+      "type": "J1K_LK_Coupling",
+      "canonical": "2[9/2]_5",
+      "html": "<sup>2</sup>[9/2]<sub>5</sub>",
+      "latex": "{}^{2}[9/2]_{5}"
+    },
+    {
+      "input": "3[9/2]o_11/2",
+      "type": "J1K_LK_Coupling",
+      "canonical": "3[9/2]o_11/2",
+      "html": "<sup>3</sup>[9/2]<sup>o</sup><sub>11/2</sub>",
+      "latex": "{}^{3}[9/2]^o_{11/2}"
+    },
+    {
+      "input": "2[9/2]_10/2",
+      "type": "J1K_LK_Coupling",
+      "canonical": "2[9/2]_5",
+      "html": "<sup>2</sup>[9/2]<sub>5</sub>",
+      "latex": "{}^{2}[9/2]_{5}"
+    },
+    {
+      "input": "2[9/2]_11/2",
+      "error": "validation"
+    },
+    {
+      "input": "0[1/2]",
+      "error": "validation"
+    },
+    {
+      "input": "(3/2,1/2)",
+      "type": "J1J2_Coupling",
+      "canonical": "(3/2,1/2)",
+      "html": "(3/2, 1/2)",
+      "latex": "(3/2, 1/2)"
+    },
+    {
+      "input": "(2,3/2)o_1/2",
+      "type": "J1J2_Coupling",
+      "canonical": "(2,3/2)o_1/2",
+      "html": "(2, 3/2)<sup>o</sup><sub>1/2</sub>",
+      "latex": "(2, 3/2)^o_{1/2}"
+    },
+    {
+      "input": "(6/2,1/2)o_5/2",
+      "type": "J1J2_Coupling",
+      "canonical": "(3,1/2)o_5/2",
+      "html": "(3, 1/2)<sup>o</sup><sub>5/2</sub>",
+      "latex": "(3, 1/2)^o_{5/2}"
+    },
+    {
+      "input": "(1,1/2)_2",
+      "error": "validation"
+    },
+    {
+      "input": "(5/2, 1/2)_2",
+      "error": "syntax"
+    },
+    {
+      "input": "J=0",
+      "type": "RotationalState",
+      "canonical": "J=0",
+      "html": "J=0",
+      "latex": "J=0"
+    },
+    {
+      "input": "J=1/2",
+      "type": "RotationalState",
+      "canonical": "J=1/2",
+      "html": "J=1/2",
+      "latex": "J=1/2"
+    },
+    {
+      "input": "J=2.5",
+      "type": "RotationalState",
+      "canonical": "J=5/2",
+      "html": "J=5/2",
+      "latex": "J=5/2"
+    },
+    {
+      "input": "J=1.0",
+      "type": "RotationalState",
+      "canonical": "J=1",
+      "html": "J=1",
+      "latex": "J=1"
+    },
+    {
+      "input": "J=4/2",
+      "type": "RotationalState",
+      "canonical": "J=2",
+      "html": "J=2",
+      "latex": "J=2"
+    },
+    {
+      "input": "J=10",
+      "type": "RotationalState",
+      "canonical": "J=10",
+      "html": "J=10",
+      "latex": "J=10"
+    },
+    {
+      "input": "J=*",
+      "type": "RotationalState",
+      "canonical": "J=*",
+      "html": "J=*",
+      "latex": "J=*"
+    },
+    {
+      "input": "J=-1",
+      "error": "syntax"
+    },
+    {
+      "input": "J=1/3",
+      "error": "syntax"
+    },
+    {
+      "input": "J=0.25",
+      "error": "syntax"
+    },
+    {
+      "input": "J=01",
+      "error": "syntax"
+    },
+    {
+      "input": "J = 2",
+      "error": "syntax"
+    },
+    {
+      "input": "5s'[1/2]_1",
+      "type": "RacahSymbol",
+      "canonical": "5s'[1/2]_1",
+      "html": "5s'[1/2]<sub>1</sub>",
+      "latex": "5s'[1/2]_1"
+    },
+    {
+      "input": "3p[5/2]_2",
+      "type": "RacahSymbol",
+      "canonical": "3p[5/2]_2",
+      "html": "3p[5/2]<sub>2</sub>",
+      "latex": "3p[5/2]_2"
+    },
+    {
+      "input": "4d[3/2]",
+      "type": "RacahSymbol",
+      "canonical": "4d[3/2]",
+      "html": "4d[3/2]",
+      "latex": "4d[3/2]"
+    },
+    {
+      "input": "3p'[3/2]_1",
+      "type": "RacahSymbol",
+      "canonical": "3p'[3/2]_1",
+      "html": "3p'[3/2]<sub>1</sub>",
+      "latex": "3p'[3/2]_1"
+    },
+    {
+      "input": "5p[3/4]_9",
+      "error": "validation"
+    },
+    {
+      "input": "5s[1/2]",
+      "error": "validation"
+    },
+    {
+      "input": "3p[3/2]_3",
+      "error": "validation"
+    },
+    {
+      "input": "5p[3/2]_1xyz",
+      "error": "syntax"
+    },
+    {
+      "input": "n=3",
+      "type": "KeyValuePair",
+      "canonical": "n=3",
+      "html": "n=3",
+      "latex": "n=3"
+    },
+    {
+      "input": "|M|=2",
+      "type": "KeyValuePair",
+      "canonical": "|M|=2",
+      "html": "|M|=2",
+      "latex": "|M|=2"
+    },
+    {
+      "input": "sym=anti",
+      "type": "KeyValuePair",
+      "canonical": "sym=anti",
+      "html": "sym=anti",
+      "latex": "sym=anti"
+    },
+    {
+      "input": "S=\"5<n<9\"",
+      "type": "KeyValuePair",
+      "canonical": "S=\"5<n<9\"",
+      "html": "S=&quot;5&lt;n&lt;9&quot;",
+      "latex": "S=\"5<n<9\""
+    },
+    {
+      "input": "=1",
+      "error": "syntax"
+    },
+    {
+      "input": "a=",
+      "error": "syntax"
+    },
+    {
+      "input": "a=b=c",
+      "error": "syntax"
+    },
+    {
+      "input": "xyzzy",
+      "error": "syntax"
+    }
+  ]
+}

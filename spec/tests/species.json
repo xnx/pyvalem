@@ -1,0 +1,322 @@
+{
+  "description": "Stateful species (section 6 of notation.md). The properties of a valid species are its canonical form, the canonical form of its formula, its states in the order written, HTML and LaTeX.",
+  "tests": [
+    {
+      "input": "H2O",
+      "canonical": "H2O",
+      "formula": "H2O",
+      "states": [],
+      "html": "H<sub>2</sub>O",
+      "latex": "\\mathrm{H}_{2}\\mathrm{O}"
+    },
+    {
+      "input": "HCl v=2 J=0",
+      "canonical": "HCl v=2;J=0",
+      "formula": "HCl",
+      "states": [
+        {
+          "type": "VibrationalState",
+          "canonical": "v=2"
+        },
+        {
+          "type": "RotationalState",
+          "canonical": "J=0"
+        }
+      ],
+      "html": "HCl v=2 J=0",
+      "latex": "\\mathrm{H}\\mathrm{Cl} \\; v=2 \\; J=0"
+    },
+    {
+      "input": "HCl v=2;J=0",
+      "canonical": "HCl v=2;J=0",
+      "formula": "HCl",
+      "states": [
+        {
+          "type": "VibrationalState",
+          "canonical": "v=2"
+        },
+        {
+          "type": "RotationalState",
+          "canonical": "J=0"
+        }
+      ],
+      "html": "HCl v=2 J=0",
+      "latex": "\\mathrm{H}\\mathrm{Cl} \\; v=2 \\; J=0"
+    },
+    {
+      "input": "HCl J=0;v=2",
+      "canonical": "HCl v=2;J=0",
+      "formula": "HCl",
+      "states": [
+        {
+          "type": "RotationalState",
+          "canonical": "J=0"
+        },
+        {
+          "type": "VibrationalState",
+          "canonical": "v=2"
+        }
+      ],
+      "html": "HCl J=0 v=2",
+      "latex": "\\mathrm{H}\\mathrm{Cl} \\; J=0 \\; v=2"
+    },
+    {
+      "input": "NCO v2+3v1;J=10.5;a(2Σ-g)",
+      "canonical": "NCO a(2Σ-g);3ν1+ν2;J=21/2",
+      "formula": "NCO",
+      "states": [
+        {
+          "type": "VibrationalState",
+          "canonical": "3ν1+ν2"
+        },
+        {
+          "type": "RotationalState",
+          "canonical": "J=21/2"
+        },
+        {
+          "type": "MolecularTermSymbol",
+          "canonical": "a(2Σ-g)"
+        }
+      ],
+      "html": "NCO 3ν<sub>1</sub> + ν<sub>2</sub> J=21/2 a<sup>2</sup>Σ<sup>-</sup><sub>g</sub>",
+      "latex": "\\mathrm{N}\\mathrm{C}\\mathrm{O} \\; 3\\nu_{1} + \\nu_{2} \\; J=21/2 \\; a{}^{2}\\Sigma^-_{g}"
+    },
+    {
+      "input": "Ar+ 1s2.2s2.2p5, 2P_3/2",
+      "canonical": "Ar+ 1s2.2s2.2p5;2P_3/2",
+      "formula": "Ar+",
+      "states": [
+        {
+          "type": "AtomicConfiguration",
+          "canonical": "1s2.2s2.2p5"
+        },
+        {
+          "type": "AtomicTermSymbol",
+          "canonical": "2P_3/2"
+        }
+      ],
+      "html": "Ar<sup>+</sup> 1s<sup>2</sup>2s<sup>2</sup>2p<sup>5</sup> <sup>2</sup>P<sub>3/2</sub>",
+      "latex": "\\mathrm{Ar}^{+} \\; 1s^{2}2s^{2}2p^{5} \\; {}^{2}\\mathrm{P}_{3/2}"
+    },
+    {
+      "input": "CrH 1sigma2.2sigma1.1pi4.3sigma1; 6SIGMA+",
+      "canonical": "CrH 1σ2.2σ1.1π4.3σ1;6Σ+",
+      "formula": "CrH",
+      "states": [
+        {
+          "type": "DiatomicMolecularConfiguration",
+          "canonical": "1σ2.2σ1.1π4.3σ1"
+        },
+        {
+          "type": "MolecularTermSymbol",
+          "canonical": "6Σ+"
+        }
+      ],
+      "html": "CrH 1σ<sup>2</sup>.2σ<sup>1</sup>.1π<sup>4</sup>.3σ<sup>1</sup> <sup>6</sup>Σ<sup>+</sup>",
+      "latex": "\\mathrm{Cr}\\mathrm{H} \\; 1\\sigma^{2}2\\sigma^{1}1\\pi^{4}3\\sigma^{1} \\; {}^{6}\\Sigma^+"
+    },
+    {
+      "input": "(235U) l=0;***;n=1",
+      "canonical": "(235U) 3*;n=1;l=0",
+      "formula": "(235U)",
+      "states": [
+        {
+          "type": "KeyValuePair",
+          "canonical": "l=0"
+        },
+        {
+          "type": "GenericExcitedState",
+          "canonical": "3*"
+        },
+        {
+          "type": "KeyValuePair",
+          "canonical": "n=1"
+        }
+      ],
+      "html": "<sup>235</sup>U l=0 <sup>3*</sup> n=1",
+      "latex": "{}^{235}\\mathrm{U} \\; l=0 \\; ^{3*} \\; n=1"
+    },
+    {
+      "input": "H n=3;l=1",
+      "canonical": "H n=3;l=1",
+      "formula": "H",
+      "states": [
+        {
+          "type": "KeyValuePair",
+          "canonical": "n=3"
+        },
+        {
+          "type": "KeyValuePair",
+          "canonical": "l=1"
+        }
+      ],
+      "html": "H n=3 l=1",
+      "latex": "\\mathrm{H} \\; n=3 \\; l=1"
+    },
+    {
+      "input": "C+ 2s2.2p1;4P",
+      "canonical": "C+ 2s2.2p;4P",
+      "formula": "C+",
+      "states": [
+        {
+          "type": "AtomicConfiguration",
+          "canonical": "2s2.2p"
+        },
+        {
+          "type": "AtomicTermSymbol",
+          "canonical": "4P"
+        }
+      ],
+      "html": "C<sup>+</sup> 2s<sup>2</sup>2p <sup>4</sup>P",
+      "latex": "\\mathrm{C}^{+} \\; 2s^{2}2p \\; {}^{4}\\mathrm{P}"
+    },
+    {
+      "input": "N 2s2.2p2(3P)6d 4F",
+      "canonical": "N 2s2.2p2(3P)6d;4F",
+      "formula": "N",
+      "states": [
+        {
+          "type": "CompoundLSCoupling",
+          "canonical": "2s2.2p2(3P)6d"
+        },
+        {
+          "type": "AtomicTermSymbol",
+          "canonical": "4F"
+        }
+      ],
+      "html": "N 2s<sup>2</sup>2p<sup>2</sup>(<sup>3</sup>P)6d <sup>4</sup>F",
+      "latex": "\\mathrm{N} \\; 2s^{2}2p^{2}({}^{3}\\mathrm{P})6d \\; {}^{4}\\mathrm{F}"
+    },
+    {
+      "input": "Fe+ a3D",
+      "canonical": "Fe+ a3D",
+      "formula": "Fe+",
+      "states": [
+        {
+          "type": "AtomicTermSymbol",
+          "canonical": "a3D"
+        }
+      ],
+      "html": "Fe<sup>+</sup> a<sup>3</sup>D",
+      "latex": "\\mathrm{Fe}^{+} \\; a{}^{3}\\mathrm{D}"
+    },
+    {
+      "input": "Ne 3p'[3/2]_1",
+      "canonical": "Ne 3p'[3/2]_1",
+      "formula": "Ne",
+      "states": [
+        {
+          "type": "RacahSymbol",
+          "canonical": "3p'[3/2]_1"
+        }
+      ],
+      "html": "Ne 3p'[3/2]<sub>1</sub>",
+      "latex": "\\mathrm{Ne} \\; 3p'[3/2]_1"
+    },
+    {
+      "input": "Pd 6s2.6p.7s (3/2,1/2)",
+      "canonical": "Pd 6s2.6p.7s;(3/2,1/2)",
+      "formula": "Pd",
+      "states": [
+        {
+          "type": "AtomicConfiguration",
+          "canonical": "6s2.6p.7s"
+        },
+        {
+          "type": "J1J2_Coupling",
+          "canonical": "(3/2,1/2)"
+        }
+      ],
+      "html": "Pd 6s<sup>2</sup>6p7s (3/2, 1/2)",
+      "latex": "\\mathrm{Pd} \\; 6s^{2}6p7s \\; (3/2, 1/2)"
+    },
+    {
+      "input": "H2O\tv=1",
+      "canonical": "H2O v=1",
+      "formula": "H2O",
+      "states": [
+        {
+          "type": "VibrationalState",
+          "canonical": "v=1"
+        }
+      ],
+      "html": "H<sub>2</sub>O v=1",
+      "latex": "\\mathrm{H}_{2}\\mathrm{O} \\; v=1"
+    },
+    {
+      "input": "N2 1σg2",
+      "canonical": "N2 1σg2",
+      "formula": "N2",
+      "states": [
+        {
+          "type": "DiatomicMolecularConfiguration",
+          "canonical": "1σg2"
+        }
+      ],
+      "html": "N<sub>2</sub> 1σ<sub>g</sub><sup>2</sup>",
+      "latex": "\\mathrm{N}_{2} \\; 1\\sigma_g^{2}"
+    },
+    {
+      "input": "N2 1sigmag2",
+      "canonical": "N2 1σg2",
+      "formula": "N2",
+      "states": [
+        {
+          "type": "DiatomicMolecularConfiguration",
+          "canonical": "1σg2"
+        }
+      ],
+      "html": "N<sub>2</sub> 1σ<sub>g</sub><sup>2</sup>",
+      "latex": "\\mathrm{N}_{2} \\; 1\\sigma_g^{2}"
+    },
+    {
+      "input": "e- *",
+      "canonical": "e- *",
+      "formula": "e-",
+      "states": [
+        {
+          "type": "GenericExcitedState",
+          "canonical": "*"
+        }
+      ],
+      "html": "e<sup>-</sup> <sup>*</sup>",
+      "latex": "\\mathrm{e}^- \\; ^{*}"
+    },
+    {
+      "input": "HCl v=0;v=1",
+      "error": "validation"
+    },
+    {
+      "input": "HCl J=2 J=1.0",
+      "error": "validation"
+    },
+    {
+      "input": "Ar *;**",
+      "error": "validation"
+    },
+    {
+      "input": "Ti +2",
+      "error": "syntax"
+    },
+    {
+      "input": "CO 2",
+      "error": "syntax"
+    },
+    {
+      "input": "H2 O",
+      "error": "syntax"
+    },
+    {
+      "input": "Ne+ 2P_5/2",
+      "error": "validation"
+    },
+    {
+      "input": "Pd 4d9.5s (5/2, 1/2)_2",
+      "error": "syntax"
+    },
+    {
+      "input": "",
+      "error": "syntax"
+    }
+  ]
+}

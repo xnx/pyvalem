@@ -2,6 +2,12 @@
 
 ## 3.0.0 (unreleased)
 
+### Added
+
+- A specification of the notation, independent of Python, in
+  `spec/notation.md`, with test vectors in `spec/tests/` that PyValem's tests
+  run and that other implementations can be checked against.
+
 ### Changed
 
 - Formulas are parsed strictly: whitespace, leading zeros and zero counts, an

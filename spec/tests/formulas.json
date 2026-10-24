@@ -1,0 +1,1542 @@
+{
+  "description": "Formulas (section 4 of notation.md). The properties of a valid formula are its canonical form, charge, number of atoms, atom counts, mass in daltons, stoichiometric formulas, HTML, LaTeX and slug.",
+  "tests": [
+    {
+      "input": "H",
+      "canonical": "H",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "H": 1
+      },
+      "mass": 1.008,
+      "stoichiometric": {
+        "atomic number": "H",
+        "alphabetical": "H",
+        "hill": "H"
+      },
+      "html": "H",
+      "latex": "\\mathrm{H}",
+      "slug": "H"
+    },
+    {
+      "input": "Ar",
+      "canonical": "Ar",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "Ar": 1
+      },
+      "mass": 39.95,
+      "stoichiometric": {
+        "atomic number": "Ar",
+        "alphabetical": "Ar",
+        "hill": "Ar"
+      },
+      "html": "Ar",
+      "latex": "\\mathrm{Ar}",
+      "slug": "Ar"
+    },
+    {
+      "input": "Tc",
+      "canonical": "Tc",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "Tc": 1
+      },
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "Tc",
+        "alphabetical": "Tc",
+        "hill": "Tc"
+      },
+      "html": "Tc",
+      "latex": "\\mathrm{Tc}",
+      "slug": "Tc"
+    },
+    {
+      "input": "(13C)",
+      "canonical": "(13C)",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "13C": 1
+      },
+      "mass": 13.0033548352,
+      "stoichiometric": {
+        "atomic number": "(13C)",
+        "alphabetical": "(13C)",
+        "hill": "(13C)"
+      },
+      "html": "<sup>13</sup>C",
+      "latex": "{}^{13}\\mathrm{C}",
+      "slug": "13C"
+    },
+    {
+      "input": "(235U)",
+      "canonical": "(235U)",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "235U": 1
+      },
+      "mass": 235.04392819,
+      "stoichiometric": {
+        "atomic number": "(235U)",
+        "alphabetical": "(235U)",
+        "hill": "(235U)"
+      },
+      "html": "<sup>235</sup>U",
+      "latex": "{}^{235}\\mathrm{U}",
+      "slug": "235U"
+    },
+    {
+      "input": "D",
+      "canonical": "D",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "2H": 1
+      },
+      "mass": 2.0141017781,
+      "stoichiometric": {
+        "atomic number": "(2H)",
+        "alphabetical": "(2H)",
+        "hill": "(2H)"
+      },
+      "html": "<sup>2</sup>H",
+      "latex": "{}^{2}\\mathrm{H}",
+      "slug": "2H"
+    },
+    {
+      "input": "T",
+      "canonical": "T",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "3H": 1
+      },
+      "mass": 3.016049282,
+      "stoichiometric": {
+        "atomic number": "(3H)",
+        "alphabetical": "(3H)",
+        "hill": "(3H)"
+      },
+      "html": "<sup>3</sup>H",
+      "latex": "{}^{3}\\mathrm{H}",
+      "slug": "3H"
+    },
+    {
+      "input": "DT",
+      "canonical": "DT",
+      "charge": 0,
+      "natoms": 2,
+      "atoms": {
+        "2H": 1,
+        "3H": 1
+      },
+      "mass": 5.0301510601,
+      "stoichiometric": {
+        "atomic number": "(2H)(3H)",
+        "alphabetical": "(2H)(3H)",
+        "hill": "(2H)(3H)"
+      },
+      "html": "<sup>2</sup>H<sup>3</sup>H",
+      "latex": "{}^{2}\\mathrm{H}{}^{3}\\mathrm{H}",
+      "slug": "2H-3H"
+    },
+    {
+      "input": "HD",
+      "canonical": "HD",
+      "charge": 0,
+      "natoms": 2,
+      "atoms": {
+        "H": 1,
+        "2H": 1
+      },
+      "mass": 3.0221017781,
+      "stoichiometric": {
+        "atomic number": "H(2H)",
+        "alphabetical": "H(2H)",
+        "hill": "H(2H)"
+      },
+      "html": "H<sup>2</sup>H",
+      "latex": "\\mathrm{H}{}^{2}\\mathrm{H}",
+      "slug": "H-2H"
+    },
+    {
+      "input": "DsD",
+      "canonical": "DsD",
+      "charge": 0,
+      "natoms": 2,
+      "atoms": {
+        "Ds": 1,
+        "2H": 1
+      },
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "(2H)Ds",
+        "alphabetical": "Ds(2H)",
+        "hill": "Ds(2H)"
+      },
+      "html": "Ds<sup>2</sup>H",
+      "latex": "\\mathrm{Ds}{}^{2}\\mathrm{H}",
+      "slug": "Ds-2H"
+    },
+    {
+      "input": "Ti",
+      "canonical": "Ti",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "Ti": 1
+      },
+      "mass": 47.867,
+      "stoichiometric": {
+        "atomic number": "Ti",
+        "alphabetical": "Ti",
+        "hill": "Ti"
+      },
+      "html": "Ti",
+      "latex": "\\mathrm{Ti}",
+      "slug": "Ti"
+    },
+    {
+      "input": "H2O",
+      "canonical": "H2O",
+      "charge": 0,
+      "natoms": 3,
+      "atoms": {
+        "H": 2,
+        "O": 1
+      },
+      "mass": 18.015,
+      "stoichiometric": {
+        "atomic number": "H2O",
+        "alphabetical": "H2O",
+        "hill": "H2O"
+      },
+      "html": "H<sub>2</sub>O",
+      "latex": "\\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "H2O"
+    },
+    {
+      "input": "CH3OH",
+      "canonical": "CH3OH",
+      "charge": 0,
+      "natoms": 6,
+      "atoms": {
+        "C": 1,
+        "H": 4,
+        "O": 1
+      },
+      "mass": 32.042,
+      "stoichiometric": {
+        "atomic number": "H4CO",
+        "alphabetical": "CH4O",
+        "hill": "CH4O"
+      },
+      "html": "CH<sub>3</sub>OH",
+      "latex": "\\mathrm{C}\\mathrm{H}_{3}\\mathrm{O}\\mathrm{H}",
+      "slug": "CH3OH"
+    },
+    {
+      "input": "C2H5OH",
+      "canonical": "C2H5OH",
+      "charge": 0,
+      "natoms": 9,
+      "atoms": {
+        "C": 2,
+        "H": 6,
+        "O": 1
+      },
+      "mass": 46.069,
+      "stoichiometric": {
+        "atomic number": "H6C2O",
+        "alphabetical": "C2H6O",
+        "hill": "C2H6O"
+      },
+      "html": "C<sub>2</sub>H<sub>5</sub>OH",
+      "latex": "\\mathrm{C}_{2}\\mathrm{H}_{5}\\mathrm{O}\\mathrm{H}",
+      "slug": "C2H5OH"
+    },
+    {
+      "input": "CH3COOONO2",
+      "canonical": "CH3COOONO2",
+      "charge": 0,
+      "natoms": 11,
+      "atoms": {
+        "C": 2,
+        "H": 3,
+        "O": 5,
+        "N": 1
+      },
+      "mass": 121.04800000000002,
+      "stoichiometric": {
+        "atomic number": "H3C2NO5",
+        "alphabetical": "C2H3NO5",
+        "hill": "C2H3NO5"
+      },
+      "html": "CH<sub>3</sub>COOONO<sub>2</sub>",
+      "latex": "\\mathrm{C}\\mathrm{H}_{3}\\mathrm{C}\\mathrm{O}\\mathrm{O}\\mathrm{O}\\mathrm{N}\\mathrm{O}_{2}",
+      "slug": "CH3COOONO2"
+    },
+    {
+      "input": "C10H8",
+      "canonical": "C10H8",
+      "charge": 0,
+      "natoms": 18,
+      "atoms": {
+        "C": 10,
+        "H": 8
+      },
+      "mass": 128.17399999999998,
+      "stoichiometric": {
+        "atomic number": "H8C10",
+        "alphabetical": "C10H8",
+        "hill": "C10H8"
+      },
+      "html": "C<sub>10</sub>H<sub>8</sub>",
+      "latex": "\\mathrm{C}_{10}\\mathrm{H}_{8}",
+      "slug": "C10H8"
+    },
+    {
+      "input": "(1H)2(16O)",
+      "canonical": "(1H)2(16O)",
+      "charge": 0,
+      "natoms": 3,
+      "atoms": {
+        "1H": 2,
+        "16O": 1
+      },
+      "mass": 18.010564684,
+      "stoichiometric": {
+        "atomic number": "(1H)2(16O)",
+        "alphabetical": "(1H)2(16O)",
+        "hill": "(1H)2(16O)"
+      },
+      "html": "<sup>1</sup>H<sub>2</sub><sup>16</sup>O",
+      "latex": "{}^{1}\\mathrm{H}_{2}{}^{16}\\mathrm{O}",
+      "slug": "1H2-16O"
+    },
+    {
+      "input": "D2O",
+      "canonical": "D2O",
+      "charge": 0,
+      "natoms": 3,
+      "atoms": {
+        "2H": 2,
+        "O": 1
+      },
+      "mass": 20.0272035562,
+      "stoichiometric": {
+        "atomic number": "(2H)2O",
+        "alphabetical": "(2H)2O",
+        "hill": "(2H)2O"
+      },
+      "html": "<sup>2</sup>H<sub>2</sub>O",
+      "latex": "{}^{2}\\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "2H2O"
+    },
+    {
+      "input": "(13C)H3Cl",
+      "canonical": "(13C)H3Cl",
+      "charge": 0,
+      "natoms": 5,
+      "atoms": {
+        "13C": 1,
+        "H": 3,
+        "Cl": 1
+      },
+      "mass": 51.4773548352,
+      "stoichiometric": {
+        "atomic number": "H3(13C)Cl",
+        "alphabetical": "(13C)ClH3",
+        "hill": "(13C)H3Cl"
+      },
+      "html": "<sup>13</sup>CH<sub>3</sub>Cl",
+      "latex": "{}^{13}\\mathrm{C}\\mathrm{H}_{3}\\mathrm{Cl}",
+      "slug": "13CH3Cl"
+    },
+    {
+      "input": "CH3D",
+      "canonical": "CH3D",
+      "charge": 0,
+      "natoms": 5,
+      "atoms": {
+        "C": 1,
+        "H": 3,
+        "2H": 1
+      },
+      "mass": 17.0491017781,
+      "stoichiometric": {
+        "atomic number": "H3(2H)C",
+        "alphabetical": "CH3(2H)",
+        "hill": "CH3(2H)"
+      },
+      "html": "CH<sub>3</sub><sup>2</sup>H",
+      "latex": "\\mathrm{C}\\mathrm{H}_{3}{}^{2}\\mathrm{H}",
+      "slug": "CH3-2H"
+    },
+    {
+      "input": "HDO",
+      "canonical": "HDO",
+      "charge": 0,
+      "natoms": 3,
+      "atoms": {
+        "H": 1,
+        "2H": 1,
+        "O": 1
+      },
+      "mass": 19.0211017781,
+      "stoichiometric": {
+        "atomic number": "H(2H)O",
+        "alphabetical": "H(2H)O",
+        "hill": "H(2H)O"
+      },
+      "html": "H<sup>2</sup>HO",
+      "latex": "\\mathrm{H}{}^{2}\\mathrm{H}\\mathrm{O}",
+      "slug": "H-2HO"
+    },
+    {
+      "input": "DCl",
+      "canonical": "DCl",
+      "charge": 0,
+      "natoms": 2,
+      "atoms": {
+        "2H": 1,
+        "Cl": 1
+      },
+      "mass": 37.4641017781,
+      "stoichiometric": {
+        "atomic number": "(2H)Cl",
+        "alphabetical": "Cl(2H)",
+        "hill": "Cl(2H)"
+      },
+      "html": "<sup>2</sup>HCl",
+      "latex": "{}^{2}\\mathrm{H}\\mathrm{Cl}",
+      "slug": "2HCl"
+    },
+    {
+      "input": "Tc(98Tc)",
+      "canonical": "Tc(98Tc)",
+      "charge": 0,
+      "natoms": 2,
+      "atoms": {
+        "Tc": 1,
+        "98Tc": 1
+      },
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "Tc(98Tc)",
+        "alphabetical": "Tc(98Tc)",
+        "hill": "Tc(98Tc)"
+      },
+      "html": "Tc<sup>98</sup>Tc",
+      "latex": "\\mathrm{Tc}{}^{98}\\mathrm{Tc}",
+      "slug": "Tc-98Tc"
+    },
+    {
+      "input": "H+",
+      "canonical": "H+",
+      "charge": 1,
+      "natoms": 1,
+      "atoms": {
+        "H": 1
+      },
+      "mass": 1.008,
+      "stoichiometric": {
+        "atomic number": "H+",
+        "alphabetical": "H+",
+        "hill": "H+"
+      },
+      "html": "H<sup>+</sup>",
+      "latex": "\\mathrm{H}^{+}",
+      "slug": "H_p"
+    },
+    {
+      "input": "H+1",
+      "canonical": "H+",
+      "charge": 1,
+      "natoms": 1,
+      "atoms": {
+        "H": 1
+      },
+      "mass": 1.008,
+      "stoichiometric": {
+        "atomic number": "H+",
+        "alphabetical": "H+",
+        "hill": "H+"
+      },
+      "html": "H<sup>+</sup>",
+      "latex": "\\mathrm{H}^{+}",
+      "slug": "H_p"
+    },
+    {
+      "input": "OH-",
+      "canonical": "OH-",
+      "charge": -1,
+      "natoms": 2,
+      "atoms": {
+        "O": 1,
+        "H": 1
+      },
+      "mass": 17.007,
+      "stoichiometric": {
+        "atomic number": "HO-",
+        "alphabetical": "HO-",
+        "hill": "HO-"
+      },
+      "html": "OH<sup>-</sup>",
+      "latex": "\\mathrm{O}\\mathrm{H}^{-}",
+      "slug": "OH_m"
+    },
+    {
+      "input": "OH-1",
+      "canonical": "OH-",
+      "charge": -1,
+      "natoms": 2,
+      "atoms": {
+        "O": 1,
+        "H": 1
+      },
+      "mass": 17.007,
+      "stoichiometric": {
+        "atomic number": "HO-",
+        "alphabetical": "HO-",
+        "hill": "HO-"
+      },
+      "html": "OH<sup>-</sup>",
+      "latex": "\\mathrm{O}\\mathrm{H}^{-}",
+      "slug": "OH_m"
+    },
+    {
+      "input": "CO3-2",
+      "canonical": "CO3-2",
+      "charge": -2,
+      "natoms": 4,
+      "atoms": {
+        "C": 1,
+        "O": 3
+      },
+      "mass": 60.007999999999996,
+      "stoichiometric": {
+        "atomic number": "CO3-2",
+        "alphabetical": "CO3-2",
+        "hill": "CO3-2"
+      },
+      "html": "CO<sub>3</sub><sup>2-</sup>",
+      "latex": "\\mathrm{C}\\mathrm{O}_{3}^{2-}",
+      "slug": "CO3_m2"
+    },
+    {
+      "input": "Ar+2",
+      "canonical": "Ar+2",
+      "charge": 2,
+      "natoms": 1,
+      "atoms": {
+        "Ar": 1
+      },
+      "mass": 39.95,
+      "stoichiometric": {
+        "atomic number": "Ar+2",
+        "alphabetical": "Ar+2",
+        "hill": "Ar+2"
+      },
+      "html": "Ar<sup>2+</sup>",
+      "latex": "\\mathrm{Ar}^{2+}",
+      "slug": "Ar_p2"
+    },
+    {
+      "input": "W+42",
+      "canonical": "W+42",
+      "charge": 42,
+      "natoms": 1,
+      "atoms": {
+        "W": 1
+      },
+      "mass": 183.84,
+      "stoichiometric": {
+        "atomic number": "W+42",
+        "alphabetical": "W+42",
+        "hill": "W+42"
+      },
+      "html": "W<sup>42+</sup>",
+      "latex": "\\mathrm{W}^{42+}",
+      "slug": "W_p42"
+    },
+    {
+      "input": "D-",
+      "canonical": "D-",
+      "charge": -1,
+      "natoms": 1,
+      "atoms": {
+        "2H": 1
+      },
+      "mass": 2.0141017781,
+      "stoichiometric": {
+        "atomic number": "(2H)-",
+        "alphabetical": "(2H)-",
+        "hill": "(2H)-"
+      },
+      "html": "<sup>2</sup>H<sup>-</sup>",
+      "latex": "{}^{2}\\mathrm{H}^{-}",
+      "slug": "2H_m"
+    },
+    {
+      "input": "D-2",
+      "canonical": "D-2",
+      "charge": -2,
+      "natoms": 1,
+      "atoms": {
+        "2H": 1
+      },
+      "mass": 2.0141017781,
+      "stoichiometric": {
+        "atomic number": "(2H)-2",
+        "alphabetical": "(2H)-2",
+        "hill": "(2H)-2"
+      },
+      "html": "<sup>2</sup>H<sup>2-</sup>",
+      "latex": "{}^{2}\\mathrm{H}^{2-}",
+      "slug": "2H_m2"
+    },
+    {
+      "input": "T+",
+      "canonical": "T+",
+      "charge": 1,
+      "natoms": 1,
+      "atoms": {
+        "3H": 1
+      },
+      "mass": 3.016049282,
+      "stoichiometric": {
+        "atomic number": "(3H)+",
+        "alphabetical": "(3H)+",
+        "hill": "(3H)+"
+      },
+      "html": "<sup>3</sup>H<sup>+</sup>",
+      "latex": "{}^{3}\\mathrm{H}^{+}",
+      "slug": "3H_p"
+    },
+    {
+      "input": "e-",
+      "canonical": "e-",
+      "charge": -1,
+      "natoms": null,
+      "atoms": {},
+      "mass": 0.000548579909,
+      "stoichiometric": {
+        "atomic number": "e-",
+        "alphabetical": "e-",
+        "hill": "e-"
+      },
+      "html": "e<sup>-</sup>",
+      "latex": "\\mathrm{e}^-",
+      "slug": "e_m"
+    },
+    {
+      "input": "e",
+      "canonical": "e-",
+      "charge": -1,
+      "natoms": null,
+      "atoms": {},
+      "mass": 0.000548579909,
+      "stoichiometric": {
+        "atomic number": "e-",
+        "alphabetical": "e-",
+        "hill": "e-"
+      },
+      "html": "e<sup>-</sup>",
+      "latex": "\\mathrm{e}^-",
+      "slug": "e_m"
+    },
+    {
+      "input": "e+",
+      "canonical": "e+",
+      "charge": 1,
+      "natoms": null,
+      "atoms": {},
+      "mass": 0.000548579909,
+      "stoichiometric": {
+        "atomic number": "e+",
+        "alphabetical": "e+",
+        "hill": "e+"
+      },
+      "html": "e<sup>+</sup>",
+      "latex": "\\mathrm{e}^+",
+      "slug": "e_p"
+    },
+    {
+      "input": "hν",
+      "canonical": "hν",
+      "charge": 0,
+      "natoms": null,
+      "atoms": {},
+      "mass": 0,
+      "stoichiometric": {
+        "atomic number": "hν",
+        "alphabetical": "hν",
+        "hill": "hν"
+      },
+      "html": "hν",
+      "latex": "h\\nu",
+      "slug": "hv"
+    },
+    {
+      "input": "hv",
+      "canonical": "hν",
+      "charge": 0,
+      "natoms": null,
+      "atoms": {},
+      "mass": 0,
+      "stoichiometric": {
+        "atomic number": "hν",
+        "alphabetical": "hν",
+        "hill": "hν"
+      },
+      "html": "hν",
+      "latex": "h\\nu",
+      "slug": "hv"
+    },
+    {
+      "input": "M",
+      "canonical": "M",
+      "charge": null,
+      "natoms": null,
+      "atoms": {},
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "M",
+        "alphabetical": "M",
+        "hill": "M"
+      },
+      "html": "M",
+      "latex": "\\mathrm{M}",
+      "slug": "M"
+    },
+    {
+      "input": "Co(H2O)6+2",
+      "canonical": "Co(H2O)6+2",
+      "charge": 2,
+      "natoms": 19,
+      "atoms": {
+        "Co": 1,
+        "H": 12,
+        "O": 6
+      },
+      "mass": 167.023194,
+      "stoichiometric": {
+        "atomic number": "H12O6Co+2",
+        "alphabetical": "CoH12O6+2",
+        "hill": "CoH12O6+2"
+      },
+      "html": "Co(H<sub>2</sub>O)<sub>6</sub><sup>2+</sup>",
+      "latex": "\\mathrm{Co}(\\mathrm{H}_{2}\\mathrm{O})_{6}^{2+}",
+      "slug": "Co-_l_H2O_r_6_p2"
+    },
+    {
+      "input": "Fe(CN)6-3",
+      "canonical": "Fe(CN)6-3",
+      "charge": -3,
+      "natoms": 13,
+      "atoms": {
+        "Fe": 1,
+        "C": 6,
+        "N": 6
+      },
+      "mass": 211.953,
+      "stoichiometric": {
+        "atomic number": "C6N6Fe-3",
+        "alphabetical": "C6FeN6-3",
+        "hill": "C6FeN6-3"
+      },
+      "html": "Fe(CN)<sub>6</sub><sup>3-</sup>",
+      "latex": "\\mathrm{Fe}(\\mathrm{C}\\mathrm{N})_{6}^{3-}",
+      "slug": "Fe-_l_CN_r_6_m3"
+    },
+    {
+      "input": "(NH4+)2SO4-2",
+      "canonical": "(NH4+)2SO4-2",
+      "charge": 0,
+      "natoms": 15,
+      "atoms": {
+        "N": 2,
+        "H": 8,
+        "S": 1,
+        "O": 4
+      },
+      "mass": 132.13400000000001,
+      "stoichiometric": {
+        "atomic number": "H8N2O4S",
+        "alphabetical": "H8N2O4S",
+        "hill": "H8N2O4S"
+      },
+      "html": "(NH<sub>4</sub><sup>+</sup>)<sub>2</sub>SO<sub>4</sub><sup>2-</sup>",
+      "latex": "(\\mathrm{N}\\mathrm{H}_{4}^{+})_{2}\\mathrm{S}\\mathrm{O}_{4}^{2-}",
+      "slug": "_l_NH4_p_r_2-SO4_m2"
+    },
+    {
+      "input": "(NH3+)CH2CO2-",
+      "canonical": "(NH3+)CH2CO2-",
+      "charge": 0,
+      "natoms": 10,
+      "atoms": {
+        "N": 1,
+        "H": 5,
+        "C": 2,
+        "O": 2
+      },
+      "mass": 75.06700000000001,
+      "stoichiometric": {
+        "atomic number": "H5C2NO2",
+        "alphabetical": "C2H5NO2",
+        "hill": "C2H5NO2"
+      },
+      "html": "(NH<sub>3</sub><sup>+</sup>)CH<sub>2</sub>CO<sub>2</sub><sup>-</sup>",
+      "latex": "(\\mathrm{N}\\mathrm{H}_{3}^{+})\\mathrm{C}\\mathrm{H}_{2}\\mathrm{C}\\mathrm{O}_{2}^{-}",
+      "slug": "_l_NH3_p_r_-CH2CO2_m"
+    },
+    {
+      "input": "CH2(NH+)CH2CO2-",
+      "canonical": "CH2(NH+)CH2CO2-",
+      "charge": 0,
+      "natoms": 11,
+      "atoms": {
+        "C": 3,
+        "H": 5,
+        "N": 1,
+        "O": 2
+      },
+      "mass": 87.078,
+      "stoichiometric": {
+        "atomic number": "H5C3NO2",
+        "alphabetical": "C3H5NO2",
+        "hill": "C3H5NO2"
+      },
+      "html": "CH<sub>2</sub>(NH<sup>+</sup>)CH<sub>2</sub>CO<sub>2</sub><sup>-</sup>",
+      "latex": "\\mathrm{C}\\mathrm{H}_{2}(\\mathrm{N}\\mathrm{H}^{+})\\mathrm{C}\\mathrm{H}_{2}\\mathrm{C}\\mathrm{O}_{2}^{-}",
+      "slug": "CH2-_l_NH_p_r_-CH2CO2_m"
+    },
+    {
+      "input": "Co(NH2+)(NH3)5",
+      "canonical": "Co(NH2+)(NH3)5",
+      "charge": 1,
+      "natoms": 24,
+      "atoms": {
+        "Co": 1,
+        "N": 6,
+        "H": 17
+      },
+      "mass": 160.111194,
+      "stoichiometric": {
+        "atomic number": "H17N6Co+",
+        "alphabetical": "CoH17N6+",
+        "hill": "CoH17N6+"
+      },
+      "html": "Co(NH<sub>2</sub><sup>+</sup>)(NH<sub>3</sub>)<sub>5</sub>",
+      "latex": "\\mathrm{Co}(\\mathrm{N}\\mathrm{H}_{2}^{+})(\\mathrm{N}\\mathrm{H}_{3})_{5}",
+      "slug": "Co-_l_NH2_p_r_-_l_NH3_r_5"
+    },
+    {
+      "input": "(H2O)2+",
+      "canonical": "(H2O)2+",
+      "charge": 1,
+      "natoms": 6,
+      "atoms": {
+        "H": 4,
+        "O": 2
+      },
+      "mass": 36.03,
+      "stoichiometric": {
+        "atomic number": "H4O2+",
+        "alphabetical": "H4O2+",
+        "hill": "H4O2+"
+      },
+      "html": "(H<sub>2</sub>O)<sub>2</sub><sup>+</sup>",
+      "latex": "(\\mathrm{H}_{2}\\mathrm{O})_{2}^{+}",
+      "slug": "_l_H2O_r_2_p"
+    },
+    {
+      "input": "2H2O",
+      "canonical": "2H2O",
+      "charge": 0,
+      "natoms": 6,
+      "atoms": {
+        "H": 4,
+        "O": 2
+      },
+      "mass": 36.03,
+      "stoichiometric": {
+        "atomic number": "H4O2",
+        "alphabetical": "H4O2",
+        "hill": "H4O2"
+      },
+      "html": "2H<sub>2</sub>O",
+      "latex": "2\\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "2H2O"
+    },
+    {
+      "input": "SiO2.2H2O",
+      "canonical": "SiO2.2H2O",
+      "charge": 0,
+      "natoms": 9,
+      "atoms": {
+        "Si": 1,
+        "O": 4,
+        "H": 4
+      },
+      "mass": 96.113,
+      "stoichiometric": {
+        "atomic number": "H4O4Si",
+        "alphabetical": "H4O4Si",
+        "hill": "H4O4Si"
+      },
+      "html": "SiO<sub>2</sub>2H<sub>2</sub>O",
+      "latex": "\\mathrm{Si}\\mathrm{O}_{2}2\\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "SiO2-2H2O"
+    },
+    {
+      "input": "SiO2.2(H2O)",
+      "canonical": "SiO2.2(H2O)",
+      "charge": 0,
+      "natoms": 9,
+      "atoms": {
+        "Si": 1,
+        "O": 4,
+        "H": 4
+      },
+      "mass": 96.113,
+      "stoichiometric": {
+        "atomic number": "H4O4Si",
+        "alphabetical": "H4O4Si",
+        "hill": "H4O4Si"
+      },
+      "html": "SiO<sub>2</sub>2(H<sub>2</sub>O)",
+      "latex": "\\mathrm{Si}\\mathrm{O}_{2}2(\\mathrm{H}_{2}\\mathrm{O})",
+      "slug": "SiO2-2_l_H2O_r_"
+    },
+    {
+      "input": "2(H2O)3",
+      "canonical": "2(H2O)3",
+      "charge": 0,
+      "natoms": 18,
+      "atoms": {
+        "H": 12,
+        "O": 6
+      },
+      "mass": 108.09,
+      "stoichiometric": {
+        "atomic number": "H12O6",
+        "alphabetical": "H12O6",
+        "hill": "H12O6"
+      },
+      "html": "2(H<sub>2</sub>O)<sub>3</sub>",
+      "latex": "2(\\mathrm{H}_{2}\\mathrm{O})_{3}",
+      "slug": "2_l_H2O_r_3"
+    },
+    {
+      "input": "CuSO4.5H2O",
+      "canonical": "CuSO4.5H2O",
+      "charge": 0,
+      "natoms": 21,
+      "atoms": {
+        "Cu": 1,
+        "S": 1,
+        "O": 9,
+        "H": 10
+      },
+      "mass": 249.67700000000002,
+      "stoichiometric": {
+        "atomic number": "H10O9SCu",
+        "alphabetical": "CuH10O9S",
+        "hill": "CuH10O9S"
+      },
+      "html": "CuSO<sub>4</sub>5H<sub>2</sub>O",
+      "latex": "\\mathrm{Cu}\\mathrm{S}\\mathrm{O}_{4}5\\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "CuSO4-5H2O"
+    },
+    {
+      "input": "H1",
+      "canonical": "H",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "H": 1
+      },
+      "mass": 1.008,
+      "stoichiometric": {
+        "atomic number": "H",
+        "alphabetical": "H",
+        "hill": "H"
+      },
+      "html": "H",
+      "latex": "\\mathrm{H}",
+      "slug": "H"
+    },
+    {
+      "input": "1H2O",
+      "canonical": "H2O",
+      "charge": 0,
+      "natoms": 3,
+      "atoms": {
+        "H": 2,
+        "O": 1
+      },
+      "mass": 18.015,
+      "stoichiometric": {
+        "atomic number": "H2O",
+        "alphabetical": "H2O",
+        "hill": "H2O"
+      },
+      "html": "H<sub>2</sub>O",
+      "latex": "\\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "H2O"
+    },
+    {
+      "input": "(H2O)1",
+      "canonical": "(H2O)",
+      "charge": 0,
+      "natoms": 3,
+      "atoms": {
+        "H": 2,
+        "O": 1
+      },
+      "mass": 18.015,
+      "stoichiometric": {
+        "atomic number": "H2O",
+        "alphabetical": "H2O",
+        "hill": "H2O"
+      },
+      "html": "(H<sub>2</sub>O)",
+      "latex": "(\\mathrm{H}_{2}\\mathrm{O})",
+      "slug": "_l_H2O_r_"
+    },
+    {
+      "input": "1(H2O)",
+      "canonical": "(H2O)",
+      "charge": 0,
+      "natoms": 3,
+      "atoms": {
+        "H": 2,
+        "O": 1
+      },
+      "mass": 18.015,
+      "stoichiometric": {
+        "atomic number": "H2O",
+        "alphabetical": "H2O",
+        "hill": "H2O"
+      },
+      "html": "(H<sub>2</sub>O)",
+      "latex": "(\\mathrm{H}_{2}\\mathrm{O})",
+      "slug": "_l_H2O_r_"
+    },
+    {
+      "input": "CFx",
+      "canonical": "CFx",
+      "charge": 0,
+      "natoms": null,
+      "atoms": {
+        "C": 1,
+        "F": null
+      },
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "CFx",
+        "alphabetical": "CFx",
+        "hill": "CFx"
+      },
+      "html": "CF<sub>x</sub>",
+      "latex": "\\mathrm{C}\\mathrm{F}_{x}",
+      "slug": "CFx"
+    },
+    {
+      "input": "CxH4",
+      "canonical": "CxH4",
+      "charge": 0,
+      "natoms": null,
+      "atoms": {
+        "C": null,
+        "H": 4
+      },
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "H4Cx",
+        "alphabetical": "CxH4",
+        "hill": "CxH4"
+      },
+      "html": "C<sub>x</sub>H<sub>4</sub>",
+      "latex": "\\mathrm{C}_{x}\\mathrm{H}_{4}",
+      "slug": "CxH4"
+    },
+    {
+      "input": "(CH2)x",
+      "canonical": "(CH2)x",
+      "charge": 0,
+      "natoms": null,
+      "atoms": {
+        "C": null,
+        "H": null
+      },
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "HxCx",
+        "alphabetical": "CxHx",
+        "hill": "CxHx"
+      },
+      "html": "(CH<sub>2</sub>)<sub>x</sub>",
+      "latex": "(\\mathrm{C}\\mathrm{H}_{2})_{x}",
+      "slug": "_l_CH2_r_x"
+    },
+    {
+      "input": "CuSO4.xH2O",
+      "canonical": "CuSO4.xH2O",
+      "charge": 0,
+      "natoms": null,
+      "atoms": {
+        "Cu": 1,
+        "S": 1,
+        "O": null,
+        "H": null
+      },
+      "mass": null,
+      "stoichiometric": {
+        "atomic number": "HxOxSCu",
+        "alphabetical": "CuHxOxS",
+        "hill": "CuHxOxS"
+      },
+      "html": "CuSO<sub>4</sub>xH<sub>2</sub>O",
+      "latex": "\\mathrm{Cu}\\mathrm{S}\\mathrm{O}_{4}x\\mathrm{H}_{2}\\mathrm{O}",
+      "slug": "CuSO4-xH2O"
+    },
+    {
+      "input": "C2H5·",
+      "canonical": "C2H5·",
+      "charge": 0,
+      "natoms": 7,
+      "atoms": {
+        "C": 2,
+        "H": 5
+      },
+      "mass": 29.061999999999998,
+      "stoichiometric": {
+        "atomic number": "H5C2",
+        "alphabetical": "C2H5",
+        "hill": "C2H5"
+      },
+      "html": "C<sub>2</sub>H<sub>5</sub>&#183;",
+      "latex": "\\mathrm{C}_{2}\\mathrm{H}_{5}\\cdot",
+      "slug": "C2H5_dot"
+    },
+    {
+      "input": "OH·-",
+      "canonical": "OH·-",
+      "charge": -1,
+      "natoms": 2,
+      "atoms": {
+        "O": 1,
+        "H": 1
+      },
+      "mass": 17.007,
+      "stoichiometric": {
+        "atomic number": "HO-",
+        "alphabetical": "HO-",
+        "hill": "HO-"
+      },
+      "html": "OH&#183;<sup>-</sup>",
+      "latex": "\\mathrm{O}\\mathrm{H}\\cdot^{-}",
+      "slug": "OH_m_dot"
+    },
+    {
+      "input": "(OH·)2",
+      "canonical": "(OH·)2",
+      "charge": 0,
+      "natoms": 4,
+      "atoms": {
+        "O": 2,
+        "H": 2
+      },
+      "mass": 34.014,
+      "stoichiometric": {
+        "atomic number": "H2O2",
+        "alphabetical": "H2O2",
+        "hill": "H2O2"
+      },
+      "html": "(OH&#183;)<sub>2</sub>",
+      "latex": "(\\mathrm{O}\\mathrm{H}\\cdot)_{2}",
+      "slug": "_l_OH_r_2_dot"
+    },
+    {
+      "input": "L-CH3CH(NH2)CO2H",
+      "canonical": "L-CH3CH(NH2)CO2H",
+      "charge": 0,
+      "natoms": 13,
+      "atoms": {
+        "C": 3,
+        "H": 7,
+        "N": 1,
+        "O": 2
+      },
+      "mass": 89.094,
+      "stoichiometric": {
+        "atomic number": "H7C3NO2",
+        "alphabetical": "C3H7NO2",
+        "hill": "C3H7NO2"
+      },
+      "html": "<span style=\"font-size: 80%;\">L</span>-CH<sub>3</sub>CH(NH<sub>2</sub>)CO<sub>2</sub>H",
+      "latex": "L-\\mathrm{C}\\mathrm{H}_{3}\\mathrm{C}\\mathrm{H}(\\mathrm{N}\\mathrm{H}_{2})\\mathrm{C}\\mathrm{O}_{2}\\mathrm{H}",
+      "slug": "L__CH3CH-_l_NH2_r_-CO2H"
+    },
+    {
+      "input": "D-CH3CH(NH2)CO2H",
+      "canonical": "D-CH3CH(NH2)CO2H",
+      "charge": 0,
+      "natoms": 13,
+      "atoms": {
+        "C": 3,
+        "H": 7,
+        "N": 1,
+        "O": 2
+      },
+      "mass": 89.094,
+      "stoichiometric": {
+        "atomic number": "H7C3NO2",
+        "alphabetical": "C3H7NO2",
+        "hill": "C3H7NO2"
+      },
+      "html": "<span style=\"font-size: 80%;\">D</span>-CH<sub>3</sub>CH(NH<sub>2</sub>)CO<sub>2</sub>H",
+      "latex": "D-\\mathrm{C}\\mathrm{H}_{3}\\mathrm{C}\\mathrm{H}(\\mathrm{N}\\mathrm{H}_{2})\\mathrm{C}\\mathrm{O}_{2}\\mathrm{H}",
+      "slug": "D__CH3CH-_l_NH2_r_-CO2H"
+    },
+    {
+      "input": "cis-1,2-CHFCHF",
+      "canonical": "cis-1,2-CHFCHF",
+      "charge": 0,
+      "natoms": 6,
+      "atoms": {
+        "C": 2,
+        "H": 2,
+        "F": 2
+      },
+      "mass": 64.034806326,
+      "stoichiometric": {
+        "atomic number": "H2C2F2",
+        "alphabetical": "C2F2H2",
+        "hill": "C2H2F2"
+      },
+      "html": "cis-1,2-CHFCHF",
+      "latex": "cis-1,2-\\mathrm{C}\\mathrm{H}\\mathrm{F}\\mathrm{C}\\mathrm{H}\\mathrm{F}",
+      "slug": "cis_1_2__CHFCHF"
+    },
+    {
+      "input": "trans-2-C4H8",
+      "canonical": "trans-2-C4H8",
+      "charge": 0,
+      "natoms": 12,
+      "atoms": {
+        "C": 4,
+        "H": 8
+      },
+      "mass": 56.108,
+      "stoichiometric": {
+        "atomic number": "H8C4",
+        "alphabetical": "C4H8",
+        "hill": "C4H8"
+      },
+      "html": "trans-2-C<sub>4</sub>H<sub>8</sub>",
+      "latex": "trans-2-\\mathrm{C}_{4}\\mathrm{H}_{8}",
+      "slug": "trans_2__C4H8"
+    },
+    {
+      "input": "(±)-CHClBrF",
+      "canonical": "(±)-CHClBrF",
+      "charge": 0,
+      "natoms": 5,
+      "atoms": {
+        "C": 1,
+        "H": 1,
+        "Cl": 1,
+        "Br": 1,
+        "F": 1
+      },
+      "mass": 147.371403163,
+      "stoichiometric": {
+        "atomic number": "HCFClBr",
+        "alphabetical": "BrCClFH",
+        "hill": "CHBrClF"
+      },
+      "html": "(±)-CHClBrF",
+      "latex": "(\\pm)-\\mathrm{C}\\mathrm{H}\\mathrm{Cl}\\mathrm{Br}\\mathrm{F}",
+      "slug": "pm__CHClBrF"
+    },
+    {
+      "input": "(S)-CH3C(NH3+)CO2-",
+      "canonical": "(S)-CH3C(NH3+)CO2-",
+      "charge": 0,
+      "natoms": 12,
+      "atoms": {
+        "C": 3,
+        "H": 6,
+        "N": 1,
+        "O": 2
+      },
+      "mass": 88.086,
+      "stoichiometric": {
+        "atomic number": "H6C3NO2",
+        "alphabetical": "C3H6NO2",
+        "hill": "C3H6NO2"
+      },
+      "html": "(S)-CH<sub>3</sub>C(NH<sub>3</sub><sup>+</sup>)CO<sub>2</sub><sup>-</sup>",
+      "latex": "(S)-\\mathrm{C}\\mathrm{H}_{3}\\mathrm{C}(\\mathrm{N}\\mathrm{H}_{3}^{+})\\mathrm{C}\\mathrm{O}_{2}^{-}",
+      "slug": "S__CH3C-_l_NH3_p_r_-CO2_m"
+    },
+    {
+      "input": "n-C4H10",
+      "canonical": "n-C4H10",
+      "charge": 0,
+      "natoms": 14,
+      "atoms": {
+        "C": 4,
+        "H": 10
+      },
+      "mass": 58.123999999999995,
+      "stoichiometric": {
+        "atomic number": "H10C4",
+        "alphabetical": "C4H10",
+        "hill": "C4H10"
+      },
+      "html": "n-C<sub>4</sub>H<sub>10</sub>",
+      "latex": "n-\\mathrm{C}_{4}\\mathrm{H}_{10}",
+      "slug": "n__C4H10"
+    },
+    {
+      "input": "1,1-C2H4Cl2",
+      "canonical": "1,1-C2H4Cl2",
+      "charge": 0,
+      "natoms": 8,
+      "atoms": {
+        "C": 2,
+        "H": 4,
+        "Cl": 2
+      },
+      "mass": 98.95400000000001,
+      "stoichiometric": {
+        "atomic number": "H4C2Cl2",
+        "alphabetical": "C2Cl2H4",
+        "hill": "C2H4Cl2"
+      },
+      "html": "1,1-C<sub>2</sub>H<sub>4</sub>Cl<sub>2</sub>",
+      "latex": "1,1-\\mathrm{C}_{2}\\mathrm{H}_{4}\\mathrm{Cl}_{2}",
+      "slug": "1_1__C2H4Cl2"
+    },
+    {
+      "input": "D-H",
+      "canonical": "D-H",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "H": 1
+      },
+      "mass": 1.008,
+      "stoichiometric": {
+        "atomic number": "H",
+        "alphabetical": "H",
+        "hill": "H"
+      },
+      "html": "<span style=\"font-size: 80%;\">D</span>-H",
+      "latex": "D-\\mathrm{H}",
+      "slug": "D__H"
+    },
+    {
+      "input": "trans-D",
+      "canonical": "trans-D",
+      "charge": 0,
+      "natoms": 1,
+      "atoms": {
+        "2H": 1
+      },
+      "mass": 2.0141017781,
+      "stoichiometric": {
+        "atomic number": "(2H)",
+        "alphabetical": "(2H)",
+        "hill": "(2H)"
+      },
+      "html": "trans-<sup>2</sup>H",
+      "latex": "trans-{}^{2}\\mathrm{H}",
+      "slug": "trans__-2H"
+    },
+    {
+      "input": "α-C6H12O6",
+      "canonical": "α-C6H12O6",
+      "charge": 0,
+      "natoms": 24,
+      "atoms": {
+        "C": 6,
+        "H": 12,
+        "O": 6
+      },
+      "mass": 180.156,
+      "stoichiometric": {
+        "atomic number": "H12C6O6",
+        "alphabetical": "C6H12O6",
+        "hill": "C6H12O6"
+      },
+      "html": "α-C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>",
+      "latex": "\\alpha-\\mathrm{C}_{6}\\mathrm{H}_{12}\\mathrm{O}_{6}",
+      "slug": "alpha__C6H12O6"
+    },
+    {
+      "input": "",
+      "error": "syntax"
+    },
+    {
+      "input": "H2 O",
+      "error": "syntax"
+    },
+    {
+      "input": " H2O",
+      "error": "syntax"
+    },
+    {
+      "input": "H2O ",
+      "error": "syntax"
+    },
+    {
+      "input": "H02",
+      "error": "syntax"
+    },
+    {
+      "input": "H0",
+      "error": "syntax"
+    },
+    {
+      "input": "0H2O",
+      "error": "syntax"
+    },
+    {
+      "input": "(H2O)0",
+      "error": "syntax"
+    },
+    {
+      "input": "Ar+02",
+      "error": "syntax"
+    },
+    {
+      "input": "H2O+0",
+      "error": "syntax"
+    },
+    {
+      "input": "(013C)",
+      "error": "syntax"
+    },
+    {
+      "input": "NH2+CH3CHO2-",
+      "error": "syntax"
+    },
+    {
+      "input": "NH2-CH3",
+      "error": "syntax"
+    },
+    {
+      "input": "Li+2-",
+      "error": "syntax"
+    },
+    {
+      "input": "H++",
+      "error": "syntax"
+    },
+    {
+      "input": "H+-",
+      "error": "syntax"
+    },
+    {
+      "input": "(H2O+)2+",
+      "error": "syntax"
+    },
+    {
+      "input": "(NH4+)2(SO4)-2",
+      "error": "syntax"
+    },
+    {
+      "input": ".H2O",
+      "error": "syntax"
+    },
+    {
+      "input": "H2O.",
+      "error": "syntax"
+    },
+    {
+      "input": "H2O..H2O",
+      "error": "syntax"
+    },
+    {
+      "input": "1-1-C2H4Cl2",
+      "error": "syntax"
+    },
+    {
+      "input": "Xx",
+      "error": "syntax"
+    },
+    {
+      "input": "Argon",
+      "error": "syntax"
+    },
+    {
+      "input": "H_2O",
+      "error": "syntax"
+    },
+    {
+      "input": "H3O^+",
+      "error": "syntax"
+    },
+    {
+      "input": "(H2O",
+      "error": "syntax"
+    },
+    {
+      "input": "H2O)",
+      "error": "syntax"
+    },
+    {
+      "input": "()",
+      "error": "syntax"
+    },
+    {
+      "input": "x",
+      "error": "syntax"
+    },
+    {
+      "input": "·",
+      "error": "syntax"
+    },
+    {
+      "input": "M+",
+      "error": "syntax"
+    },
+    {
+      "input": "e-2",
+      "error": "syntax"
+    },
+    {
+      "input": "(1D)",
+      "error": "syntax"
+    },
+    {
+      "input": "H2O−",
+      "error": "syntax"
+    },
+    {
+      "input": "(99H)",
+      "error": "validation"
+    },
+    {
+      "input": "(27N)",
+      "error": "validation"
+    },
+    {
+      "input": "(NH4+)x",
+      "error": "validation"
+    }
+  ]
+}

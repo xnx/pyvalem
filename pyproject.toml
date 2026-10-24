@@ -45,6 +45,7 @@ path = "src/pyvalem/__init__.py"
 include = [
     "/src/pyvalem",
     "/tests",
+    "/spec",
     "/docs/source",
     "/docs/Makefile",
     "/docs/make.bat",

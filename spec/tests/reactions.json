@@ -1,0 +1,436 @@
+{
+  "description": "Reactions (section 7 of notation.md). A case with \"strict\": false skips the conservation checks. The properties of a valid reaction are its canonical form, its reactants and products as [coefficient, species] pairs in the order written, HTML and LaTeX.",
+  "tests": [
+    {
+      "input": "CO + O2 → CO2 + O",
+      "canonical": "CO + O2 → CO2 + O",
+      "reactants": [
+        [
+          1,
+          "CO"
+        ],
+        [
+          1,
+          "O2"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "CO2"
+        ],
+        [
+          1,
+          "O"
+        ]
+      ],
+      "html": "CO + O<sub>2</sub> → CO<sub>2</sub> + O",
+      "latex": "\\mathrm{C}\\mathrm{O} + \\mathrm{O}_{2} \\rightarrow \\mathrm{C}\\mathrm{O}_{2} + \\mathrm{O}"
+    },
+    {
+      "input": "CO v=1 + O2 J=2;X(3SIGMA-g) → CO2 + O",
+      "canonical": "CO v=1 + O2 X(3Σ-g);J=2 → CO2 + O",
+      "reactants": [
+        [
+          1,
+          "CO v=1"
+        ],
+        [
+          1,
+          "O2 X(3Σ-g);J=2"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "CO2"
+        ],
+        [
+          1,
+          "O"
+        ]
+      ],
+      "html": "CO v=1 + O<sub>2</sub> J=2 X<sup>3</sup>Σ<sup>-</sup><sub>g</sub> → CO<sub>2</sub> + O",
+      "latex": "\\mathrm{C}\\mathrm{O} \\; v=1 + \\mathrm{O}_{2} \\; J=2 \\; X{}^{3}\\Sigma^-_{g} \\rightarrow \\mathrm{C}\\mathrm{O}_{2} + \\mathrm{O}"
+    },
+    {
+      "input": "HCl + hv -> H+ + Cl + e-",
+      "canonical": "hν + HCl → H+ + Cl + e-",
+      "reactants": [
+        [
+          1,
+          "HCl"
+        ],
+        [
+          1,
+          "hν"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "H+"
+        ],
+        [
+          1,
+          "Cl"
+        ],
+        [
+          1,
+          "e-"
+        ]
+      ],
+      "html": "HCl + hν → H<sup>+</sup> + Cl + e<sup>-</sup>",
+      "latex": "\\mathrm{H}\\mathrm{Cl} + h\\nu \\rightarrow \\mathrm{H}^{+} + \\mathrm{Cl} + \\mathrm{e}^-"
+    },
+    {
+      "input": "C6H5OH + 7O2 → 6CO2 + 3H2O",
+      "canonical": "C6H5OH + O2 + O2 + O2 + O2 + O2 + O2 + O2 → CO2 + CO2 + CO2 + CO2 + CO2 + CO2 + H2O + H2O + H2O",
+      "reactants": [
+        [
+          1,
+          "C6H5OH"
+        ],
+        [
+          7,
+          "O2"
+        ]
+      ],
+      "products": [
+        [
+          6,
+          "CO2"
+        ],
+        [
+          3,
+          "H2O"
+        ]
+      ],
+      "html": "C<sub>6</sub>H<sub>5</sub>OH + 7O<sub>2</sub> → 6CO<sub>2</sub> + 3H<sub>2</sub>O",
+      "latex": "\\mathrm{C}_{6}\\mathrm{H}_{5}\\mathrm{O}\\mathrm{H} + 7\\mathrm{O}_{2} \\rightarrow 6\\mathrm{C}\\mathrm{O}_{2} + 3\\mathrm{H}_{2}\\mathrm{O}"
+    },
+    {
+      "input": "H + H + e- + 2H <-> e- + e- + 4H + e+ + hv",
+      "canonical": "e- + H + H + H + H ⇌ H + H + H + H + hν + 2e- + e+",
+      "reactants": [
+        [
+          1,
+          "H"
+        ],
+        [
+          1,
+          "H"
+        ],
+        [
+          1,
+          "e-"
+        ],
+        [
+          2,
+          "H"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "e-"
+        ],
+        [
+          1,
+          "e-"
+        ],
+        [
+          4,
+          "H"
+        ],
+        [
+          1,
+          "e+"
+        ],
+        [
+          1,
+          "hν"
+        ]
+      ],
+      "html": "H + H + e<sup>-</sup> + 2H ⇌ e<sup>-</sup> + e<sup>-</sup> + 4H + e<sup>+</sup> + hν",
+      "latex": "\\mathrm{H} + \\mathrm{H} + \\mathrm{e}^- + 2\\mathrm{H} \\rightleftharpoons \\mathrm{e}^- + \\mathrm{e}^- + 4\\mathrm{H} + \\mathrm{e}^+ + h\\nu"
+    },
+    {
+      "input": "W+26 + M -> e- + W+28 + M + e-",
+      "canonical": "W+26 + M → W+28 + M + 2e-",
+      "reactants": [
+        [
+          1,
+          "W+26"
+        ],
+        [
+          1,
+          "M"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "e-"
+        ],
+        [
+          1,
+          "W+28"
+        ],
+        [
+          1,
+          "M"
+        ],
+        [
+          1,
+          "e-"
+        ]
+      ],
+      "html": "W<sup>26+</sup> + M → e<sup>-</sup> + W<sup>28+</sup> + M + e<sup>-</sup>",
+      "latex": "\\mathrm{W}^{26+} + \\mathrm{M} \\rightarrow \\mathrm{e}^- + \\mathrm{W}^{28+} + \\mathrm{M} + \\mathrm{e}^-"
+    },
+    {
+      "input": "e + C2 + e -> C- + C-",
+      "canonical": "2e- + C2 → C- + C-",
+      "reactants": [
+        [
+          1,
+          "e-"
+        ],
+        [
+          1,
+          "C2"
+        ],
+        [
+          1,
+          "e-"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "C-"
+        ],
+        [
+          1,
+          "C-"
+        ]
+      ],
+      "html": "e<sup>-</sup> + C<sub>2</sub> + e<sup>-</sup> → C<sup>-</sup> + C<sup>-</sup>",
+      "latex": "\\mathrm{e}^- + \\mathrm{C}_{2} + \\mathrm{e}^- \\rightarrow \\mathrm{C}^{-} + \\mathrm{C}^{-}"
+    },
+    {
+      "input": "2H + M → H2 + M",
+      "canonical": "H + H + M → H2 + M",
+      "reactants": [
+        [
+          2,
+          "H"
+        ],
+        [
+          1,
+          "M"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "H2"
+        ],
+        [
+          1,
+          "M"
+        ]
+      ],
+      "html": "2H + M → H<sub>2</sub> + M",
+      "latex": "2\\mathrm{H} + \\mathrm{M} \\rightarrow \\mathrm{H}_{2} + \\mathrm{M}"
+    },
+    {
+      "input": "H2 + O2 = H2O2",
+      "canonical": "H2 + O2 → H2O2",
+      "reactants": [
+        [
+          1,
+          "H2"
+        ],
+        [
+          1,
+          "O2"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "H2O2"
+        ]
+      ],
+      "html": "H<sub>2</sub> + O<sub>2</sub> → H<sub>2</sub>O<sub>2</sub>",
+      "latex": "\\mathrm{H}_{2} + \\mathrm{O}_{2} \\rightarrow \\mathrm{H}_{2}\\mathrm{O}_{2}"
+    },
+    {
+      "input": "H2 <=> H + H",
+      "canonical": "H2 ⇌ H + H",
+      "reactants": [
+        [
+          1,
+          "H2"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "H"
+        ],
+        [
+          1,
+          "H"
+        ]
+      ],
+      "html": "H<sub>2</sub> ⇌ H + H",
+      "latex": "\\mathrm{H}_{2} \\rightleftharpoons \\mathrm{H} + \\mathrm{H}"
+    },
+    {
+      "input": "1,2-C2H4Cl2 -> C2H3Cl + HCl",
+      "canonical": "1,2-C2H4Cl2 → C2H3Cl + HCl",
+      "reactants": [
+        [
+          1,
+          "1,2-C2H4Cl2"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "C2H3Cl"
+        ],
+        [
+          1,
+          "HCl"
+        ]
+      ],
+      "html": "1,2-C<sub>2</sub>H<sub>4</sub>Cl<sub>2</sub> → C<sub>2</sub>H<sub>3</sub>Cl + HCl",
+      "latex": "1,2-\\mathrm{C}_{2}\\mathrm{H}_{4}\\mathrm{Cl}_{2} \\rightarrow \\mathrm{C}_{2}\\mathrm{H}_{3}\\mathrm{Cl} + \\mathrm{H}\\mathrm{Cl}"
+    },
+    {
+      "input": "2 1,2-C2H4Cl2 -> 2C2H3Cl + 2HCl",
+      "canonical": "1,2-C2H4Cl2 + 1,2-C2H4Cl2 → C2H3Cl + C2H3Cl + HCl + HCl",
+      "reactants": [
+        [
+          2,
+          "1,2-C2H4Cl2"
+        ]
+      ],
+      "products": [
+        [
+          2,
+          "C2H3Cl"
+        ],
+        [
+          2,
+          "HCl"
+        ]
+      ],
+      "html": "2 1,2-C<sub>2</sub>H<sub>4</sub>Cl<sub>2</sub> → 2C<sub>2</sub>H<sub>3</sub>Cl + 2HCl",
+      "latex": "2\\,1,2-\\mathrm{C}_{2}\\mathrm{H}_{4}\\mathrm{Cl}_{2} \\rightarrow 2\\mathrm{C}_{2}\\mathrm{H}_{3}\\mathrm{Cl} + 2\\mathrm{H}\\mathrm{Cl}"
+    },
+    {
+      "input": "CFx -> C + Fx",
+      "canonical": "CFx → C + Fx",
+      "reactants": [
+        [
+          1,
+          "CFx"
+        ]
+      ],
+      "products": [
+        [
+          1,
+          "C"
+        ],
+        [
+          1,
+          "Fx"
+        ]
+      ],
+      "html": "CF<sub>x</sub> → C + F<sub>x</sub>",
+      "latex": "\\mathrm{C}\\mathrm{F}_{x} \\rightarrow \\mathrm{C} + \\mathrm{F}_{x}"
+    },
+    {
+      "input": "Ar+ + He ->",
+      "strict": false,
+      "canonical": "Ar+ + He →",
+      "reactants": [
+        [
+          1,
+          "Ar+"
+        ],
+        [
+          1,
+          "He"
+        ]
+      ],
+      "products": [],
+      "html": "Ar<sup>+</sup> + He →",
+      "latex": "\\mathrm{Ar}^{+} + \\mathrm{He} \\rightarrow"
+    },
+    {
+      "input": "-> Ar + He",
+      "strict": false,
+      "canonical": "→ Ar + He",
+      "reactants": [],
+      "products": [
+        [
+          1,
+          "Ar"
+        ],
+        [
+          1,
+          "He"
+        ]
+      ],
+      "html": "→ Ar + He",
+      "latex": "\\rightarrow \\mathrm{Ar} + \\mathrm{He}"
+    },
+    {
+      "input": "BeH+ + I2 ⇌ BeI + HI",
+      "error": "charge"
+    },
+    {
+      "input": "BeH + I2 ⇌ BeI",
+      "error": "stoichiometry"
+    },
+    {
+      "input": "(2H) + (3H) -> (4He)",
+      "error": "stoichiometry"
+    },
+    {
+      "input": "CO + O2 CO2 + O",
+      "error": "syntax"
+    },
+    {
+      "input": "H -> H -> H",
+      "error": "syntax"
+    },
+    {
+      "input": "0H2 + O2 -> O2",
+      "error": "syntax"
+    },
+    {
+      "input": "02H -> H2",
+      "error": "syntax"
+    },
+    {
+      "input": "->",
+      "strict": false,
+      "error": "syntax"
+    },
+    {
+      "input": "H2 v=1.5 + O -> OH + H",
+      "error": "syntax"
+    },
+    {
+      "input": "Ne+ 2P_5/2 + e- -> Ne+ 2P_5/2 + e-",
+      "error": "validation"
+    }
+  ]
+}
