@@ -22,10 +22,25 @@ from pyvalem.states._state_parser import STATES, state_parser
 # Mostly characters used in formulas, states and reactions, so that the strings
 # get further into the parsers than random text would.
 ALPHABET = "HCNOSPDTMBFKLIRZexvνJnlspdfgσπδΣΠΔΦΓuo0123456789+-()[]{}.,;=*/_'\"· →⇌<>"
-strings = st.text(alphabet=ALPHABET, max_size=24) | st.text(max_size=12)
+# Fragments of valid notation, which strings made from them reach further still.
+TOKENS = (
+    "H", "C", "O", "Cl", "D", "(13C)", "2", "3", "x", "+", "-", "(", ")", ".", "·",
+    "1s2", "2p", "3d10", "[Ne]", "[Ar]", "2P", "_1/2", "o", "X", "1Σ+", "g", "u",
+    "v=", "J=", "ν", "v", "1", "*", "[", "]", "3/2", "5p", "s'", "σ", "π", "sigma",
+    " ", ";", ", ", "n=", " + ", " -> ", "e-", "hv", "M", "trans-", "1,2-", "(±)-",
+    "{2}", "a", "z", "EF", "X\u0303",
+)  # fmt: skip
+strings = (
+    st.text(alphabet=ALPHABET, max_size=24)
+    | st.text(max_size=12)
+    | st.lists(st.sampled_from(TOKENS), max_size=8).map("".join)
+)
 
 settings.register_profile(
-    "pyvalem", deadline=None, suppress_health_check=[HealthCheck.too_slow]
+    "pyvalem",
+    max_examples=500,
+    deadline=None,
+    suppress_health_check=[HealthCheck.too_slow],
 )
 settings.load_profile("pyvalem")
 

@@ -44,6 +44,12 @@ class StatefulSpeciesTest(unittest.TestCase):
         ss4 = StatefulSpecies("Ne 3p'[3/2]_1")
         self.assertEqual(ss4.states[0].html, "3p'[3/2]<sub>1</sub>")
 
+    def test_separators_without_states(self):
+        for s in ("H2O ;", "H2O ;;", "H2O , "):
+            with self.subTest(s):
+                self.assertEqual(StatefulSpecies(s), StatefulSpecies("H2O"))
+                self.assertEqual(StatefulSpecies(s).states, [])
+
     def test_whitespace_separates_the_formula_from_the_states(self):
         self.assertEqual(StatefulSpecies("H2O\tv=1"), StatefulSpecies("H2O v=1"))
         self.assertEqual(

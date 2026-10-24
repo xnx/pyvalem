@@ -50,13 +50,13 @@ RESERVED_KEYS = {"J": RotationalState, "v": VibrationalState, "ν": VibrationalS
 def state_parser(s_state):
     """Parse s_state into an appropriate State-like object or list of such."""
 
-    if not s_state:
-        return None
-
     if not isinstance(s_state, str):
         # If we have a sequence of strings, parse them one by one into a list
         # of State-like objects.
         return [state_parser(s.strip()) for s in s_state]
+
+    if not s_state:
+        return None
 
     # A key=value state with a reserved key can only be of that key's type.
     key, sep, _ = s_state.partition("=")
