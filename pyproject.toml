@@ -30,6 +30,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/xnx/pyvalem"
+Documentation = "https://pyvalem.readthedocs.io/"
 Issues = "https://github.com/xnx/pyvalem/issues"
 Changelog = "https://github.com/xnx/pyvalem/blob/master/CHANGELOG.md"
 

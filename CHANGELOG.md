@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0.2 (unreleased)
+
+### Added
+
+- The documentation is built on Read the Docs, at
+  https://pyvalem.readthedocs.io/ (configured in `.readthedocs.yaml`), and
+  linked from the README and from PyPI.
+
+### Fixed
+
+- `make html` in `docs/` failed: the makefiles pointed Sphinx at `docs/`
+  instead of `docs/source/`.
+
 ## 3.0.1 (24 October 2026)
 
 The HTML and LaTeX of a formula with a period, such as `CuSO4.5H2O`, have

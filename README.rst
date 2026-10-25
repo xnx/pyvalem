@@ -1,7 +1,9 @@
-|Tests action| |GitHub license| |PyPI version| |PyPI pyversions| |Code style|
+|Tests action| |Docs| |GitHub license| |PyPI version| |PyPI pyversions| |Code style|
 
 .. |Tests action| image:: https://github.com/xnx/pyvalem/workflows/tests/badge.svg
    :target: https://github.com/xnx/pyvalem/actions
+.. |Docs| image:: https://readthedocs.org/projects/pyvalem/badge/?version=latest
+   :target: https://pyvalem.readthedocs.io/
 .. |GitHub license| image:: https://img.shields.io/github/license/xnx/pyvalem.svg
    :target: https://github.com/xnx/pyvalem/blob/master/LICENSE
 .. |PyPI version| image:: https://img.shields.io/pypi/v/pyvalem.svg
@@ -24,6 +26,8 @@ and small molecules.
 Species and states are specified as strings using a simple and flexible syntax,
 and may be compared, output in different formats and manipulated using a
 variety of predefined Python methods.
+
+The documentation is at https://pyvalem.readthedocs.io/.
 
 
 

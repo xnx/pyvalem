@@ -9,7 +9,7 @@ from pathlib import Path
 
 # -- Project information -----------------------------------------------------
 
-project = "pyvalem"
+project = "PyValem"
 copyright = "2022, Christian Hill"
 author = "Christian Hill"
 
