@@ -8,6 +8,14 @@
   https://pyvalem.readthedocs.io/ (configured in `.readthedocs.yaml`), and
   linked from the README and from PyPI.
 
+### Changed
+
+- The repository's default branch is now `main`, and the links in the README,
+  the documentation and the package metadata point to it. Anything that
+  fetches `master` by name, such as
+  `pip install git+https://github.com/xnx/pyvalem@master`, needs `main`
+  instead.
+
 ### Fixed
 
 - `make html` in `docs/` failed: the makefiles pointed Sphinx at `docs/`

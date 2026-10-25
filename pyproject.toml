@@ -32,7 +32,7 @@ classifiers = [
 Homepage = "https://github.com/xnx/pyvalem"
 Documentation = "https://pyvalem.readthedocs.io/"
 Issues = "https://github.com/xnx/pyvalem/issues"
-Changelog = "https://github.com/xnx/pyvalem/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/xnx/pyvalem/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 dev = ["hypothesis", "pytest>=8", "pytest-cov", "ruff==0.17.2"]

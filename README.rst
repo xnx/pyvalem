@@ -5,7 +5,7 @@
 .. |Docs| image:: https://readthedocs.org/projects/pyvalem/badge/?version=latest
    :target: https://pyvalem.readthedocs.io/
 .. |GitHub license| image:: https://img.shields.io/github/license/xnx/pyvalem.svg
-   :target: https://github.com/xnx/pyvalem/blob/master/LICENSE
+   :target: https://github.com/xnx/pyvalem/blob/main/LICENSE
 .. |PyPI version| image:: https://img.shields.io/pypi/v/pyvalem.svg
    :target: https://pypi.python.org/pypi/pyvalem/
 .. |PyPI pyversions| image:: https://img.shields.io/pypi/pyversions/pyvalem.svg
@@ -200,7 +200,7 @@ The `examples`_ directory has short scripts that check a list of reactions befor
 it goes into a database, and that apply the selection rules for atomic transitions
 to levels written in PyValem's notation.
 
-.. _examples: https://github.com/xnx/pyvalem/tree/master/examples
+.. _examples: https://github.com/xnx/pyvalem/tree/main/examples
 
 
 Specification:
@@ -209,8 +209,8 @@ The notation that PyValem implements is specified, independently of Python, in
 `spec/notation.md`_, with test vectors in `spec/tests`_ that any implementation of
 the notation can be checked against.
 
-.. _spec/notation.md: https://github.com/xnx/pyvalem/blob/master/spec/notation.md
-.. _spec/tests: https://github.com/xnx/pyvalem/tree/master/spec/tests
+.. _spec/notation.md: https://github.com/xnx/pyvalem/blob/main/spec/notation.md
+.. _spec/tests: https://github.com/xnx/pyvalem/tree/main/spec/tests
 
 
 For Developers:

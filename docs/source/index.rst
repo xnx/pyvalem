@@ -21,6 +21,6 @@ source code is on GitHub_, and it is installed from PyPI_.
    reaction.rst
    examples.rst
 
-.. _spec/notation.md: https://github.com/xnx/pyvalem/blob/master/spec/notation.md
+.. _spec/notation.md: https://github.com/xnx/pyvalem/blob/main/spec/notation.md
 .. _GitHub: https://github.com/xnx/pyvalem
 .. _PyPI: https://pypi.org/project/pyvalem/

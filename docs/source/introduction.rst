@@ -189,8 +189,8 @@ The notation that PyValem implements is specified, independently of Python, in
 `spec/notation.md`_, with test vectors in `spec/tests`_ that any implementation of
 the notation can be checked against.
 
-.. _spec/notation.md: https://github.com/xnx/pyvalem/blob/master/spec/notation.md
-.. _spec/tests: https://github.com/xnx/pyvalem/tree/master/spec/tests
+.. _spec/notation.md: https://github.com/xnx/pyvalem/blob/main/spec/notation.md
+.. _spec/tests: https://github.com/xnx/pyvalem/tree/main/spec/tests
 
 
 .. _PyPI: https://pypi.org/project/pyvalem/
