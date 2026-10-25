@@ -1,6 +1,9 @@
 # Changelog
 
-## 3.0.2 (unreleased)
+## 3.0.2 (25 October 2026)
+
+The documentation is on Read the Docs, and the repository's default branch is
+`main`. The package works exactly as 3.0.1 does.
 
 ### Added
 
