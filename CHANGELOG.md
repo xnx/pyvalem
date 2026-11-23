@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.1.0 (23 November 2026)
+
+PyValem is now licensed under the Apache License, Version 2.0, instead of the
+GNU General Public License, version 3. The package works exactly as 3.0.2 does.
+
+### Changed
+
+- The licence is Apache-2.0, with the copyright holders named in a new `NOTICE`
+  file. Releases up to and including 3.0.2 are also licensed under Apache-2.0
+  (see the README).
+
 ## 3.0.2 (25 October 2026)
 
 The documentation is on Read the Docs, and the repository's default branch is

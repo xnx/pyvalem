@@ -10,7 +10,7 @@ from pathlib import Path
 # -- Project information -----------------------------------------------------
 
 project = "PyValem"
-copyright = "2022, Christian Hill"
+copyright = "2012–2026 Christian Hill and Martin Haničinec"
 author = "Christian Hill"
 
 # The full version, including alpha/beta/rc tags, read from the package so that

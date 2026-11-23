@@ -241,6 +241,16 @@ group). Before submitting a pull request, run
     ruff format
 
 
+Licence:
+========
+
+PyValem is licensed under the Apache License, Version 2.0 (see ``LICENSE``);
+the copyright notice is in ``NOTICE``. Releases up to and including 3.0.2 were
+published under the GNU General Public License, version 3; their copyright
+holders, Christian Hill and Martin Haničinec, also license them under the
+Apache License, Version 2.0.
+
+
 .. _GitHub: https://github.com/xnx/pyvalem
 .. _PyPI: https://pypi.org/project/pyvalem/
 .. _numpydoc: https://numpydoc.readthedocs.io/en/latest/format.html

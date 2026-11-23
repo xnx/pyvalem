@@ -7,9 +7,9 @@ name = "pyvalem"
 dynamic = ["version"]
 description = "A package for managing simple chemical species and states"
 readme = "README.rst"
-license = "GPL-3.0-only"
-license-files = ["LICENSE"]
-authors = [{ name = "Christian Hill", email = "ch.hill@iaea.org" }]
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Christian Hill", email = "christian@scipython.com" }]
 requires-python = ">=3.11"
 dependencies = ["pyparsing>=3.1"]
 keywords = ["chemistry", "formula", "species", "state", "reaction"]
