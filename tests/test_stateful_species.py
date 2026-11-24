@@ -2,6 +2,8 @@
 Unit tests for the stateful_species module of PyValem
 """
 
+import copy
+import pickle
 import unittest
 
 from pyvalem.formula import FormulaParseError
@@ -162,6 +164,14 @@ class StatefulSpeciesTest(unittest.TestCase):
     def test_J1J2_coupling(self):
         _ = StatefulSpecies("Pd 6s2.6p.7s (3/2,1/2)")
         _ = StatefulSpecies("Bi 5d4.6s(6D)31d (1/2,3/2)o_2")
+
+    def test_copy_and_pickle(self):
+        # StatefulSpecies.__new__ requires a positional state_str; without a
+        # __getnewargs__ hook, copy and pickle can't supply it.
+        ss1 = StatefulSpecies("CrH 1sigma2.2sigma1.1pi4.3sigma1; 6SIGMA+")
+        self.assertEqual(copy.deepcopy(ss1), ss1)
+        self.assertIsNot(copy.deepcopy(ss1), ss1)
+        self.assertEqual(pickle.loads(pickle.dumps(ss1)), ss1)
 
 
 if __name__ == "__main__":
