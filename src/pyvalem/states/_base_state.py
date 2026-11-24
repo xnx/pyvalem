@@ -48,6 +48,16 @@ class State(ABC):
             )
         return super().__new__(cls)
 
+    def __getnewargs__(self):
+        """Arguments for ``__new__``, for the copy and pickle protocols.
+
+        Concrete :class:`State` subclasses validate in ``__new__`` that they
+        are created from a ``str``, making that argument required. This hook
+        supplies it to ``copy`` and ``pickle`` so that state objects can be
+        copied and pickled.
+        """
+        return (self.state_str,)
+
     @property
     def html(self):
         """HTML representation of the State instance.

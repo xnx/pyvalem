@@ -2,6 +2,8 @@
 Unit tests for the atomic term symbols module of PyValem
 """
 
+import copy
+import pickle
 import unittest
 
 from pyvalem.states.atomic_term_symbol import (
@@ -93,6 +95,14 @@ class AtomicTermSymbolTest(unittest.TestCase):
         for s in ("0S", "0P_1"):
             with self.subTest(s):
                 self.assertRaises(AtomicTermSymbolValidationError, AtomicTermSymbol, s)
+
+    def test_copy_and_pickle(self):
+        # State.__new__ requires a positional state_str; without a
+        # __getnewargs__ hook, copy and pickle can't supply it.
+        a0 = AtomicTermSymbol("2P_1/2")
+        self.assertEqual(copy.deepcopy(a0), a0)
+        self.assertIsNot(copy.deepcopy(a0), a0)
+        self.assertEqual(pickle.loads(pickle.dumps(a0)), a0)
 
 
 if __name__ == "__main__":
